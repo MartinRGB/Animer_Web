@@ -6,3 +6,11 @@ A script for better Android Motion Design,inspired by "Ease and wizz" and "After
 - Put |Android Interpolator_v_x.x.xjsx| into |Adobe After Effect| -> |Scripts| - > |ScriptUI Panels|
 - Open |Window| menu in AE,then Choose |Android Interpolator_v_x.x.x.jsx|
 
+
+## Roadmap
+
+- add 'FlingAnimation'
+- add native Time Interpolator
+- convert Script to Extension with new GUI(ZXP Install)
+- add SpringAnimation Converter (Protopie|Origami|FramerJS|iOS|ReboundJS(Web)|Android Dyanmic)
+- show the source code of the Animation
