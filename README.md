@@ -9,8 +9,9 @@ A script for better Android Motion Design,inspired by "Ease and wizz" and "After
 
 ## Roadmap
 
-- add 'FlingAnimation'
+- fix 'FlingAnimation' keyframe issues
 - add native Time Interpolator
 - convert Script to Extension with new GUI(ZXP Install)
 - add SpringAnimation Converter (Protopie|Origami|FramerJS|iOS|ReboundJS(Web)|Android Dyanmic)
 - show the source code of the Animation
+- add an Android Example Application
