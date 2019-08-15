@@ -209,6 +209,34 @@ ANDROIDFLING_CODE=
 "        return valTransition;\n" + 
 "} \n"
 
+ANTICIPATEOVERSHOOT_CODE =
+"//var factor = 2.0;\n" + 
+
+"var config = undefined;\n" + 
+"var isPathShape = false;\n" + 
+
+"function aosiFunctionA(t,s) {\n" + 
+"	return t * t * ((s + 1) * t - s);\n" + 
+"}\n" + 
+" function aosiFunctionB(t,s) {\n" + 
+"	return t * t * ((s + 1) * t + s);\n" + 
+"}\n" + 
+
+"function AnticipateOvershootInterpolator(t,f) {\n" + 
+"	if (t < 0.5){\n" + 
+"		return 0.5 * aosiFunctionA(t * 2.0, f*1.5);\n" + 
+"	}\n" + 
+"	else{\n" + 
+"		return 0.5 * (aosiFunctionB(t * 2.0 - 2.0, f*1.5) + 2.0);\n" + 
+"	}\n" + 
+"}	\n" + 
+
+"function calculate(t,b,c,d) {\n" + 
+"    return c* AnticipateOvershootInterpolator(t/d,factor) + b;\n" + 
+"}\n"
+
+
+
 NORMALIZED_EASING_FUNCTION = 
 "function getDimensions()\n" +
 "{\n" +
@@ -280,7 +308,7 @@ function android_interpolator_script(ui_reference) {
 	var android_interpolator = {}; // put all global variables on this object to avoid namespace clashes
 
 	android_interpolator.CLEAR_EXPRESSION_BTN     = false; // this adds a button to the palette, "clear", that deletes expressions on all selected properties. Off by default.
-	android_interpolator.VERSION                  = "0.0.1";
+	android_interpolator.VERSION                  = "0.0.2";
 	android_interpolator.interpolatorEquation           = "";
 	android_interpolator.palette                  = {};
 
@@ -293,7 +321,7 @@ function android_interpolator_script(ui_reference) {
 
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "spring"; 
 
-	android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling']
+	android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling','-','AnticipateOvershoot']
 
 	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择物理插值器的类型";
 
@@ -355,9 +383,13 @@ function android_interpolator_script(ui_reference) {
 				value1.text = (slider1.value*100. -5000.).toFixed(1).toString() + '.f';
 				factor1 = (slider1.value*100. - 5000.).toFixed(1);
 			}
-			else{
+			else if(INTERPOLATOR_MODE == 2 || INTERPOLATOR_MODE == 3){
 				value1.text = slider1.value.toFixed(1).toString() + '.f';
 				factor1 = slider1.value.toFixed(1);
+			}
+			else{
+				value1.text = slider1.value.toFixed(1).toString()/25. + '.f';
+				factor1 = slider1.value.toFixed(1)/25.;
 			}
 
 		}
@@ -531,7 +563,18 @@ function android_interpolator_script(ui_reference) {
 							factor2 = 0.;
 							prefixParameters = 'var mStartVelocity = 0.;\nvar mDampingRatio = 0.;\n'
 							break;
+						case 8:
+								INTERPOLATOR_MODE = 7;
+								text1.text = 'Factor:';
+								slider1.value = 25;
+								value1.text = '1.f'
+								slGrp2.visible = false;
+								slGrp3.visible = false;
+								factor1 = 1.;
+								prefixParameters = 'var factor = 1.0;\n'
+								break;
 						default:
+							//alert('233')
 					}
 
 				}
@@ -586,6 +629,9 @@ function android_interpolator_script(ui_reference) {
 			case 6:
 				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n';
 				break;
+			case 7:
+				prefixParameters = 'var factor = '+factor1.toString()+';\n';
+				break;
 			default:
 
 		}
@@ -611,6 +657,9 @@ function android_interpolator_script(ui_reference) {
 				break;
 			case 6:
 				return ANDROIDFLING_CODE
+				break;
+			case 7:
+				return ANTICIPATEOVERSHOOT_CODE
 				break;
 			default:
 		}
