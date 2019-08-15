@@ -185,7 +185,29 @@ ANDROIDSPRING_CODE =
 
 "function calculate(t,b,c,d) {\n" + 
 "    return c*getCurrentInterpolation(t/d,t) + b;\n" + 
-"} \n"	
+"} \n"
+
+ANDROIDFLING_CODE=
+"//mStartVelocity = -4000;\n" + 
+"//mDampingRatio = 0.5;\n" + 
+
+"var config = undefined;\n" + 
+"var isPathShape = false;\n" + 
+
+"function calculate(t,b,c,d) {\n" + 
+"    var startVal = b;\n" + 
+"    var deltaT = t;\n" + 
+
+"    mRealFriction = mDampingRatio*(-4.2);\n" + 
+"    mFlingVelocity = ( mStartVelocity)*Math.exp(t *mRealFriction) ;\n" + 
+"    valTransition =  (valueAtTime(time - 1/60) - mStartVelocity/mRealFriction) + ( mStartVelocity/ mRealFriction) * (Math.exp(mRealFriction * t ) ) \n" + 
+"    mLastVal = valTransition;\n" + 
+
+"    if(deltaT == 0)\n" + 
+"        return b;\n" + 
+"    else\n" + 
+"        return valTransition;\n" + 
+"} \n"
 
 NORMALIZED_EASING_FUNCTION = 
 "function getDimensions()\n" +
@@ -271,7 +293,7 @@ function android_interpolator_script(ui_reference) {
 
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "spring"; 
 
-	android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring']
+	android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling']
 
 	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择物理插值器的类型";
 
@@ -329,6 +351,10 @@ function android_interpolator_script(ui_reference) {
 				value1.text = (slider1.value*30.).toFixed(1).toString() + '.f';
 				factor1 = (slider1.value*30.).toFixed(1);
 			}
+			else if(INTERPOLATOR_MODE == 6){
+				value1.text = (slider1.value*100. -5000.).toFixed(1).toString() + '.f';
+				factor1 = (slider1.value*100. - 5000.).toFixed(1);
+			}
 			else{
 				value1.text = slider1.value.toFixed(1).toString() + '.f';
 				factor1 = slider1.value.toFixed(1);
@@ -353,6 +379,10 @@ function android_interpolator_script(ui_reference) {
 			else if(INTERPOLATOR_MODE == 5){
 				value2.text = (slider2.value).toFixed(1).toString()/100. + '.f';
 				factor2 = slider2.value.toFixed(1)/100.;
+			}
+			else if(INTERPOLATOR_MODE == 6){
+				value2.text = (slider2.value).toFixed(1).toString()/25. + '.f';
+				factor2 = slider2.value.toFixed(1)/25.;
 			}
 			else{
 				value2.text = slider2.value.toFixed(1).toString() + '.f';
@@ -401,6 +431,7 @@ function android_interpolator_script(ui_reference) {
 					app.settings.saveSetting("androidinterpolator", android_interpolator.INTERPOLATOR_SETTINGS_KEY, this.selection.toString());
 					//alert("yo, you selected item " + this.selection.index);
 					switch(this.selection.index) {
+						//TODO:add a ParaSetting Function
 						case 0:
 							INTERPOLATOR_MODE = 1;
 							text1.text = 'Factor:';
@@ -486,6 +517,20 @@ function android_interpolator_script(ui_reference) {
 							factor3 = 0.;
 							prefixParameters = 'var mStiffness = 1500.;\nvar mDampingRatio = 0.5;\nvar mVelocity = 0.;\n'
 							break;
+						case 6:
+							INTERPOLATOR_MODE = 6;
+							text1.text = 'Velocity:';
+							text2.text = 'Damping:';
+							slider1.value = 50;
+							slider2.value = 0;
+							value1.text = '0.f'
+							value2.text = '0.f'
+							slGrp2.visible = true;
+							slGrp3.visible = false;
+							factor1 = 0.;
+							factor2 = 0.;
+							prefixParameters = 'var mStartVelocity = 0.;\nvar mDampingRatio = 0.;\n'
+							break;
 						default:
 					}
 
@@ -520,6 +565,7 @@ function android_interpolator_script(ui_reference) {
 		writeLn(s); // writes in the AE info window
 	}
 
+	//TODO:Use for loop for select
 	function getParameters(mode_num){
 		switch(mode_num) {
 			case 1:
@@ -537,11 +583,15 @@ function android_interpolator_script(ui_reference) {
 			case 5:
 				prefixParameters = 'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n';
 				break;
+			case 6:
+				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n';
+				break;
 			default:
 
 		}
 	}
 
+	//TODO:Use for loop for select
 	function getInterpolatorType(mode_num){
 		switch(mode_num) {
 			case 1:
@@ -558,6 +608,9 @@ function android_interpolator_script(ui_reference) {
 				break;
 			case 5:
 				return ANDROIDSPRING_CODE
+				break;
+			case 6:
+				return ANDROIDFLING_CODE
 				break;
 			default:
 		}
