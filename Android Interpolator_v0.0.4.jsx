@@ -24,6 +24,7 @@ var DECELERATE = new Object();
 var LINEAR = new Object();
 var OVERSHOOT = new Object();
 var NORMALIZED_EASING_FUNCTION;
+var KEYTIME_FUNCTION;
 
 SPRING = {
 name:"Spring",
@@ -613,8 +614,15 @@ NORMALIZED_EASING_FUNCTION =
 "        else\n" +
 "            return values;\n" +
 "    }\n" +
-"}\n" +
-"try { easeBootstrap() || value; } catch(e) { value; }\n";
+"}\n";
+
+KEYTIME_FUNCTION = 
+"if(time>key(1).time  &  time<key(2).time){\n" + 
+"try { easeBootstrap() || value; } catch(e) { value; }\n" + 
+"}\n" + 
+"else{\n" + 
+"value;\n" + 
+"}\n";
 
 function android_interpolator_script(ui_reference) {
 
@@ -632,6 +640,8 @@ function android_interpolator_script(ui_reference) {
 	var INTERPOLAOTR_STRING_ARRAY = new Array();
 	//var INTERPOLATOR_MODE = 1;
 	var prefixParameters;
+
+	var key1Index,key2Index;
 
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
@@ -891,8 +901,9 @@ function android_interpolator_script(ui_reference) {
 		app.beginUndoGroup("Android Interpolator");
 
 		try {
+			an_two_keyframe_func();
 			getParameters(INTERPOLATOR_MODE);
-			android_interpolator.interpolatorEquation = prefixParameters + getInterpolatorType(INTERPOLATOR_MODE) + NORMALIZED_EASING_FUNCTION;
+			android_interpolator.interpolatorEquation = prefixParameters + getInterpolatorType(INTERPOLATOR_MODE) + NORMALIZED_EASING_FUNCTION + KEYTIME_FUNCTION;
 		} catch(e) {
 			Window.alert(e);
 			return false;
@@ -932,7 +943,6 @@ function android_interpolator_script(ui_reference) {
 
 			if (!currentProperty.canSetExpression) { continue } // don't do anything if we can't set an expression
 			if (currentProperty.numKeys < 2) { continue }       // likewise if there aren't at least two keyframes
-
 			currentProperty.expression = expressionCode;
 			numOfChangedProperties++;
 		}
@@ -946,15 +956,94 @@ function android_interpolator_script(ui_reference) {
 		}
 	}
 
+	function an_two_keyframe_func() {
+		var activeItem = app.project.activeItem, props, n, p,currentLayer;  
+		if (activeItem instanceof CompItem){  
+			DT = Math.min(0.01, activeItem.frameDuration/10.0);  
+			currentLayer = activeItem.selectedLayers;
+			//alert(currentLayer[0].name);
+			props = activeItem.selectedProperties;
+			// for ( var x = 0; x <= (currentLayer.length - 1); ++x)
+			// {
+				for (n=0; n<props.length; n++){  
+					p = props[n];  
+					if (!p.numKeys) continue;  
+
+					key1Index = p.selectedKeys[0];
+					key2Index = p.selectedKeys[1];
+
+					KEYTIME_FUNCTION = 
+					"if(time>key("+p.selectedKeys[0]+").time  &  time<key("+p.selectedKeys[1]+").time){\n" + 
+					"try { easeBootstrap() || value; } catch(e) { value; }\n" + 
+					"}\n" + 
+					"else{\n" + 
+					"value;\n" + 
+					"}\n";
+
+
+					//alert(p.name)
+					var myMarker1 = new MarkerValue("",p.name + " Anim Begin");
+					var myMarker2 = new MarkerValue("",p.name + " Anim End");
+					var myTime1 = p.keyTime(p.selectedKeys[0]);
+					var myTime2 = p.keyTime(p.selectedKeys[1]);
+
+					//#TODO,2 Layers Add Keyframe
+					currentLayer[0].Marker.setValueAtTime(myTime1,myMarker1);
+					currentLayer[0].Marker.setValueAtTime(myTime2,myMarker2);
+
+					if(p.selectedKeys.length == 2){
+						// key1Index = p.selectedKeys[0];
+						// key2Index = p.selectedKeys[1];
+						// KEYTIME_FUNCTION = 
+						// "if(time>key("+key1Index+").time  &  time<key("+key2Index+").time){\n" + 
+						// "try { easeBootstrap() || value; } catch(e) { value; }\n" + 
+						// "}\n" + 
+						// "else{\n" + 
+						// "value;\n" + 
+						// "}\n";
+					}
+					else{
+						//alert('You can only select two keyframes!')
+						//return false;
+					}
+				};
+			//};
+
+
+		};  
+
+
+
+
+		return;  
+	}
+
+
 	function an_canProceed()
 	{ 
 		var activeItem = app.project.activeItem;
 		if (activeItem === null) {
-			alert("Select a keyframe or two.");
+			alert("Select two keyframes.");
 			return false;
 		}
 		if (activeItem.selectedProperties == "") {
 			alert("Please select at least one keyframe.")
+			return false;
+		}
+		var props = activeItem.selectedProperties,n,p;
+		for (n=0; n<props.length; n++){  
+			p = props[n];  
+			if (!p.numKeys) continue;  
+			//idx = p.nearestKeyIndex(comp.time);  
+			if(p.selectedKeys.length != 2){
+				alert('You can only select two keyframes!')
+				return false;
+			}
+		};
+		
+		var currentLayer = activeItem.selectedLayers;
+		if(currentLayer.length > 1){
+			alert('Only support one layer now!')
 			return false;
 		}
 
