@@ -345,7 +345,6 @@ defaultPara:null};
 ACCELERATEDECELERATE = {
 name:"AccelerateDecelerate",
 code:
-"//var factor = 2.0; \n" + 
 "var config = undefined; \n" + 
 "var isPathShape = false; \n" + 
 "function AccelerateDecelerateInterpolator(t,c){\n" + 
@@ -355,16 +354,16 @@ code:
 "    return c* AccelerateDecelerateInterpolator(t/d,factor) + b; \n" + 
 "}\n",
 index:8,
-slider1Range:4,
-slider1Val:2/ACCELERATEDECELERATE.slider1Range,
+slider1Range:null,
+slider1Val:null,
 slider1FixVal:null,
-slider1Text:"Factor:",
+slider1Text:null,
 slider2Range:null,
 slider2Val:null,
 slider3Range:null,
 slider3Val:null,
 slider3Text:null,
-defaultPara:'var factor = '+factor1.toString()+';\n'};
+defaultPara:''};
 
 ACCELERATE = {
 name:"Accelerate",
@@ -379,7 +378,7 @@ code:
 "    return c* AccelerateInterpolator(t/d,factor) + b; \n" + 
 "}\n", 
 index:9,
-slider1Range:4,
+slider1Range:10,
 slider1Val:2/ACCELERATE.slider1Range,
 slider1FixVal:null,
 slider1Text:"Factor:",
@@ -403,7 +402,7 @@ code:
 "    return c* AnticipateInterpolator(t/d,factor) + b; \n" + 
 "}\n",
 index:10,
-slider1Range:4,
+slider1Range:10,
 slider1Val:2/ANTICIPATE.slider1Range,
 slider1FixVal:null,
 slider1Text:"Factor:",
@@ -438,8 +437,141 @@ code:
 "    return c* AnticipateOvershootInterpolator(t/d,factor) + b;\n" + 
 "}\n",
 index:11,
-slider1Range:4,
+slider1Range:10,
 slider1Val:2/ANTICIPATEOVERSHOOT.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
+
+BOUNCE2 = {
+name:"Bounce",
+code:
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+"function bounce(t){\n" + 
+"	return t * t * 8.0;\n" + 
+"}\n" + 
+"function BounceInterpolator(t){\n" + 
+"	 t *= 1.1226;\n" + 
+"	 if (t < 0.3535) return bounce(t);\n" + 
+"	else if (t < 0.7408) return bounce(t - 0.54719) + 0.7;\n" + 
+"	else if (t < 0.9644) return bounce(t - 0.8526) + 0.9;\n" + 
+"	else return bounce(t - 1.0435) + 0.95;\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* BounceInterpolator(t/d) + b; \n" + 
+"}\n",
+index:12,
+slider1Range:null,
+slider1Val:null,
+slider1FixVal:null,
+slider1Text:null,
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:''};
+
+CYCLE = {
+name:"Cycle",
+code:
+"//var factor = 2.0; \n" + 
+
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+
+"function CycleInterpolator(t,c){\n" + 
+"	return Math.sin(2*Math.PI * c * t);\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* CycleInterpolator(t/d,factor) + b; \n" + 
+"}\n",
+index:13,
+slider1Range:10,
+slider1Val:2/CYCLE.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
+
+DECELERATE = {
+name:"Decelerate",
+code:
+"//var factor = 2.0; \n" + 
+
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+
+"function DecelerateInterpolator(t,c){\n" + 
+"	return 1 - Math.pow(1-t,2 * c)\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* DecelerateInterpolator(t/d,factor) + b; \n" + 
+"}\n",
+index:14,
+slider1Range:10,
+slider1Val:2/DECELERATE.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
+
+LINEAR = {
+name:"Linear",
+code:
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+
+"function LinearInterpolator(t){\n" + 
+"	return t;\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* LinearInterpolator(t/d) + b; \n" + 
+"}\n",
+index:15,
+slider1Range:null,
+slider1Val:null,
+slider1FixVal:null,
+slider1Text:null,
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:''};
+
+OVERSHOOT = {
+name:"Overshoot",
+code:
+"//var factor = 2.0; \n" + 
+
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+
+"function OvershootInterpolator(t,c){\n" + 
+"	return (c + 1) * Math.pow(t - 1,3) + c * Math.pow(t - 1,2) + 1;\n" + 
+"}\n" + 
+
+"function calculate(t,b,c,d) { \n" + 
+"    return c* OvershootInterpolator(t/d,factor) + b; \n" + 
+"}\n",
+index:16,
+slider1Range:10,
+slider1Val:2/OVERSHOOT.slider1Range,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -535,7 +667,7 @@ function android_interpolator_script(ui_reference) {
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
 	//android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT];
-	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT];
+	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT];
 	//android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling','-','AnticipateOvershoot']
 
 	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择插值器的类型";
@@ -592,10 +724,10 @@ function android_interpolator_script(ui_reference) {
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
 					if(android_interpolator.interpolatorTypesAry[i].slider1FixVal !=null){
-						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(1) - android_interpolator.interpolatorTypesAry[i].slider1FixVal;
+						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(2) - android_interpolator.interpolatorTypesAry[i].slider1FixVal;
 					}
 					else{
-						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(1);
+						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(2);
 					}
 					value1.text = factor1.toString() + 'f';
 				}
@@ -616,7 +748,7 @@ function android_interpolator_script(ui_reference) {
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
 					if(android_interpolator.interpolatorTypesAry[i].slider2Val !=null){
-						factor2 = (slider2.value/100. * android_interpolator.interpolatorTypesAry[i].slider2Range).toFixed(1);
+						factor2 = (slider2.value/100. * android_interpolator.interpolatorTypesAry[i].slider2Range).toFixed(2);
 						value2.text = factor2.toString() + 'f';
 					}
 				}
@@ -634,7 +766,7 @@ function android_interpolator_script(ui_reference) {
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
 					if(android_interpolator.interpolatorTypesAry[i].slider3Val !=null){
-						factor3 = (slider3.value/100. * android_interpolator.interpolatorTypesAry[i].slider3Range).toFixed(1);
+						factor3 = (slider3.value/100. * android_interpolator.interpolatorTypesAry[i].slider3Range).toFixed(2);
 						value3.text = factor3.toString() + 'f';
 					}
 				}
@@ -646,7 +778,7 @@ function android_interpolator_script(ui_reference) {
 		// "interpolator" menu
 
 		var	interpolatorGrp = android_interpolator.palette.add('group', undefined, 'Easing group');
-		interpolatorGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '弹性类型:');
+		interpolatorGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '插值类型:');
 
 
 			android_interpolator.interpolatorList                          = interpolatorGrp.add('dropdownlist', LIST_DIMENSIONS, INTERPOLAOTR_STRING_ARRAY);
@@ -670,6 +802,12 @@ function android_interpolator_script(ui_reference) {
 
 					for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 						if(INTERPOLATOR_MODE == android_interpolator.interpolatorTypesAry[i].index){
+							if(android_interpolator.interpolatorTypesAry[i].slider1Val == null){
+								slGrp1.visible = false;
+							}
+							else{
+								slGrp1.visible = true;
+							}
 							if(android_interpolator.interpolatorTypesAry[i].slider2Val == null){
 								slGrp2.visible = false;
 							}
@@ -699,9 +837,9 @@ function android_interpolator_script(ui_reference) {
 							factor2 = android_interpolator.interpolatorTypesAry[i].slider2Val * android_interpolator.interpolatorTypesAry[i].slider2Range;
 							factor3 = android_interpolator.interpolatorTypesAry[i].slider3Val * android_interpolator.interpolatorTypesAry[i].slider3Range;
 
-							value1.text = (factor1).toFixed(1).toString() + 'f';
-							value2.text = (factor2).toFixed(1).toString() + 'f';
-							value3.text = (factor3).toFixed(1).toString() + 'f';
+							value1.text = (factor1).toFixed(2).toString() + 'f';
+							value2.text = (factor2).toFixed(2).toString() + 'f';
+							value3.text = (factor3).toFixed(2).toString() + 'f';
 							prefixParameters = android_interpolator.interpolatorTypesAry[i].defaultPara;
 
 						}
@@ -720,7 +858,7 @@ function android_interpolator_script(ui_reference) {
 		var applyBtn     = buttonGrp.add('button', undefined, '应用');
 		applyBtn.onClick = an_applyExpressions;
 		var helpBtn      = buttonGrp.add("button {text:'?', maximumSize:[30,30]}");
-		helpBtn.onClick  = function() {alert("Android Interpolator v" + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
+		helpBtn.onClick  = function() {alert("Android Interpolator v " + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
 
 
 		if (android_interpolator.palette instanceof Window) {
@@ -759,7 +897,13 @@ function android_interpolator_script(ui_reference) {
 				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\nvar mDampingRatio = '+factor2.toString()+';\n';
 				break;
 			default:
-				prefixParameters = 'var factor = '+factor1.toString()+';\n';
+				if(android_interpolator.interpolatorTypesAry[mode_num].defaultPara == null){
+					prefixParameters = '';
+				}
+				else{
+					prefixParameters = 'var factor = '+factor1.toString()+';\n';
+				}
+
 		}
 	}
 
