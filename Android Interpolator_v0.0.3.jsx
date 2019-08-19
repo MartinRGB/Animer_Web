@@ -1,16 +1,18 @@
 #target aftereffects
 
-// Android Interpolaotr 0.0.1
-// MartinRGB 2019 (mail@ianhaigh.com)
+// Android Interpolaotr 0.0.3
+// MartinRGB 2019 (qiuyinsen@gmail.com)
 
 // An After Effects adaptation of Android Interpolator equations.
 
-SPRING_CODE = 	
-"//var factor = 0.5;\n" + 
+var factor1 = 0.5,factor2 = 0.,factor3 = 0.;
 
+SPRING = {
+name:"Spring",
+code:
+"//var factor = 0.5;\n" + 
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
-
 "function getCurrentInterpolation(ratio) {\n" + 
 "        if (ratio == 0.0 || ratio == 1.0){\n" + 
 "            return ratio;\n" + 
@@ -20,36 +22,42 @@ SPRING_CODE =
 "            return value;\n" + 
 "        }\n" + 
 "}\n" + 
-
 "function calculate(a,b,c,d,e) {\n" + 
 "        var k = c*getCurrentInterpolation(a/d)+b;\n" + 
 "        return k;\n" + 
-"}\n"
+"}\n",
+index:0,
+slider1Range:1,
+slider1Val:0.5/SPRING.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
 
-BOUNCE_CODE = 
+BOUNCE = {
+name:"Bounce",
+code:
 "//var mTension = 0.;\n" + 
 "//var mFriction = 0.;\n" + 
-
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
-
 "//Parameters\n" + 
 "var maxStifness = 50.;\n" + 
 "var maxFrictionMultipler = 1.;\n" + 
-
 "//Curve Position parameters(No Adjust)\n" + 
 "var amplitude = 1.;\n" + 
 "var phase = 0.;\n" + 
-
 "//Original Scale parameters(Better No Adjust)\n" + 
 "var originalStiffness = 12.;\n" + 
 "var originalFrictionMultipler = 0.3;\n" + 
 "var mass = 0.058;\n" + 
-
 "//Internal parameters\n" + 
 "var pulsation = Math.sqrt((originalStiffness + mTension) / mass);\n" + 
 "var friction = (originalFrictionMultipler + mFriction) * pulsation;\n" + 
-
 "function getCurrentInterpolation(ratio) {\n" + 
 "    if (ratio == 0.0 || ratio == 1.0)\n" + 
 "        return ratio;\n" + 
@@ -58,35 +66,42 @@ BOUNCE_CODE =
 "        return -Math.abs(value)+1.;\n" + 
 "    }\n" + 
 "}\n" + 
-
 "function calculate(t,b,c,d) {\n" + 
 "    return c*getCurrentInterpolation(t/d) + b;\n" + 
-"}\n"
+"}\n",
+index:1,
+slider1Range:100,
+slider1Val:0,
+slider1FixVal:null,
+slider1Text:"Tension:",
+slider2Range:10,
+slider2Val:0,
+slider2Text:"Friction:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var mTension = '+factor1.toString()+';\n var mFriction = '+factor2.toString()+';\n'};
 
-DAMPING_CODE = 
+DAMPING = {
+name:"Damping",
+code:
 "//var mTension = 0.;\n" + 
 "//var mFriction = 0.;\n" + 
-
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
-
 "//Parameters\n" + 
 "var maxStifness = 50.;\n" + 
 "var maxFrictionMultipler = 1.;\n" + 
-
 "//Curve Position parameters(No Adjust)\n" + 
 "var amplitude = 1.;\n" + 
 "var phase = 0.;\n" + 
-
 "//Original Scale parameters(Better No Adjust)\n" + 
 "var originalStiffness = 12.;\n" + 
 "var originalFrictionMultipler = 0.3;\n" + 
 "var mass = 0.058;\n" + 
-
 "//Internal parameters\n" + 
 "var pulsation = Math.sqrt((originalStiffness + mTension) / mass);\n" + 
 "var friction = (originalFrictionMultipler + mFriction) * pulsation;\n" + 
-
 "function getCurrentInterpolation(ratio) {\n" + 
 "    if (ratio == 0.0 || ratio == 1.0)\n" + 
 "        return ratio;\n" + 
@@ -95,25 +110,34 @@ DAMPING_CODE =
 "        return -value+1.;\n" + 
 "    }\n" + 
 "}\n" + 
-
 "function calculate(t,b,c,d) {\n" + 
 "    return c*getCurrentInterpolation(t/d) + b;\n" + 
-"}\n"
+"}\n",
+index:2,
+slider1Range:100,
+slider1Val:0,
+slider1FixVal:null,
+slider1Text:"Tension:",
+slider2Range:10,
+slider2Val:0,
+slider2Text:"Friction:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var mTension = '+factor1.toString()+';\n var mFriction = '+factor2.toString()+';\n'};
 
-MOCOSSPRING_CODE =
+MOCOSSPRING = {
+name:"MocosSpring",
+code:
 "//var tension = 100.;\n" + 
 "//var damping = 15.;\n" + 
 "//var v0 = 20.;\n" + 
-
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
-
 "var mGamma = 0., mVDiv2 = 0.;\n" + 
 "var mEps = 0.001;\n" + 
-
 "var mA = 0., mB = 0.;\n" + 
 "var mDuration = 1000.;\n" + 
-
 "if(4 * tension - damping * damping > 0){\n" + 
 "        mGamma = Math.sqrt(4 * tension - damping * damping) / 2;\n" + 
 "        mVDiv2 = damping / 2;\n" + 
@@ -127,13 +151,10 @@ MOCOSSPRING_CODE =
 "        mA = (v0 - (mGamma + mVDiv2)) / (2 * mGamma);\n" + 
 "        mB = -1 - mA;\n" + 
 "        mDuration = Math.log(Math.abs(mA) / mEps) / (mVDiv2 - mGamma);\n" + 
-
 "}\n" + 
-
 "function getDesiredDuration() {\n" + 
 "    return mDuration;\n" + 
 "}\n" + 
-
 "function getCurrentInterpolation(ratio) {\n" + 
 "    if (ratio >= 1) {\n" + 
 "        return 1;\n" + 
@@ -148,16 +169,43 @@ MOCOSSPRING_CODE =
 "}\n" + 
 "function calculate(t,b,c,d) {\n" + 
 "    return c*getCurrentInterpolation(t/d) + b;\n" + 
-"}\n"
+"}\n",
+index:3,
+slider1Range:200,
+slider1Val:100/MOCOSSPRING.slider1Range,
+slider1FixVal:null,
+slider1Text:"Tension:",
+slider2Range:100,
+slider2Val:15/MOCOSSPRING.slider2Range,
+slider2Text:"Friction:",
+slider3Range:100,
+slider3Val:20/MOCOSSPRING.slider3Range,
+slider3Text:"Velocity:",
+defaultPara:'var tension = '+factor1.toString()+';\n var damping = '+factor2.toString()+';\n var v0 = '+factor3.toString()+';\n'};
 
-ANDROIDSPRING_CODE = 
+DIVIDE1 = {
+name:"-",
+code:null,
+index:4,
+slider1Range:null,
+slider1Val:null,
+slider1FixVal:null,
+slider2Range:null,
+slider2Val:null,
+slider2Text:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:null};
+
+ANDROIDSPRING = {
+name:"AndroidSpring",
+code:
 "//mStiffness = 1500;\n" + 
 "//mDampingRatio = 0.5;\n" + 
 "//mVelocity = 0.;\n" + 
-
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
-
 "function getCurrentInterpolation(progress,time){\n" + 
 "    if (progress >= 1) {\n" + 
 "        return 1;\n" + 
@@ -182,46 +230,202 @@ ANDROIDSPRING_CODE =
 "        }\n" + 
 "    }\n" + 
 "}\n" + 
-
 "function calculate(t,b,c,d) {\n" + 
 "    return c*getCurrentInterpolation(t/d,t) + b;\n" + 
-"} \n"
+"} \n",
+index:5,
+slider1Range:3000,
+slider1Val:1500/ANDROIDSPRING.slider1Range,
+slider1FixVal:null,
+slider1Text:"Stiffness:",
+slider2Range:1,
+slider2Val:0.5/ANDROIDSPRING.slider2Range,
+slider2Text:"Damping:",
+slider3Range:500,
+slider3Val:0/ANDROIDSPRING.slider3Range,
+slider3Text:"Velocity:",
+defaultPara:'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n'};
 
-ANDROIDFLING_CODE=
-"//mStartVelocity = -4000;\n" + 
+
+ANDROIDSPRING = {
+name:"AndroidSpring",
+code:
+"//mStiffness = 1500;\n" + 
 "//mDampingRatio = 0.5;\n" + 
-
+"//mVelocity = 0.;\n" + 
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
+"function getCurrentInterpolation(progress,time){\n" + 
+"    if (progress >= 1) {\n" + 
+"        return 1;\n" + 
+"    }else{\n" + 
+"        var deltaT = time;\n" + 
+"        var starVal = 0;\n" + 
+"        var endVal = 1;\n" + 
 
+"        var mNaturalFreq = Math.sqrt(mStiffness);\n" + 
+"        var mDampedFreq = mNaturalFreq*Math.sqrt(1.0 - mDampingRatio* mDampingRatio);\n" + 
+"        var lastVelocity =  mVelocity;\n" + 
+"        var lastDisplacement  = progress -  endVal;\n" + 
+"        var coeffB = 1.0 / mDampedFreq * (mDampingRatio * mNaturalFreq * lastDisplacement + lastVelocity);\n" + 
+"        var displacement = Math.pow(Math.E,-mDampingRatio * mNaturalFreq * deltaT) * (lastDisplacement * Math.cos(mDampedFreq * deltaT) + coeffB * Math.sin(mDampedFreq * deltaT));\n" + 
+"        var mValue = displacement + endVal;\n" + 
+
+"        if(time = 0){\n" + 
+"            return starVal;\n" + 
+"        }\n" + 
+"        else{\n" + 
+"            return mValue;\n" + 
+"        }\n" + 
+"    }\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) {\n" + 
+"    return c*getCurrentInterpolation(t/d,t) + b;\n" + 
+"} \n",
+index:5,
+slider1Range:3000,
+slider1Val:1500/ANDROIDSPRING.slider1Range,
+slider1FixVal:null,
+slider1Text:"Stiffness:",
+slider2Range:1,
+slider2Val:0.5/ANDROIDSPRING.slider2Range,
+slider2Text:"Damping:",
+slider3Range:500,
+slider3Val:0,
+slider3Text:"Velocity:",
+defaultPara:'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n'};
+
+ANDROIDFLING = {
+name:"AndroidFling",
+code:
+"//mStartVelocity = -4000;\n" + 
+"//mDampingRatio = 0.5;\n" + 
+"var config = undefined;\n" + 
+"var isPathShape = false;\n" + 
 "function calculate(t,b,c,d) {\n" + 
 "    var startVal = b;\n" + 
 "    var deltaT = t;\n" + 
-
 "    mRealFriction = mDampingRatio*(-4.2);\n" + 
 "    mFlingVelocity = ( mStartVelocity)*Math.exp(t *mRealFriction) ;\n" + 
 "    valTransition =  (valueAtTime(time - 1/60) - mStartVelocity/mRealFriction) + ( mStartVelocity/ mRealFriction) * (Math.exp(mRealFriction * t ) ) \n" + 
 "    mLastVal = valTransition;\n" + 
-
 "    if(deltaT == 0)\n" + 
 "        return b;\n" + 
 "    else\n" + 
 "        return valTransition;\n" + 
-"} \n"
+"} \n",
+index:6,
+slider1Range:10000,
+slider1FixVal:5000,
+slider1Val:(ANDROIDFLING.slider1Range - ANDROIDFLING.slider1FixVal + (-4000))/ANDROIDFLING.slider1Range,
+slider1Text:"Velocity:",
+slider2Range:1,
+slider2Val:0.8/ANDROIDFLING.slider2Range,
+slider2Text:"Damping:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var mStartVelocity = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n'};
 
-ANTICIPATEOVERSHOOT_CODE =
+DIVIDE2 = {
+name:"-",
+code:null,
+index:7,
+slider1Range:null,
+slider1Val:null,
+slider1FixVal:null,
+slider2Range:null,
+slider2Val:null,
+slider2Text:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:null};
+
+ACCELERATEDECELERATE = {
+name:"AccelerateDecelerate",
+code:
+"//var factor = 2.0; \n" + 
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+"function AccelerateDecelerateInterpolator(t,c){\n" + 
+"	return Math.cos((t + 1)*Math.PI)/2 + 0.5;\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* AccelerateDecelerateInterpolator(t/d,factor) + b; \n" + 
+"}\n",
+index:8,
+slider1Range:4,
+slider1Val:2/ACCELERATEDECELERATE.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
+
+ACCELERATE = {
+name:"Accelerate",
+code:
+"//var factor = 2.0; \n" + 
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+"function AccelerateInterpolator(t,c){\n" + 
+"	return Math.pow(t,2*c)\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* AccelerateInterpolator(t/d,factor) + b; \n" + 
+"}\n", 
+index:9,
+slider1Range:4,
+slider1Val:2/ACCELERATE.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
+	
+ANTICIPATE = {
+name:"Anticipate",
+code:
+"//var factor = 2.0; \n" + 
+"var config = undefined; \n" + 
+"var isPathShape = false; \n" + 
+"function AnticipateInterpolator(t,c){\n" + 
+"	return (c+1)*Math.pow(t,3) - c * Math.pow(t,2);\n" + 
+"}\n" + 
+"function calculate(t,b,c,d) { \n" + 
+"    return c* AnticipateInterpolator(t/d,factor) + b; \n" + 
+"}\n",
+index:10,
+slider1Range:4,
+slider1Val:2/ANTICIPATE.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
+
+ANTICIPATEOVERSHOOT = {
+name:"AnticipateOvershoot",
+code:
 "//var factor = 2.0;\n" + 
-
 "var config = undefined;\n" + 
 "var isPathShape = false;\n" + 
-
 "function aosiFunctionA(t,s) {\n" + 
 "	return t * t * ((s + 1) * t - s);\n" + 
 "}\n" + 
 " function aosiFunctionB(t,s) {\n" + 
 "	return t * t * ((s + 1) * t + s);\n" + 
 "}\n" + 
-
 "function AnticipateOvershootInterpolator(t,f) {\n" + 
 "	if (t < 0.5){\n" + 
 "		return 0.5 * aosiFunctionA(t * 2.0, f*1.5);\n" + 
@@ -230,12 +434,20 @@ ANTICIPATEOVERSHOOT_CODE =
 "		return 0.5 * (aosiFunctionB(t * 2.0 - 2.0, f*1.5) + 2.0);\n" + 
 "	}\n" + 
 "}	\n" + 
-
 "function calculate(t,b,c,d) {\n" + 
 "    return c* AnticipateOvershootInterpolator(t/d,factor) + b;\n" + 
-"}\n"
-
-
+"}\n",
+index:11,
+slider1Range:4,
+slider1Val:2/ANTICIPATEOVERSHOOT.slider1Range,
+slider1FixVal:null,
+slider1Text:"Factor:",
+slider2Range:null,
+slider2Val:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:'var factor = '+factor1.toString()+';\n'};
 
 NORMALIZED_EASING_FUNCTION = 
 "function getDimensions()\n" +
@@ -300,7 +512,7 @@ NORMALIZED_EASING_FUNCTION =
 "            return values;\n" +
 "    }\n" +
 "}\n" +
-"try { easeBootstrap() || value; } catch(e) { value; }\n"
+"try { easeBootstrap() || value; } catch(e) { value; }\n";
 
 
 function android_interpolator_script(ui_reference) {
@@ -308,34 +520,44 @@ function android_interpolator_script(ui_reference) {
 	var android_interpolator = {}; // put all global variables on this object to avoid namespace clashes
 
 	android_interpolator.CLEAR_EXPRESSION_BTN     = false; // this adds a button to the palette, "clear", that deletes expressions on all selected properties. Off by default.
-	android_interpolator.VERSION                  = "0.0.2";
+	android_interpolator.VERSION                  = "0.0.3";
 	android_interpolator.interpolatorEquation           = "";
 	android_interpolator.palette                  = {};
 
 	// palette controls
 	android_interpolator.interpolatorList               = {};
 
-	var INTERPOLATOR_MODE = 1;
-	var factor1 = 0.5,factor2 = 0,factor3 = 0;
+	var INTERPOLATOR_MODE = 0;
+	var INTERPOLAOTR_STRING_ARRAY = new Array();
+	//var INTERPOLATOR_MODE = 1;
 	var prefixParameters;
 
-	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "spring"; 
+	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
-	android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling','-','AnticipateOvershoot']
+	//android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT];
+	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT];
+	//android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling','-','AnticipateOvershoot']
 
-	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择物理插值器的类型";
+	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择插值器的类型";
 
 	android_interpolator.strHelpText = 
-	"Android Interpolaotr 使用 「时间轴 - 关键帧 - 插值」 的方式，去模拟 「迭代式」 力学动画。\n" +
+	"Android Interpolaotr 使用 「时间轴 - 关键帧 - 插值」 的方式，去模拟 「迭代式」 力学动画，同时也整合了默认的安卓插值器动画\n" +
 	"\n" +
 	"首先选择关键帧，然后选择插值器类型，参数调节完成后点击 「应用」 按钮即可 \n" + 
 	"\n" +
-	"(其中的 AndroidSpring 是 Android API 25 中迭代动画系统 DynamicAnimation 的 插值版本，参数完全对齐，只要保证足够的震荡时间即可)\n" 
+	"(其中的 AndroidSpring 是 Android API 25 中迭代动画系统 DynamicAnimation 的 插值版本，参数完全对齐，只要保证足够的动画时间即可)\n"
 	
+
+
 
 	function an_main(thisObj)
 	{ 
+		//add Object Name to An Array
+		for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+			INTERPOLAOTR_STRING_ARRAY[i] = android_interpolator.interpolatorTypesAry[i].name
+		}
 		an_createPalette(thisObj);
+	
 	}
 
 
@@ -362,35 +584,23 @@ function android_interpolator_script(ui_reference) {
 		// "slider" group
 
 		var	slGrp1 = android_interpolator.palette.add('group', undefined, 'Slider Group 1');
-		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor1:');
+		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor:');
 		var slider1 = slGrp1.add("slider", undefined, thisObj.numRows, 0, 100.);
 		slider1.size = 'width: 150, height: 20';
 		var value1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, '0.5f');
 		slider1.onChanging = function () {  
-			if(INTERPOLATOR_MODE == 1){
-				value1.text = slider1.value.toFixed(1).toString()/100. + '.f';
-				factor1 = slider1.value.toFixed(1)/100.;
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					if(android_interpolator.interpolatorTypesAry[i].slider1FixVal !=null){
+						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(1) - android_interpolator.interpolatorTypesAry[i].slider1FixVal;
+					}
+					else{
+						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(1);
+					}
+					value1.text = factor1.toString() + 'f';
+				}
 			}
-			else if(INTERPOLATOR_MODE == 4){
-				value1.text = (slider1.value*2.).toFixed(1).toString() + '.f';
-				factor1 = (slider1.value*2.).toFixed(1);
-			}
-			else if(INTERPOLATOR_MODE == 5){
-				value1.text = (slider1.value*30.).toFixed(1).toString() + '.f';
-				factor1 = (slider1.value*30.).toFixed(1);
-			}
-			else if(INTERPOLATOR_MODE == 6){
-				value1.text = (slider1.value*100. -5000.).toFixed(1).toString() + '.f';
-				factor1 = (slider1.value*100. - 5000.).toFixed(1);
-			}
-			else if(INTERPOLATOR_MODE == 2 || INTERPOLATOR_MODE == 3){
-				value1.text = slider1.value.toFixed(1).toString() + '.f';
-				factor1 = slider1.value.toFixed(1);
-			}
-			else{
-				value1.text = slider1.value.toFixed(1).toString()/25. + '.f';
-				factor1 = slider1.value.toFixed(1)/25.;
-			}
+			
 
 		}
 		slider1.value = 50.;
@@ -403,22 +613,13 @@ function android_interpolator_script(ui_reference) {
 		slider2.size = 'width: 150, height: 20';
 		var value2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
 		slider2.onChanging = function () {  
-
-			if(INTERPOLATOR_MODE == 2 || INTERPOLATOR_MODE == 3){
-				value2.text = slider2.value.toFixed(1).toString()/10. + '.f';
-				factor2 = slider2.value.toFixed(1)/10.;
-			}
-			else if(INTERPOLATOR_MODE == 5){
-				value2.text = (slider2.value).toFixed(1).toString()/100. + '.f';
-				factor2 = slider2.value.toFixed(1)/100.;
-			}
-			else if(INTERPOLATOR_MODE == 6){
-				value2.text = (slider2.value).toFixed(1).toString()/25. + '.f';
-				factor2 = slider2.value.toFixed(1)/25.;
-			}
-			else{
-				value2.text = slider2.value.toFixed(1).toString() + '.f';
-				factor2 = slider2.value.toFixed(1);
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					if(android_interpolator.interpolatorTypesAry[i].slider2Val !=null){
+						factor2 = (slider2.value/100. * android_interpolator.interpolatorTypesAry[i].slider2Range).toFixed(1);
+						value2.text = factor2.toString() + 'f';
+					}
+				}
 			}
 		}
 
@@ -430,14 +631,13 @@ function android_interpolator_script(ui_reference) {
 		slider3.size = 'width: 150, height: 20';
 		var value3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
 		slider3.onChanging = function () {  
-
-			if(INTERPOLATOR_MODE == 4){
-				value3.text = slider3.value.toFixed(1).toString() + '.f';
-				factor3 = slider3.value.toFixed(1);
-			}
-			else if(INTERPOLATOR_MODE == 5){
-				value3.text = (slider3.value*5.).toFixed(1).toString() + '.f';
-				factor3 = (slider3.value*5.).toFixed(1);
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					if(android_interpolator.interpolatorTypesAry[i].slider3Val !=null){
+						factor3 = (slider3.value/100. * android_interpolator.interpolatorTypesAry[i].slider3Range).toFixed(1);
+						value3.text = factor3.toString() + 'f';
+					}
+				}
 			}
 
 		}
@@ -448,7 +648,9 @@ function android_interpolator_script(ui_reference) {
 		var	interpolatorGrp = android_interpolator.palette.add('group', undefined, 'Easing group');
 		interpolatorGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '弹性类型:');
 
-			android_interpolator.interpolatorList                          = interpolatorGrp.add('dropdownlist', LIST_DIMENSIONS, android_interpolator.interpolatorTypesAry);
+
+			android_interpolator.interpolatorList                          = interpolatorGrp.add('dropdownlist', LIST_DIMENSIONS, INTERPOLAOTR_STRING_ARRAY);
+
 			android_interpolator.interpolatorList.helpTip                  = android_interpolator.TOOLTIP_INTERPOLATOR;
 			android_interpolator.interpolatorList.graphics.foregroundColor = darkColorBrush;
 
@@ -462,121 +664,48 @@ function android_interpolator_script(ui_reference) {
 				} else {
 					app.settings.saveSetting("androidinterpolator", android_interpolator.INTERPOLATOR_SETTINGS_KEY, this.selection.toString());
 					//alert("yo, you selected item " + this.selection.index);
-					switch(this.selection.index) {
-						//TODO:add a ParaSetting Function
-						case 0:
-							INTERPOLATOR_MODE = 1;
-							text1.text = 'Factor:';
-							value1.text = '0.5f'
-							slider1.max = 1;
-							slider1.value = 50
-							slGrp2.visible = false;
-							slGrp3.visible = false;
-							factor1 = 0.5;
-							prefixParameters = 'var factor = 0.5; \n'
-							break;
-						case 1:
-							INTERPOLATOR_MODE = 2;
-							text1.text = 'Tension:';
-							text2.text = 'Friction:';
-							slider1.max = 20;
-							slider2.max = 20;
-							slider1.value = 0;
-							slider2.value = 0;
-							value1.text = '0.f'
-							value2.text = '0.f'
-							slGrp2.visible = true;
-							slGrp3.visible = false;
-							factor1 = 0.;
-							factor2 = 0.;
-							prefixParameters = 'var mTension = 0.;\n var mFriction = 0.;\n'
-							break;
-						case 2:
-							INTERPOLATOR_MODE = 3;
-							text1.text = 'Tension:';
-							text2.text = 'Friction:';
-							slider1.max = 20;
-							slider2.max = 20;
-							slider1.value = 0;
-							slider2.value = 0;
-							value1.text = '0.f'
-							value2.text = '0.f'
-							slGrp2.visible = true;
-							slGrp3.visible = false;
-							factor1 = 0.;
-							factor2 = 0.;
-							prefixParameters = 'var mTension = 0.;\n var mFriction = 0.;\n'
-							break;
-						case 3:
-							INTERPOLATOR_MODE = 4;
-							text1.text = 'Tension:';
-							text2.text = 'Friction:';
-							text3.text = 'Velocity:';
-							slider1.max = 100;
-							slider2.max = 100;
-							slider3.max = 100;
-							slider1.value = 50;
-							slider2.value = 15;
-							slider3.value = 20;
-							value1.text = '100.f'
-							value2.text = '15.f'
-							value3.text = '20.f'
-							slGrp2.visible = true;
-							slGrp3.visible = true;
-							factor1 = 100.;
-							factor2 = 15.;
-							factor3 = 20.;
-							prefixParameters = 'var tension = 100.;\nvar damping = 15.;\nvar v0 = 20.;\n'
-							break;
-						case 5:
-							INTERPOLATOR_MODE = 5;
-							text1.text = 'Stiffness:';
-							text2.text = 'Damping:';
-							text3.text = 'Velocity:';
-							slider1.max = 100;
-							slider2.max = 100;
-							slider3.max = 100;
-							slider1.value = 50;
-							slider2.value = 50;
-							slider3.value = 0;
-							value1.text = '1500.f'
-							value2.text = '0.5f'
-							value3.text = '0.f'
-							slGrp2.visible = true;
-							slGrp3.visible = true;
-							factor1 = 1500.;
-							factor2 = 0.5;
-							factor3 = 0.;
-							prefixParameters = 'var mStiffness = 1500.;\nvar mDampingRatio = 0.5;\nvar mVelocity = 0.;\n'
-							break;
-						case 6:
-							INTERPOLATOR_MODE = 6;
-							text1.text = 'Velocity:';
-							text2.text = 'Damping:';
-							slider1.value = 50;
-							slider2.value = 0;
-							value1.text = '0.f'
-							value2.text = '0.f'
-							slGrp2.visible = true;
-							slGrp3.visible = false;
-							factor1 = 0.;
-							factor2 = 0.;
-							prefixParameters = 'var mStartVelocity = 0.;\nvar mDampingRatio = 0.;\n'
-							break;
-						case 8:
-								INTERPOLATOR_MODE = 7;
-								text1.text = 'Factor:';
-								slider1.value = 25;
-								value1.text = '1.f'
-								slGrp2.visible = false;
-								slGrp3.visible = false;
-								factor1 = 1.;
-								prefixParameters = 'var factor = 1.0;\n'
-								break;
-						default:
-							//alert('233')
-					}
+					INTERPOLATOR_MODE = this.selection.index;
 
+
+
+					for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+						if(INTERPOLATOR_MODE == android_interpolator.interpolatorTypesAry[i].index){
+							if(android_interpolator.interpolatorTypesAry[i].slider2Val == null){
+								slGrp2.visible = false;
+							}
+							else{
+								slGrp2.visible = true;
+							}
+							if(android_interpolator.interpolatorTypesAry[i].slider3Val == null){
+								slGrp3.visible = false;
+							}
+							else{
+								slGrp3.visible = true;
+							}
+							text1.text = android_interpolator.interpolatorTypesAry[i].slider1Text;
+							text2.text = android_interpolator.interpolatorTypesAry[i].slider2Text;
+							text3.text = android_interpolator.interpolatorTypesAry[i].slider3Text;
+
+							slider1.value = android_interpolator.interpolatorTypesAry[i].slider1Val*100.;
+							slider2.value = android_interpolator.interpolatorTypesAry[i].slider2Val*100.;
+							slider3.value = android_interpolator.interpolatorTypesAry[i].slider3Val*100.;
+
+							if(android_interpolator.interpolatorTypesAry[i].slider1FixVal !=null){
+								factor1 = (android_interpolator.interpolatorTypesAry[i].slider1Val * android_interpolator.interpolatorTypesAry[i].slider1Range - android_interpolator.interpolatorTypesAry[i].slider1FixVal);
+							}
+							else{
+								factor1 = android_interpolator.interpolatorTypesAry[i].slider1Val * android_interpolator.interpolatorTypesAry[i].slider1Range;
+							}
+							factor2 = android_interpolator.interpolatorTypesAry[i].slider2Val * android_interpolator.interpolatorTypesAry[i].slider2Range;
+							factor3 = android_interpolator.interpolatorTypesAry[i].slider3Val * android_interpolator.interpolatorTypesAry[i].slider3Range;
+
+							value1.text = (factor1).toFixed(1).toString() + 'f';
+							value2.text = (factor2).toFixed(1).toString() + 'f';
+							value3.text = (factor3).toFixed(1).toString() + 'f';
+							prefixParameters = android_interpolator.interpolatorTypesAry[i].defaultPara;
+
+						}
+					}
 				}
 			}
 
@@ -611,57 +740,35 @@ function android_interpolator_script(ui_reference) {
 	//TODO:Use for loop for select
 	function getParameters(mode_num){
 		switch(mode_num) {
-			case 1:
+			case 0:
 				prefixParameters = 'var factor = '+factor1.toString()+'; \n';
 				break;
+			case 1:
+				prefixParameters = 'var mTension = '+factor1.toString()+';\nvar mFriction = '+factor2.toString()+';\n';
+				break;
 			case 2:
-				prefixParameters = 'var mTension = '+factor1.toString()+';\n var mFriction = '+factor2.toString()+';\n';
+				prefixParameters = 'var mTension = '+factor1.toString()+';\nvar mFriction = '+factor2.toString()+';\n';
 				break;
 			case 3:
-				prefixParameters = 'var mTension = '+factor1.toString()+';\n var mFriction = '+factor2.toString()+';\n';
-				break;
-			case 4:
-				prefixParameters = 'var tension = '+factor1.toString()+';\n var damping = '+factor2.toString()+';\n var v0 = '+factor3.toString()+';\n';
+				prefixParameters = 'var tension = '+factor1.toString()+';\nvar damping = '+factor2.toString()+';\nvar v0 = '+factor3.toString()+';\n';
 				break;
 			case 5:
-				prefixParameters = 'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n';
+				prefixParameters = 'var mStiffness = '+factor1.toString()+';\nvar mDampingRatio = '+factor2.toString()+';\nvar mVelocity = '+factor3.toString()+';\n';
 				break;
 			case 6:
-				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n';
-				break;
-			case 7:
-				prefixParameters = 'var factor = '+factor1.toString()+';\n';
+				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\nvar mDampingRatio = '+factor2.toString()+';\n';
 				break;
 			default:
-
+				prefixParameters = 'var factor = '+factor1.toString()+';\n';
 		}
 	}
 
 	//TODO:Use for loop for select
 	function getInterpolatorType(mode_num){
-		switch(mode_num) {
-			case 1:
-				return SPRING_CODE
-				break;
-			case 2:
-				return BOUNCE_CODE
-				break;
-			case 3:
-				return DAMPING_CODE
-				break;
-			case 4:
-				return MOCOSSPRING_CODE
-				break;
-			case 5:
-				return ANDROIDSPRING_CODE
-				break;
-			case 6:
-				return ANDROIDFLING_CODE
-				break;
-			case 7:
-				return ANTICIPATEOVERSHOOT_CODE
-				break;
-			default:
+		for (var i = 0; i < android_interpolator.interpolatorTypesAry.length; i++){
+			if(mode_num == android_interpolator.interpolatorTypesAry[i].index){
+				return android_interpolator.interpolatorTypesAry[i].code
+			}
 		}
 	}
 
