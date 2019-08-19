@@ -1,11 +1,29 @@
 #target aftereffects
 
-// Android Interpolaotr 0.0.3
+// Android Interpolaotr 0.0.4
 // MartinRGB 2019 (qiuyinsen@gmail.com)
 
 // An After Effects adaptation of Android Interpolator equations.
 
 var factor1 = 0.5,factor2 = 0.,factor3 = 0.;
+var SPRING = new Object();
+var BOUNCE = new Object();
+var DAMPING = new Object();
+var MOCOSSPRING = new Object();
+var DIVIDE1 = new Object();
+var ANDROIDSPRING = new Object();
+var ANDROIDFLING = new Object();
+var DIVIDE2 = new Object();
+var ACCELERATEDECELERATE = new Object();
+var ACCELERATE = new Object();
+var ANTICIPATE = new Object();
+var ANTICIPATEOVERSHOOT = new Object();
+var BOUNCE2 = new Object();
+var CYCLE = new Object();
+var DECELERATE = new Object();
+var LINEAR = new Object();
+var OVERSHOOT = new Object();
+var NORMALIZED_EASING_FUNCTION;
 
 SPRING = {
 name:"Spring",
@@ -28,7 +46,7 @@ code:
 "}\n",
 index:0,
 slider1Range:1,
-slider1Val:0.5/SPRING.slider1Range,
+slider1Val:0.5/1,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -172,14 +190,14 @@ code:
 "}\n",
 index:3,
 slider1Range:200,
-slider1Val:100/MOCOSSPRING.slider1Range,
+slider1Val:100/200,
 slider1FixVal:null,
 slider1Text:"Tension:",
 slider2Range:100,
-slider2Val:15/MOCOSSPRING.slider2Range,
+slider2Val:15/100,
 slider2Text:"Friction:",
 slider3Range:100,
-slider3Val:20/MOCOSSPRING.slider3Range,
+slider3Val:20/100,
 slider3Text:"Velocity:",
 defaultPara:'var tension = '+factor1.toString()+';\n var damping = '+factor2.toString()+';\n var v0 = '+factor3.toString()+';\n'};
 
@@ -235,65 +253,17 @@ code:
 "} \n",
 index:5,
 slider1Range:3000,
-slider1Val:1500/ANDROIDSPRING.slider1Range,
+slider1Val:1500/3000,
 slider1FixVal:null,
 slider1Text:"Stiffness:",
 slider2Range:1,
-slider2Val:0.5/ANDROIDSPRING.slider2Range,
+slider2Val:0.5/1,
 slider2Text:"Damping:",
 slider3Range:500,
-slider3Val:0/ANDROIDSPRING.slider3Range,
+slider3Val:0/500,
 slider3Text:"Velocity:",
 defaultPara:'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n'};
 
-
-ANDROIDSPRING = {
-name:"AndroidSpring",
-code:
-"//mStiffness = 1500;\n" + 
-"//mDampingRatio = 0.5;\n" + 
-"//mVelocity = 0.;\n" + 
-"var config = undefined;\n" + 
-"var isPathShape = false;\n" + 
-"function getCurrentInterpolation(progress,time){\n" + 
-"    if (progress >= 1) {\n" + 
-"        return 1;\n" + 
-"    }else{\n" + 
-"        var deltaT = time;\n" + 
-"        var starVal = 0;\n" + 
-"        var endVal = 1;\n" + 
-
-"        var mNaturalFreq = Math.sqrt(mStiffness);\n" + 
-"        var mDampedFreq = mNaturalFreq*Math.sqrt(1.0 - mDampingRatio* mDampingRatio);\n" + 
-"        var lastVelocity =  mVelocity;\n" + 
-"        var lastDisplacement  = progress -  endVal;\n" + 
-"        var coeffB = 1.0 / mDampedFreq * (mDampingRatio * mNaturalFreq * lastDisplacement + lastVelocity);\n" + 
-"        var displacement = Math.pow(Math.E,-mDampingRatio * mNaturalFreq * deltaT) * (lastDisplacement * Math.cos(mDampedFreq * deltaT) + coeffB * Math.sin(mDampedFreq * deltaT));\n" + 
-"        var mValue = displacement + endVal;\n" + 
-
-"        if(time = 0){\n" + 
-"            return starVal;\n" + 
-"        }\n" + 
-"        else{\n" + 
-"            return mValue;\n" + 
-"        }\n" + 
-"    }\n" + 
-"}\n" + 
-"function calculate(t,b,c,d) {\n" + 
-"    return c*getCurrentInterpolation(t/d,t) + b;\n" + 
-"} \n",
-index:5,
-slider1Range:3000,
-slider1Val:1500/ANDROIDSPRING.slider1Range,
-slider1FixVal:null,
-slider1Text:"Stiffness:",
-slider2Range:1,
-slider2Val:0.5/ANDROIDSPRING.slider2Range,
-slider2Text:"Damping:",
-slider3Range:500,
-slider3Val:0,
-slider3Text:"Velocity:",
-defaultPara:'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n'};
 
 ANDROIDFLING = {
 name:"AndroidFling",
@@ -317,10 +287,10 @@ code:
 index:6,
 slider1Range:10000,
 slider1FixVal:5000,
-slider1Val:(ANDROIDFLING.slider1Range - ANDROIDFLING.slider1FixVal + (-4000))/ANDROIDFLING.slider1Range,
+slider1Val:(10000 - 5000 + (-4000))/10000,
 slider1Text:"Velocity:",
 slider2Range:1,
-slider2Val:0.8/ANDROIDFLING.slider2Range,
+slider2Val:0.8/1,
 slider2Text:"Damping:",
 slider3Range:null,
 slider3Val:null,
@@ -379,7 +349,7 @@ code:
 "}\n", 
 index:9,
 slider1Range:10,
-slider1Val:2/ACCELERATE.slider1Range,
+slider1Val:2/10,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -403,7 +373,7 @@ code:
 "}\n",
 index:10,
 slider1Range:10,
-slider1Val:2/ANTICIPATE.slider1Range,
+slider1Val:2/10,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -438,7 +408,7 @@ code:
 "}\n",
 index:11,
 slider1Range:10,
-slider1Val:2/ANTICIPATEOVERSHOOT.slider1Range,
+slider1Val:2/10,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -494,7 +464,7 @@ code:
 "}\n",
 index:13,
 slider1Range:10,
-slider1Val:2/CYCLE.slider1Range,
+slider1Val:2/10,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -520,7 +490,7 @@ code:
 "}\n",
 index:14,
 slider1Range:10,
-slider1Val:2/DECELERATE.slider1Range,
+slider1Val:2/10,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -571,7 +541,7 @@ code:
 "}\n",
 index:16,
 slider1Range:10,
-slider1Val:2/OVERSHOOT.slider1Range,
+slider1Val:2/10,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -646,13 +616,12 @@ NORMALIZED_EASING_FUNCTION =
 "}\n" +
 "try { easeBootstrap() || value; } catch(e) { value; }\n";
 
-
 function android_interpolator_script(ui_reference) {
 
 	var android_interpolator = {}; // put all global variables on this object to avoid namespace clashes
 
 	android_interpolator.CLEAR_EXPRESSION_BTN     = false; // this adds a button to the palette, "clear", that deletes expressions on all selected properties. Off by default.
-	android_interpolator.VERSION                  = "0.0.3";
+	android_interpolator.VERSION                  = "0.0.4";
 	android_interpolator.interpolatorEquation           = "";
 	android_interpolator.palette                  = {};
 
@@ -666,7 +635,8 @@ function android_interpolator_script(ui_reference) {
 
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
-	//android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT];
+
+
 	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT];
 	//android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling','-','AnticipateOvershoot']
 
@@ -679,8 +649,6 @@ function android_interpolator_script(ui_reference) {
 	"\n" +
 	"(其中的 AndroidSpring 是 Android API 25 中迭代动画系统 DynamicAnimation 的 插值版本，参数完全对齐，只要保证足够的动画时间即可)\n"
 	
-
-
 
 	function an_main(thisObj)
 	{ 
