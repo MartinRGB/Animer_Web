@@ -877,23 +877,23 @@ function android_interpolator_script(ui_reference) {
 
 	//TODO:Use for loop for select
 	function getParameters(mode_num){
-		switch(mode_num) {
-			case 0:
+		switch(android_interpolator.interpolatorTypesAry[mode_num].name) {
+			case "Spring":
 				prefixParameters = 'var factor = '+factor1.toString()+'; \n';
 				break;
-			case 1:
+			case "Bounce":
 				prefixParameters = 'var mTension = '+factor1.toString()+';\nvar mFriction = '+factor2.toString()+';\n';
 				break;
-			case 2:
+			case "Damping":
 				prefixParameters = 'var mTension = '+factor1.toString()+';\nvar mFriction = '+factor2.toString()+';\n';
 				break;
-			case 3:
+			case "MocosSpring":
 				prefixParameters = 'var tension = '+factor1.toString()+';\nvar damping = '+factor2.toString()+';\nvar v0 = '+factor3.toString()+';\n';
 				break;
-			case 5:
+			case "AndroidSpring":
 				prefixParameters = 'var mStiffness = '+factor1.toString()+';\nvar mDampingRatio = '+factor2.toString()+';\nvar mVelocity = '+factor3.toString()+';\n';
 				break;
-			case 6:
+			case "AndroidFling":
 				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\nvar mDampingRatio = '+factor2.toString()+';\n';
 				break;
 			default:
