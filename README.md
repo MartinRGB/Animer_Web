@@ -15,4 +15,4 @@ A script for better Android Motion Design,inspired by "Ease and wizz" and "After
 - convert Script to Extension with new GUI(ZXP Install)
 - add SpringAnimation Converter (Protopie|Origami|FramerJS|iOS|ReboundJS(Web)|Android Dyanmic)
 - show the source code of the Animation
-- add an Android Example Application
+- add Android & iOS Example Application
