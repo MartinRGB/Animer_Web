@@ -5,6 +5,11 @@
 
 // An After Effects adaptation of Android Interpolator equations.
 
+
+///////////////////////////////
+// aescript expression
+///////////////////////////////
+
 var factor1 = 0.5,factor2 = 0.,factor3 = 0.;
 var SPRING = new Object();
 var BOUNCE = new Object();
@@ -626,6 +631,10 @@ KEYTIME_FUNCTION =
 
 function android_interpolator_script(ui_reference) {
 
+	///////////////////////////////
+	// preset
+	///////////////////////////////
+
 	var android_interpolator = {}; // put all global variables on this object to avoid namespace clashes
 
 	android_interpolator.CLEAR_EXPRESSION_BTN     = false; // this adds a button to the palette, "clear", that deletes expressions on all selected properties. Off by default.
@@ -636,19 +645,19 @@ function android_interpolator_script(ui_reference) {
 	// palette controls
 	android_interpolator.interpolatorList               = {};
 
+	// selected interpolator
 	var INTERPOLATOR_MODE = 0;
+	// array for storing interpolators' name
 	var INTERPOLAOTR_STRING_ARRAY = new Array();
-	//var INTERPOLATOR_MODE = 1;
-	var prefixParameters;
-
+	// prefix code snippet 
+	var prefixParameters
+	// selected keyframe variable
 	var key1Index,key2Index;
 
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
-
-
+	// arrary for storing interpolators' object
 	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT];
-	//android_interpolator.interpolatorTypesAry = ['Spring','Bounce', 'Damping', 'MocosSpring','-','AndroidSpring','AndroidFling','-','AnticipateOvershoot']
 
 	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择插值器的类型";
 
@@ -662,7 +671,7 @@ function android_interpolator_script(ui_reference) {
 
 	function an_main(thisObj)
 	{ 
-		//add Object Name to An Array
+		//add Object Name to An Array(by using of menu creating)
 		for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 			INTERPOLAOTR_STRING_ARRAY[i] = android_interpolator.interpolatorTypesAry[i].name
 		}
@@ -691,7 +700,9 @@ function android_interpolator_script(ui_reference) {
 
 		// popup menus
 
-		// "slider" group
+		///////////////////////////////
+		// slider group
+		///////////////////////////////
 
 		var	slGrp1 = android_interpolator.palette.add('group', undefined, 'Slider Group 1');
 		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor:');
@@ -753,7 +764,9 @@ function android_interpolator_script(ui_reference) {
 		}
 				
 
-		// "interpolator" menu
+		///////////////////////////////
+		// interpolator menu
+		///////////////////////////////
 
 		var	interpolatorGrp = android_interpolator.palette.add('group', undefined, 'Easing group');
 		interpolatorGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '插值类型:');
@@ -825,16 +838,15 @@ function android_interpolator_script(ui_reference) {
 				}
 			}
 
-
-		////////////////////
+		///////////////////////////////
 		// apply button
-		////////////////////
+		///////////////////////////////
 
 		var buttonGrp = android_interpolator.palette.add('group', undefined, 'Button group');
 		buttonGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
 
 		var applyBtn     = buttonGrp.add('button', undefined, '应用');
-		applyBtn.onClick = an_applyExpressions;
+		applyBtn.onClick = an_setFunctions;
 		var helpBtn      = buttonGrp.add("button {text:'?', maximumSize:[30,30]}");
 		helpBtn.onClick  = function() {alert("Android Interpolator v " + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
 
@@ -847,11 +859,9 @@ function android_interpolator_script(ui_reference) {
 
 	}
 
-
-	function an_trace(s) { // for debugging
-		//$.writeln(s); // writes to the ExtendScript interface
-		writeLn(s); // writes in the AE info window
-	}
+	//////////////////////////////////////////////////////////////
+	// get selected interpolator's code 
+	//////////////////////////////////////////////////////////////
 
 	//TODO:Use for loop for select
 	function getParameters(mode_num){
@@ -894,6 +904,155 @@ function android_interpolator_script(ui_reference) {
 		}
 	}
 
+	//////////////////////////////////////////////////////////////
+	// set aescript to layers' keyframes
+	//////////////////////////////////////////////////////////////
+
+	function an_setFunctions(){
+		an_two_keyframe_func();
+	} 
+
+	function an_two_keyframe_func() {
+		var activeItem = app.project.activeItem, props,props2, n, p,currentLayer,myMarker1,myMarker2,myTime1,myTime2;  
+		if (activeItem instanceof CompItem){  
+			DT = Math.min(0.01, activeItem.frameDuration/10.0);  
+			currentLayer = activeItem.selectedLayers;
+			//alert(currentLayer[0].name);
+			props = activeItem.selectedProperties;
+			for ( var x = 0; x <= (currentLayer.length - 1); x++)
+			{
+
+				props2 = currentLayer[x].selectedProperties;
+				for (n=0; n<props2.length; n++){  
+					p = props2[n];   //props[n]
+					if (!p.numKeys) continue;  
+
+					key1Index = p.selectedKeys[0];
+					key2Index = p.selectedKeys[1];
+
+					//alert(p.name)
+					myMarker1 = new MarkerValue("",p.name + " Anim Begin");
+					myMarker2 = new MarkerValue("",p.name + " Anim End");
+					myTime1 = p.keyTime(p.selectedKeys[0]);
+					myTime2 = p.keyTime(p.selectedKeys[1]);
+
+					KEYTIME_FUNCTION = 
+					"if(time>key("+key1Index+").time  &  time<key("+key2Index+").time){\n" + 
+					"try { easeBootstrap() || value; } catch(e) { value; }\n" + 
+					"}\n" + 
+					"else{\n" + 
+					"value;\n" + 
+					"}\n";
+	
+					//#TODO,2 Layers Add Keyframe
+					currentLayer[x].Marker.setValueAtTime(myTime1,myMarker1);
+					currentLayer[x].Marker.setValueAtTime(myTime2,myMarker2);
+
+					an_applyExpressions_singleLayer(x);
+
+				};
+			};
+		};  
+		return;  
+	}
+
+	function an_applyExpressions_singleLayer(layer_num) { // decide what external file to load
+
+		if (!an_canProceed()) { return false; }
+		app.beginUndoGroup("Android Interpolator");
+		try {
+			getParameters(INTERPOLATOR_MODE);
+			android_interpolator.interpolatorEquation = prefixParameters + getInterpolatorType(INTERPOLATOR_MODE) + NORMALIZED_EASING_FUNCTION + KEYTIME_FUNCTION;
+		} catch(e) {
+			Window.alert(e);
+			return false;
+		}
+
+		an_setProps_singeLayer(android_interpolator.interpolatorEquation,layer_num);
+		app.endUndoGroup();
+	}
+
+	function an_setProps_singeLayer(expressionCode,layer_num)
+	{
+		var selectedLayers = app.project.activeItem.selectedLayers;
+		for ( var x = 0; x <= (selectedLayers.length - 1); x++)
+		{
+
+			if( x == layer_num){
+				var selectedProperties = selectedLayers[x].selectedProperties;
+				var numOfChangedProperties = 0;
+
+				for (var f in selectedProperties)
+				{
+					var currentProperty = selectedProperties[f];
+
+					if ((currentProperty.propertyValueType == PropertyValueType.SHAPE)) {
+						//alert(android_interpolator.CURVACEOUS_ERROR_TXT);
+						alert ('wrong!');
+						continue;
+					}
+
+					if (!currentProperty.canSetExpression) { continue } // don't do anything if we can't set an expression
+					if (currentProperty.numKeys < 2) { continue }       // likewise if there aren't at least two keyframes
+					currentProperty.expression = expressionCode;
+					numOfChangedProperties++;
+				}
+				// clearOutput(); // TODO
+				// an_trace("Ease and Wizz:")
+				var easingType = android_interpolator.interpolatorList.selection.toString();
+				if (numOfChangedProperties == 1) {
+					an_trace("Applied \"" +  easingType + "\" to one property.");
+				} else {
+					an_trace("Applied \"" +  easingType + "\" to " + numOfChangedProperties + " properties.");
+				}
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////
+	// utils for debugging
+	//////////////////////////////////////////////////////////////
+
+	function an_trace(s) { // for debugging
+		//$.writeln(s); // writes to the ExtendScript interface
+		writeLn(s); // writes in the AE info window
+	}
+	
+	function an_canProceed()
+	{ 
+		var activeItem = app.project.activeItem;
+		if (activeItem === null) {
+			alert("Select two keyframes.");
+			return false;
+		}
+		if (activeItem.selectedProperties == "") {
+			alert("Please select at least one keyframe.")
+			return false;
+		}
+		var props = activeItem.selectedProperties,n,p;
+		for (n=0; n<props.length; n++){  
+			p = props[n];  
+			if (!p.numKeys) continue;  
+			//idx = p.nearestKeyIndex(comp.time);  
+			if(p.selectedKeys.length != 2){
+				alert('You can only select two keyframes!')
+				return false;
+			}
+		};
+		
+		// var currentLayer = activeItem.selectedLayers;
+		// if(currentLayer.length > 1){
+		// 	alert('Only support one layer now!')
+		// 	return false;
+		// }
+
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////
+	// backup functions
+	//////////////////////////////////////////////////////////////
+
 	function an_applyExpressions() { // decide what external file to load
 
 		if (!an_canProceed()) { return false; }
@@ -901,7 +1060,7 @@ function android_interpolator_script(ui_reference) {
 		app.beginUndoGroup("Android Interpolator");
 
 		try {
-			an_two_keyframe_func();
+			
 			getParameters(INTERPOLATOR_MODE);
 			android_interpolator.interpolatorEquation = prefixParameters + getInterpolatorType(INTERPOLATOR_MODE) + NORMALIZED_EASING_FUNCTION + KEYTIME_FUNCTION;
 		} catch(e) {
@@ -947,107 +1106,12 @@ function android_interpolator_script(ui_reference) {
 			numOfChangedProperties++;
 		}
 		// clearOutput(); // TODO
-		// an_trace("Ease and Wizz:")
 		var easingType = android_interpolator.interpolatorList.selection.toString();
 		if (numOfChangedProperties == 1) {
 			an_trace("Applied \"" +  easingType + "\" to one property.");
 		} else {
 			an_trace("Applied \"" +  easingType + "\" to " + numOfChangedProperties + " properties.");
 		}
-	}
-
-	function an_two_keyframe_func() {
-		var activeItem = app.project.activeItem, props, n, p,currentLayer;  
-		if (activeItem instanceof CompItem){  
-			DT = Math.min(0.01, activeItem.frameDuration/10.0);  
-			currentLayer = activeItem.selectedLayers;
-			//alert(currentLayer[0].name);
-			props = activeItem.selectedProperties;
-			// for ( var x = 0; x <= (currentLayer.length - 1); ++x)
-			// {
-				for (n=0; n<props.length; n++){  
-					p = props[n];  
-					if (!p.numKeys) continue;  
-
-					key1Index = p.selectedKeys[0];
-					key2Index = p.selectedKeys[1];
-
-					KEYTIME_FUNCTION = 
-					"if(time>key("+p.selectedKeys[0]+").time  &  time<key("+p.selectedKeys[1]+").time){\n" + 
-					"try { easeBootstrap() || value; } catch(e) { value; }\n" + 
-					"}\n" + 
-					"else{\n" + 
-					"value;\n" + 
-					"}\n";
-
-
-					//alert(p.name)
-					var myMarker1 = new MarkerValue("",p.name + " Anim Begin");
-					var myMarker2 = new MarkerValue("",p.name + " Anim End");
-					var myTime1 = p.keyTime(p.selectedKeys[0]);
-					var myTime2 = p.keyTime(p.selectedKeys[1]);
-
-					//#TODO,2 Layers Add Keyframe
-					currentLayer[0].Marker.setValueAtTime(myTime1,myMarker1);
-					currentLayer[0].Marker.setValueAtTime(myTime2,myMarker2);
-
-					if(p.selectedKeys.length == 2){
-						// key1Index = p.selectedKeys[0];
-						// key2Index = p.selectedKeys[1];
-						// KEYTIME_FUNCTION = 
-						// "if(time>key("+key1Index+").time  &  time<key("+key2Index+").time){\n" + 
-						// "try { easeBootstrap() || value; } catch(e) { value; }\n" + 
-						// "}\n" + 
-						// "else{\n" + 
-						// "value;\n" + 
-						// "}\n";
-					}
-					else{
-						//alert('You can only select two keyframes!')
-						//return false;
-					}
-				};
-			//};
-
-
-		};  
-
-
-
-
-		return;  
-	}
-
-
-	function an_canProceed()
-	{ 
-		var activeItem = app.project.activeItem;
-		if (activeItem === null) {
-			alert("Select two keyframes.");
-			return false;
-		}
-		if (activeItem.selectedProperties == "") {
-			alert("Please select at least one keyframe.")
-			return false;
-		}
-		var props = activeItem.selectedProperties,n,p;
-		for (n=0; n<props.length; n++){  
-			p = props[n];  
-			if (!p.numKeys) continue;  
-			//idx = p.nearestKeyIndex(comp.time);  
-			if(p.selectedKeys.length != 2){
-				alert('You can only select two keyframes!')
-				return false;
-			}
-		};
-		
-		var currentLayer = activeItem.selectedLayers;
-		if(currentLayer.length > 1){
-			alert('Only support one layer now!')
-			return false;
-		}
-
-		return true;
 	}
 
 	an_main(ui_reference);
