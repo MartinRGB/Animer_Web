@@ -6,9 +6,9 @@
 // An After Effects adaptation of Android Interpolator equations.
 
 
-///////////////////////////////
-// aescript expression
-///////////////////////////////
+/////////////////////////////////////////////
+// aescript timing function expressions
+/////////////////////////////////////////////
 
 var factor1 = 0.5,factor2 = 0.,factor3 = 0.;
 var SPRING = new Object();
@@ -659,6 +659,243 @@ KEYTIME_FUNCTION =
 "value;\n" + 
 "}\n";
 
+/////////////////////////////////////////////
+// spring converter
+/////////////////////////////////////////////
+
+var mBounciness,mSpeed,mBouncyTension,mBouncyFriction,mTension,mFriction,mStiffness,mDamping,mDampingRatio,mDuration;
+
+function OrigamiSpringConverter(bounciness,speed){
+
+	mBounciness = bounciness;
+	mSpeed = speed;
+	var b = normalize(mBounciness / 1.7, 0, 20.0);
+	b = projectNormal(b, 0.0, 0.8);
+	var s = normalize(mSpeed / 1.7, 0, 20.0);
+	mBouncyTension = projectNormal(s, 0.5, 200)
+	mBouncyFriction = quadraticOutInterpolation(b, b3Nobounce(mBouncyTension), 0.01);
+	
+	mTension = tensionConversion(mBouncyTension);
+	mFriction = frictionConversion(mBouncyFriction);
+	mStiffness = mTension;
+	mDamping = mFriction;
+	mDampingRatio = computeDampingRatio(mTension, mFriction);
+	mDuration = computeDuration(mTension, mFriction);
+
+	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+}
+
+
+function FramerDHOConverter(stiffness,damping){
+	mStiffness = stiffness;
+	mDamping = damping;
+	
+	mTension = mStiffness;
+	mFriction = mDamping;
+	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
+	mBouncyTension = bouncyTesnionConversion(mTension);
+	mBouncyFriction = bouncyFrictionConversion(mFriction);
+	mDuration = computeDuration(mTension, mFriction);
+
+	var s = getParaS(mBouncyTension,0.5,200);
+	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+	mBounciness = 20*1.7*b/0.8;
+
+	// Output
+	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+}
+
+function FramerRK4Converter(stiffness,damping){
+	mStiffness = stiffness;
+	mDamping = damping;
+	
+	mTension = mStiffness;
+	mFriction = mDamping;
+	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
+	mBouncyTension = bouncyTesnionConversion(mTension);
+	mBouncyFriction = bouncyFrictionConversion(mFriction);
+	mDuration = computeDuration(mTension, mFriction);
+
+	var s = getParaS(mBouncyTension,0.5,200);
+	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+	mBounciness = 20*1.7*b/0.8;
+
+	// Output
+	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+}
+
+function CASpringConverter(stiffness,damping){
+	//mass = 1;initialVelocity = 0;
+	mStiffness = stiffness;
+	mDamping = damping;
+	
+	mTension = mStiffness;
+	mFriction = mDamping;
+	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
+	mBouncyTension = bouncyTesnionConversion(mTension);
+	mBouncyFriction = bouncyFrictionConversion(mFriction);
+	mDuration = computeDuration(mTension, mFriction);
+
+	var s = getParaS(mBouncyTension,0.5,200);
+	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+	mBounciness = 20*1.7*b/0.8;
+
+	// Output
+	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+}
+
+//TODO: duration + dampingratio(UIViewSpring) -> android
+
+function AndroidSpringAnimationConverter(stiffness,dampingratio){
+	mStiffness = stiffness;
+	mDampingratio = dampingratio;
+
+
+
+	// Output
+	mDamping = computeDamping(mStiffness,mDampingratio);
+	mTension = mStiffness;
+	mFriction = mDamping;
+	mBouncyTension = bouncyTesnionConversion(mTension);
+	mBouncyFriction = bouncyFrictionConversion(mFriction);
+	mDuration = computeDuration(mTension, mFriction);
+
+	var s = getParaS(mBouncyTension,0.5,200);
+	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+	mBounciness = 20*1.7*b/0.8;
+	alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
+}
+
+
+/////////////////////////////////////////////
+// spring converter funtions
+/////////////////////////////////////////////
+
+function getParaS(n,start,end){
+	return (n - start)/(end - start);
+}
+
+function getParaB(finalVal,startVal,endVal){
+	var a = 1;
+	var b = -2;
+	var c = (finalVal - startVal)/(endVal-startVal);
+
+	var root_part = Math.sqrt(b * b - 4 * a * c);
+	var denom = 2 * a;
+
+	var root1 = ( -b + root_part ) / denom;
+	var root2 = ( -b - root_part ) / denom;
+	
+	
+	if(root2 <0) {
+		return root1
+	}
+	if(root1 <0){return root2
+	}
+	return Math.min(root1,root2)
+}
+
+function bouncyTesnionConversion(tension){
+	return (tension - 194.0)/3.62 + 30.;
+}
+function bouncyFrictionConversion(friction){
+	return (friction - 25.)/3. + 8.;
+}
+
+function computeSpeed(value,startValue,endValue){
+	return (value * (endValue - startValue) + startValue)*1.7 ;
+}
+
+function computeDamping(stiffness,dampingRatio){
+	var mass = 1.0;
+	return dampingRatio * (2 * Math.sqrt(mass * stiffness));
+}
+
+function computeDampingRatio(tension, friction) {
+	var mass = 1.0;
+	return friction / (2 * Math.sqrt(mass * tension));
+}
+
+function computeDuration(tension, friction) {
+	var epsilon = 0.001
+	var velocity = 0.0
+	var mass = 1.0
+	var dampingRatio = computeDampingRatio(tension, friction)
+	var undampedFrequency = Math.sqrt(tension / mass)
+	if (dampingRatio < 1) {
+		var a = Math.sqrt(1 - Math.pow(dampingRatio, 2))
+		var b = velocity / (a * undampedFrequency)
+		var c = dampingRatio / a
+		var d = -((b - c) / epsilon)
+		if (d <= 0) {
+			return 0.0
+		}
+		return Math.log(d) / (dampingRatio * undampedFrequency)
+	} else {
+		return 0.0
+	}
+}
+
+function tensionConversion(oValue) {
+	return (oValue - 30.0) * 3.62 + 194.0;
+}
+
+function frictionConversion(oValue) {
+	return (oValue - 8.0) * 3.0 + 25.0;
+}
+
+function normalize(value, startValue, endValue) {
+	return (value - startValue) / (endValue - startValue);
+}
+
+function projectNormal(n, start, end) {
+	return start + (n * (end - start));
+}
+
+function linearInterpolation(t, start, end) {
+	return t * end + (1.0 - t) * start;
+}
+
+function quadraticOutInterpolation(t, start, end) {
+	return linearInterpolation(2 * t - t * t, start, end);
+}
+
+
+function b3Friction1(x) {
+	return (0.0007 * Math.pow(x, 3)) -
+		(0.031 * Math.pow(x, 2)) + 0.64 * x + 1.28;
+}
+
+function b3Friction2(x) {
+	return (0.000044 * Math.pow(x, 3)) -
+		(0.006 * Math.pow(x, 2)) + 0.36 * x + 2.;
+}
+
+function b3Friction3(x) {
+	return (0.00000045 * Math.pow(x, 3)) -
+		(0.000332 * Math.pow(x, 2)) + 0.1078 * x + 5.84;
+}
+
+function b3Nobounce(tension) {
+	var friction = 0;
+	if (tension <= 18) {
+		friction = b3Friction1(tension);
+	} else if (tension > 18 && tension <= 44) {
+		friction = b3Friction2(tension);
+	} else {
+		friction = b3Friction3(tension);
+	}
+	return friction;
+}
+
+/////////////////////////////////////////////
+// main functions
+/////////////////////////////////////////////
+
 function android_interpolator_script(ui_reference) {
 
 	///////////////////////////////
@@ -667,12 +904,12 @@ function android_interpolator_script(ui_reference) {
 
 	var android_interpolator = {}; // put all global variables on this object to avoid namespace clashes
 
-	android_interpolator.CLEAR_EXPRESSION_BTN     = false; // this adds a button to the palette, "clear", that deletes expressions on all selected properties. Off by default.
+	android_interpolator.CLEAR_EXPRESSION_BTN     = false; // this adds a button to the pavarte, "clear", that devares expressions on all selected properties. Off by default.
 	android_interpolator.VERSION                  = "0.0.4";
 	android_interpolator.interpolatorEquation           = "";
-	android_interpolator.palette                  = {};
+	android_interpolator.pavarte                  = {};
 
-	// palette controls
+	// pavarte controls
 	android_interpolator.interpolatorList               = {};
 
 	// selected interpolator
@@ -716,7 +953,7 @@ function android_interpolator_script(ui_reference) {
 				
 			}
 	   	}  
-		an_createPalette(thisObj);
+		an_createPavarte(thisObj);
 	
 	}
 
@@ -725,17 +962,17 @@ function android_interpolator_script(ui_reference) {
 		android_interpolator.interpolatorList.selection = 0;
 	}
 
-	function an_createPalette(thisObj)
+	function an_createPavarte(thisObj)
 	{
 		var LIST_DIMENSIONS = [0, 0, 180, 15];
 		var STATIC_TEXT_DIMENSIONS = [0, 0, 60, 15];
 
-		android_interpolator.palette = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Easing", undefined, {resizeable: true});
-		android_interpolator.palette.margins       = 6;
-		android_interpolator.palette.alignChildren = 'left';
+		android_interpolator.pavarte = (thisObj instanceof Panel) ? thisObj : new Window("pavarte", "Easing", undefined, {resizeable: true});
+		android_interpolator.pavarte.margins       = 6;
+		android_interpolator.pavarte.alignChildren = 'left';
 
 		// fix the text display in the popup menu - thanks Jeff Almasol
-		var winGfx          = android_interpolator.palette.graphics;
+		var winGfx          = android_interpolator.pavarte.graphics;
 		var darkColorBrush  = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 		var lightColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [1,1,1], 1);
 
@@ -745,7 +982,7 @@ function android_interpolator_script(ui_reference) {
 		// slider group
 		///////////////////////////////
 
-		var	slGrp1 = android_interpolator.palette.add('group', undefined, 'Slider Group 1');
+		var	slGrp1 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 1');
 		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor:');
 		var slider1 = slGrp1.add("slider", undefined, thisObj.numRows, 0, 100.);
 		slider1.size = 'width: 150, height: 20';
@@ -768,7 +1005,7 @@ function android_interpolator_script(ui_reference) {
 		slider1.value = 50.;
 		factor1 = 0.5;
 				
-		var	slGrp2 = android_interpolator.palette.add('group', undefined, 'Slider Group 2');
+		var	slGrp2 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 2');
 		slGrp2.visible = false;
 		var text2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor2:');
 		var slider2 = slGrp2.add("slider", undefined, thisObj.numRows, 0, 100);
@@ -786,7 +1023,7 @@ function android_interpolator_script(ui_reference) {
 		}
 
 
-		var	slGrp3 = android_interpolator.palette.add('group', undefined, 'Slider Group 3');
+		var	slGrp3 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 3');
 		slGrp3.visible = false;
 		var text3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor3:');
 		var slider3 = slGrp3.add("slider", undefined, thisObj.numRows, 0, 100);
@@ -809,7 +1046,7 @@ function android_interpolator_script(ui_reference) {
 		// interpolator menu
 		///////////////////////////////
 
-		var	interpolatorGrp = android_interpolator.palette.add('group', undefined, 'Easing group');
+		var	interpolatorGrp = android_interpolator.pavarte.add('group', undefined, 'Easing group');
 		interpolatorGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '插值类型:');
 
 
@@ -821,14 +1058,14 @@ function android_interpolator_script(ui_reference) {
 			an_set_interpolator_menu();
 
 			android_interpolator.interpolatorList.onChange = function() {
-				if (this.selection == null) {
+				if (selection == null) {
 					// tried to select a greyed-out item, ignore
 					an_set_interpolator_menu();
 					return;
 				} else {
-					app.settings.saveSetting("androidinterpolator", android_interpolator.INTERPOLATOR_SETTINGS_KEY, this.selection.toString());
-					//alert("yo, you selected item " + this.selection.index);
-					INTERPOLATOR_MODE = this.selection.index;
+					app.settings.saveSetting("androidinterpolator", android_interpolator.INTERPOLATOR_SETTINGS_KEY, selection.toString());
+					//alert("yo, you selected item " + selection.index);
+					INTERPOLATOR_MODE = selection.index;
 
 					// Default Easing(Cubic-Bezier)in iOS/Web/Material  
 					if (BEZIER_FUNCTION.hasOwnProperty(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE])){
@@ -888,7 +1125,7 @@ function android_interpolator_script(ui_reference) {
 		// apply button
 		///////////////////////////////
 
-		var buttonGrp = android_interpolator.palette.add('group', undefined, 'Button group');
+		var buttonGrp = android_interpolator.pavarte.add('group', undefined, 'Button group');
 		buttonGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
 
 		var applyBtn     = buttonGrp.add('button', undefined, '应用');
@@ -896,17 +1133,17 @@ function android_interpolator_script(ui_reference) {
 		var helpBtn      = buttonGrp.add("button {text:'?', maximumSize:[30,30]}");
 		helpBtn.onClick  = function() {alert("Android Interpolator v " + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
 
-		// var testGrp = android_interpolator.palette.add('group', undefined, 'Button group');
+		// var testGrp = android_interpolator.pavarte.add('group', undefined, 'Button group');
 		// testGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
 		// var testBtn     = testGrp.add('button', undefined, 'Test');
 		// testBtn.onClick = function(){
 		// 	an_two_keyframe_cubicbeziers(0.2,0.5,0.1,1.0);
 		// }
 
-		if (android_interpolator.palette instanceof Window) {
-			android_interpolator.palette.show();
+		if (android_interpolator.pavarte instanceof Window) {
+			android_interpolator.pavarte.show();
 		} else {
-			android_interpolator.palette.layout.layout(true);
+			android_interpolator.pavarte.layout.layout(true);
 		}
 
 	}

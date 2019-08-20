@@ -655,8 +655,8 @@ console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyF
 console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
 console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
 
-// console.log(dho.stiffness)
-// console.log(dho.dampingRatio)
+console.log('DHO Stiffness: ' + dho.stiffness)
+console.log('DHO DampingRatio: ' + dho.dampingRatio)
 
-console.log(rk4.stiffness)
-console.log(rk4.dampingRatio)
+console.log('DHO Stiffness: ' + rk4.stiffness)
+console.log('DHO RK4: ' + rk4.dampingRatio)
