@@ -850,6 +850,12 @@ function android_interpolator_script(ui_reference) {
 		var helpBtn      = buttonGrp.add("button {text:'?', maximumSize:[30,30]}");
 		helpBtn.onClick  = function() {alert("Android Interpolator v " + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
 
+		var testGrp = android_interpolator.palette.add('group', undefined, 'Button group');
+		testGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
+
+
+		var testBtn     = testGrp.add('button', undefined, 'Test');
+		testBtn.onClick = getCubicbeziers;
 
 		if (android_interpolator.palette instanceof Window) {
 			android_interpolator.palette.show();
@@ -913,18 +919,19 @@ function android_interpolator_script(ui_reference) {
 	} 
 
 	function an_two_keyframe_func() {
-		var activeItem = app.project.activeItem, props,props2, n, p,currentLayer,myMarker1,myMarker2,myTime1,myTime2;  
+		if (!an_canProceed()) { return false; }
+		var activeItem = app.project.activeItem, props, n, p,currentLayer,myMarker1,myMarker2,myTime1,myTime2;  
 		if (activeItem instanceof CompItem){  
 			DT = Math.min(0.01, activeItem.frameDuration/10.0);  
 			currentLayer = activeItem.selectedLayers;
 			//alert(currentLayer[0].name);
-			props = activeItem.selectedProperties;
+			//props = activeItem.selectedProperties;
 			for ( var x = 0; x <= (currentLayer.length - 1); x++)
 			{
 
-				props2 = currentLayer[x].selectedProperties;
-				for (n=0; n<props2.length; n++){  
-					p = props2[n];   //props[n]
+				props = currentLayer[x].selectedProperties;
+				for (n=0; n<props.length; n++){  
+					p = props[n];   //props[n]
 					if (!p.numKeys) continue;  
 
 					key1Index = p.selectedKeys[0];
@@ -948,6 +955,7 @@ function android_interpolator_script(ui_reference) {
 					currentLayer[x].Marker.setValueAtTime(myTime1,myMarker1);
 					currentLayer[x].Marker.setValueAtTime(myTime2,myMarker2);
 
+
 					an_applyExpressions_singleLayer(x);
 
 				};
@@ -958,7 +966,7 @@ function android_interpolator_script(ui_reference) {
 
 	function an_applyExpressions_singleLayer(layer_num) { // decide what external file to load
 
-		if (!an_canProceed()) { return false; }
+		
 		app.beginUndoGroup("Android Interpolator");
 		try {
 			getParameters(INTERPOLATOR_MODE);
@@ -1022,11 +1030,11 @@ function android_interpolator_script(ui_reference) {
 	{ 
 		var activeItem = app.project.activeItem;
 		if (activeItem === null) {
-			alert("Select two keyframes.");
+			alert("Select two keyframes in each layer.");
 			return false;
 		}
 		if (activeItem.selectedProperties == "") {
-			alert("Please select at least one keyframe.")
+			alert("Please select at least one keyframe in each layer.")
 			return false;
 		}
 		var props = activeItem.selectedProperties,n,p;
@@ -1035,7 +1043,7 @@ function android_interpolator_script(ui_reference) {
 			if (!p.numKeys) continue;  
 			//idx = p.nearestKeyIndex(comp.time);  
 			if(p.selectedKeys.length != 2){
-				alert('You can only select two keyframes!')
+				alert('You can only select two keyframes in each layer!')
 				return false;
 			}
 		};
@@ -1049,6 +1057,90 @@ function android_interpolator_script(ui_reference) {
 		return true;
 	}
 
+
+	function getCubicbeziers(){
+		var curItem = app.project.activeItem;
+		var selectedLayers = curItem.selectedLayers;
+		var props,p;
+		if (selectedLayers == 0){
+			alert("Please Select at least one Layer");
+		}
+		else if(selectedLayers !=0){
+			for ( var x = 0; x <= (selectedLayers.length - 1); x++)
+			{
+	
+				props = selectedLayers[x].selectedProperties;
+				for (n=0; n<props.length; n++){  
+					p = props[n];   //props[n]
+					if (!p.numKeys) continue;  
+
+					var t1 = p.keyTime(p.selectedKeys[0]);
+					var t2 = p.keyTime(p.selectedKeys[1]);
+					var val1 = p.keyValue(p.selectedKeys[0]);
+					var val2 = p.keyValue(p.selectedKeys[1]);
+					var avSpeed;
+					if(p.value.length == undefined){
+						avSpeed = Math.abs(val2-val1)/(t2-t1);
+						if(val1 == val2){
+							alert('values are equal!')
+							return false;
+						}
+					}
+					else if(p.value.length == 2){
+						if(val1[0] == val2[0] && val1[1] == val2[1]){
+							alert('values are equal!')
+							return false;
+						}
+						avSpeed = Math.sqrt( Math.pow(val2[0] - val1[0], 2) + Math.pow(val2[1] - val1[1], 2))/(t2 - t1);
+					}
+					else if (p.value.length == 3){
+						if(val1[0] == val2[0] && val1[1] == val2[1] && val1[2] == val2[2]){
+							alert('values are equal!')
+							return false;
+						}
+						avSpeed = Math.sqrt( Math.pow(val2[0] - val1[0], 2) + Math.pow(val2[1] - val1[1], 2) + Math.pow(val2[2] - val1[2], 2))/(t2 - t1);
+					}
+					else{
+						if(val1 == val2){
+							alert('values are equal!')
+							return false;
+						}
+						avSpeed = Math.abs(val2-val1)/(t2-t1);
+					}
+
+
+
+					if (val1<val2){//, this should reproduce your website:     
+						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;
+						var y1 = x1*p.keyOutTemporalEase(p.selectedKeys[0])[0].speed / avSpeed;
+						var x2 = 1-p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
+						var y2 = 1-(1-x2)*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / avSpeed);
+						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
+					}
+					if (val2<val1){//, to get a curve starting from point [0,1] going to point [1,0], it would be:
+						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;
+						var y1 = (-x1)*p.keyOutTemporalEase(p.selectedKeys[0])[0].speed / avSpeed;
+						var x2 = p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
+						var y2 = 1+x2*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / avSpeed);
+						x2 = 1-x2;
+						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
+					}
+					if (val1==val2){
+						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;  
+						var y1 = (-x1)*p.keyOutTemporalEase(p.selectedKeys[0])[0].speed / ((p.maxValue-p.minValue)/(t2-t1)) ;
+						var x2 = p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
+						var y2 = 1+x2*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / ((p.maxValue-p.minValue)/(t2-t1)));
+						x2 = 1-x2;
+						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
+					}
+					
+					
+				};
+
+			}
+		}
+	}
+	
 	//////////////////////////////////////////////////////////////
 	// backup functions
 	//////////////////////////////////////////////////////////////
