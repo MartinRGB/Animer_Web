@@ -28,8 +28,11 @@ var CYCLE = new Object();
 var DECELERATE = new Object();
 var LINEAR = new Object();
 var OVERSHOOT = new Object();
+var DIVIDE3 = new Object();
+var BEZIER_FUNCTION = new Object();
 var NORMALIZED_EASING_FUNCTION;
 var KEYTIME_FUNCTION;
+
 
 SPRING = {
 name:"Spring",
@@ -557,6 +560,33 @@ slider3Val:null,
 slider3Text:null,
 defaultPara:'var factor = '+factor1.toString()+';\n'};
 
+DIVIDE3 = {
+name:"-",
+code:null,
+index:17,
+slider1Range:null,
+slider1Val:null,
+slider1FixVal:null,
+slider2Range:null,
+slider2Val:null,
+slider2Text:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:null};
+
+var point1x,point1y,point2x,point2y;
+
+BEZIER_FUNCTION = {
+	Material_FastOutSlowIn:[0.40, 0.00, 0.20, 1.00],
+	Material_LinearOutSlowIn:[0.00, 0.00, 0.20, 1.00],
+	Material_FastOutLinear:[0.40, 0.00, 1.00, 1.00],
+	iOS_CSS_Ease_Deafult:[0.25, 0.10, 0.25, 1.00],
+	iOS_CSS_EaseIn:[0.42, 0.00, 1.00, 1.00],
+	iOS_CSS_EaseOut:[0.00, 0.00, 0.58, 1.00],
+	iOS_CSS_EaseInOut:[0.42, 0.00, 0.58, 1.00]
+}
+
 NORMALIZED_EASING_FUNCTION = 
 "function getDimensions()\n" +
 "{\n" +
@@ -657,7 +687,7 @@ function android_interpolator_script(ui_reference) {
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
 	// arrary for storing interpolators' object
-	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT];
+	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT,DIVIDE3];
 
 	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择插值器的类型";
 
@@ -675,6 +705,17 @@ function android_interpolator_script(ui_reference) {
 		for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 			INTERPOLAOTR_STRING_ARRAY[i] = android_interpolator.interpolatorTypesAry[i].name
 		}
+
+
+		var objIndex = 0
+		for ( var key in BEZIER_FUNCTION ){ 
+			if (BEZIER_FUNCTION.hasOwnProperty(key)){
+				INTERPOLAOTR_STRING_ARRAY[android_interpolator.interpolatorTypesAry.length + objIndex] = key
+				objIndex++;
+				//alert(BEZIER_FUNCTION[key])
+				
+			}
+	   	}  
 		an_createPalette(thisObj);
 	
 	}
@@ -686,7 +727,7 @@ function android_interpolator_script(ui_reference) {
 
 	function an_createPalette(thisObj)
 	{
-		var LIST_DIMENSIONS = [0, 0, 140, 15];
+		var LIST_DIMENSIONS = [0, 0, 180, 15];
 		var STATIC_TEXT_DIMENSIONS = [0, 0, 60, 15];
 
 		android_interpolator.palette = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Easing", undefined, {resizeable: true});
@@ -789,9 +830,14 @@ function android_interpolator_script(ui_reference) {
 					//alert("yo, you selected item " + this.selection.index);
 					INTERPOLATOR_MODE = this.selection.index;
 
+					// Default Easing(Cubic-Bezier)in iOS/Web/Material  
+					if (BEZIER_FUNCTION.hasOwnProperty(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE])){
 
+						slGrp1.visible = false;
+					}
 
-					for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+					// Android Timing Function Interpolator
+					for (var i = 0;i < android_interpolator.interpolatorTypesAry.length;i++){
 						if(INTERPOLATOR_MODE == android_interpolator.interpolatorTypesAry[i].index){
 							if(android_interpolator.interpolatorTypesAry[i].slider1Val == null){
 								slGrp1.visible = false;
@@ -846,16 +892,16 @@ function android_interpolator_script(ui_reference) {
 		buttonGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
 
 		var applyBtn     = buttonGrp.add('button', undefined, '应用');
-		applyBtn.onClick = an_setFunctions;
+		applyBtn.onClick = an_setAnimationCurves;
 		var helpBtn      = buttonGrp.add("button {text:'?', maximumSize:[30,30]}");
 		helpBtn.onClick  = function() {alert("Android Interpolator v " + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
 
-		var testGrp = android_interpolator.palette.add('group', undefined, 'Button group');
-		testGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
-
-
-		var testBtn     = testGrp.add('button', undefined, 'Test');
-		testBtn.onClick = getCubicbeziers;
+		// var testGrp = android_interpolator.palette.add('group', undefined, 'Button group');
+		// testGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
+		// var testBtn     = testGrp.add('button', undefined, 'Test');
+		// testBtn.onClick = function(){
+		// 	an_two_keyframe_cubicbeziers(0.2,0.5,0.1,1.0);
+		// }
 
 		if (android_interpolator.palette instanceof Window) {
 			android_interpolator.palette.show();
@@ -914,12 +960,26 @@ function android_interpolator_script(ui_reference) {
 	// set aescript to layers' keyframes
 	//////////////////////////////////////////////////////////////
 
-	function an_setFunctions(){
-		an_two_keyframe_func();
-	} 
+	function an_setAnimationCurves(){
+		if (!an_canProceed()) { return false; }
+		if(INTERPOLATOR_MODE < android_interpolator.interpolatorTypesAry.length){
+			an_two_keyframe_func();
+		}
+		else{
+
+			//alert(point1x+","+point1y+","+point2x+","+point2y+"")
+			var k0 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][0];
+			var k1 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][1];
+			var k2 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][2];
+			var k3 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][3];
+			
+			an_two_keyframe_cubicbeziers(k0,k1,k2,k3);
+			//an_two_keyframe_cubicbeziers(0.42, 0.00, 1.00, 1.00);
+		}
+	}
+
 
 	function an_two_keyframe_func() {
-		if (!an_canProceed()) { return false; }
 		var activeItem = app.project.activeItem, props, n, p,currentLayer,myMarker1,myMarker2,myTime1,myTime2;  
 		if (activeItem instanceof CompItem){  
 			DT = Math.min(0.01, activeItem.frameDuration/10.0);  
@@ -1057,6 +1117,134 @@ function android_interpolator_script(ui_reference) {
 		return true;
 	}
 
+	function an_two_keyframe_cubicbeziers(x1,y1,x2,y2){
+		var curItem = app.project.activeItem;
+		var selectedLayers = curItem.selectedLayers;
+		var props,p;
+		if (selectedLayers == 0){
+			alert("Please Select at least one Layer");
+		}
+		else if(selectedLayers !=0){
+			for ( var x = 0; x <= (selectedLayers.length - 1); x++)
+			{
+	
+				var p1x = x1;
+				var p1y = y1;
+				var p2x = x2;
+				var p2y = y2;
+				
+				props = selectedLayers[x].selectedProperties;
+				for (n=0; n<props.length; n++){  
+					p = props[n];   //props[n]
+					if (!p.numKeys) continue;  
+					if (!p.canSetExpression) { continue; }
+					// Clean expression
+					//p.expression = '';
+
+					var t1 = p.keyTime(p.selectedKeys[0]);
+					var t2 = p.keyTime(p.selectedKeys[1]);
+					var val1 = p.keyValue(p.selectedKeys[0]);
+					var val2 = p.keyValue(p.selectedKeys[1]);
+					var avSpeed;
+					if(p.value.length == undefined){
+						avSpeed = Math.abs(val2-val1)/(t2-t1);
+						if(val1 == val2){
+							//alert('values are equal!')
+							alert("Error in layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nvalues are equal!")
+							return false;
+						}
+					}
+					else if(p.value.length == 2){
+						if(val1[0] == val2[0] && val1[1] == val2[1]){
+							//alert('values are equal!')
+							alert("Error in layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nvalues are equal!")
+							return false; 
+						}
+						avSpeed = Math.sqrt( Math.pow(val2[0] - val1[0], 2) + Math.pow(val2[1] - val1[1], 2))/(t2 - t1);
+					}
+					else if (p.value.length == 3){
+						if(val1[0] == val2[0] && val1[1] == val2[1] && val1[2] == val2[2]){
+							alert("Error in layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nvalues are equal!")
+							return false;
+						}
+						avSpeed = Math.sqrt( Math.pow(val2[0] - val1[0], 2) + Math.pow(val2[1] - val1[1], 2) + Math.pow(val2[2] - val1[2], 2))/(t2 - t1);
+					}
+					else{
+						if(val1 == val2){
+							alert("Error in layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nvalues are equal!")
+							return false;
+						}
+						avSpeed = Math.abs(val2-val1)/(t2-t1);
+					}
+
+
+						// Material_LinearOutSlowIn:[0.00, 0.00, 0.20, 1.00],
+						// Material_FastOutLinear:[0.40, 0.00, 1.00, 1.00],
+						// iOS_CSS_EaseIn:[0.42, 0.00, 1.00, 1.00],
+						// iOS_CSS_EaseOut:[0.00, 0.00, 0.58, 1.00],
+
+						// Material_FastOutSlowIn:[0.40, 0.00, 0.20, 1.00],
+						// iOS_CSS_EaseInOut:[0.42, 0.00, 0.58, 1.00]
+						// iOS_CSS_Ease_Deafult:[0.25, 0.10, 0.25, 1.00],
+
+					if (val1<val2){//, this should reproduce your website:     
+						
+						// p.keyOutTemporalEase(p.selectedKeys[0])[0].influence = x1*100.;
+						// p.keyOutTemporalEase(p.selectedKeys[0])[0].speed = y1 * avSpeed / x1;
+						// p.keyInTemporalEase(p.selectedKeys[1])[0].influence = (1.-x2)*100.;
+						// p.keyInTemporalEase(p.selectedKeys[1])[0].speed = (1 - y2)/(1. - x2)*avSpeed;
+						// alert('2-0')
+						var prevIn = new KeyframeEase(p.keyInTemporalEase(p.selectedKeys[0])[0].speed,p.keyInTemporalEase(p.selectedKeys[0])[0].influence);
+						var nextOut = new KeyframeEase(p.keyOutTemporalEase(p.selectedKeys[1])[0].speed,p.keyOutTemporalEase(p.selectedKeys[1])[0].influence);
+						var easeOut = (p1x == 0) ? new KeyframeEase(0.,0.1):new KeyframeEase(p1y * avSpeed / p1x, p1x*100);
+						var easeIn  = (p2x == 1) ? new KeyframeEase(0.,0.1):new KeyframeEase((1.- p2y)/(1. - p2x)*avSpeed, (1.-p2x)*100);
+						p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
+						p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+						
+						// alert('2-3')
+					}
+					if (val2<val1){//, to get a curve starting from point [0,1] going to point [1,0], it would be:
+						p2x = 1-p2x;
+						// p.keyOutTemporalEase(p.selectedKeys[0])[0].influence = x1*100.;
+						// p.keyOutTemporalEase(p.selectedKeys[0])[0].speed = y1 * avSpeed /(-x1);
+						// p.keyInTemporalEase(p.selectedKeys[1])[0].influence = x2*100.;
+						// p.keyInTemporalEase(p.selectedKeys[1])[0].speed = (y2-1.)/x2*avSpeed;
+						var prevIn = new KeyframeEase(p.keyInTemporalEase(p.selectedKeys[0])[0].speed,p.keyInTemporalEase(p.selectedKeys[0])[0].influence);
+						var nextOut = new KeyframeEase(p.keyOutTemporalEase(p.selectedKeys[1])[0].speed,p.keyOutTemporalEase(p.selectedKeys[1])[0].influence);
+						
+
+						var easeOut = (p1x == 0) ? new KeyframeEase(0.,0.1):new KeyframeEase(p1y * avSpeed / (-p1x), p1x*100);
+						var easeIn  = (p2x == 0) ? new KeyframeEase(0.,0.1):new KeyframeEase((p2y-1.)/p2x*avSpeed, p2x*100);
+
+						p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
+						p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+					}
+					if (val1==val2){
+						p2x = 1-p2x;
+						// x2 = 1.-x2;
+						// var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;  
+						// p.keyOutTemporalEase(p.selectedKeys[0])[0].influence = x1*100.;
+						// var y1 = 0. ;
+						// var x2 = p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
+						var prevIn = new KeyframeEase(p.keyInTemporalEase(p.selectedKeys[0])[0].speed,p.keyInTemporalEase(p.selectedKeys[0])[0].influence);
+						var nextOut = new KeyframeEase(p.keyOutTemporalEase(p.selectedKeys[1])[0].speed,p.keyOutTemporalEase(p.selectedKeys[1])[0].influence);
+						var easeOut = new KeyframeEase(0., p1x*100);
+						var easeIn = new KeyframeEase(0., p2x*100);
+						p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
+						p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+						
+					}
+					
+					
+				};
+
+			}
+		}
+	}
+	
+	//////////////////////////////////////////////////////////////
+	// backup functions
+	//////////////////////////////////////////////////////////////
 
 	function getCubicbeziers(){
 		var curItem = app.project.activeItem;
@@ -1080,11 +1268,11 @@ function android_interpolator_script(ui_reference) {
 					var val2 = p.keyValue(p.selectedKeys[1]);
 					var avSpeed;
 					if(p.value.length == undefined){
-						avSpeed = Math.abs(val2-val1)/(t2-t1);
 						if(val1 == val2){
 							alert('values are equal!')
 							return false;
 						}
+						avSpeed = Math.abs(val2-val1)/(t2-t1);
 					}
 					else if(p.value.length == 2){
 						if(val1[0] == val2[0] && val1[1] == val2[1]){
@@ -1116,6 +1304,7 @@ function android_interpolator_script(ui_reference) {
 						var x2 = 1-p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
 						var y2 = 1-(1-x2)*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / avSpeed);
 						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
+						alert('1')
 					}
 					if (val2<val1){//, to get a curve starting from point [0,1] going to point [1,0], it would be:
 						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;
@@ -1124,12 +1313,13 @@ function android_interpolator_script(ui_reference) {
 						var y2 = 1+x2*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / avSpeed);
 						x2 = 1-x2;
 						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
+						alert('2')
 					}
 					if (val1==val2){
-						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;  
-						var y1 = (-x1)*p.keyOutTemporalEase(p.selectedKeys[0])[0].speed / ((p.maxValue-p.minValue)/(t2-t1)) ;
+						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;
+						var y1 = (-x1)*p.keyOutTemporalEase(p.selectedKeys[0])[0].speed *(t2-t1);
 						var x2 = p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
-						var y2 = 1+x2*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / ((p.maxValue-p.minValue)/(t2-t1)));
+						var y2 = 1+x2*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed*(t2-t1));
 						x2 = 1-x2;
 						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
 					}
@@ -1140,10 +1330,6 @@ function android_interpolator_script(ui_reference) {
 			}
 		}
 	}
-	
-	//////////////////////////////////////////////////////////////
-	// backup functions
-	//////////////////////////////////////////////////////////////
 
 	function an_applyExpressions() { // decide what external file to load
 
