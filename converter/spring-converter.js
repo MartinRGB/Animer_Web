@@ -703,11 +703,11 @@ class UIViewSpringConverter {
 
 
 
-let bounciness = 87;
-let speed = 3.;
+let bounciness = 5;
+let speed = 10.;
 
-let stiffness =  800
-let dampingRatio =  0.25
+let stiffness =  1500
+let dampingRatio =  0.5
 
 let framerStiffness =  50
 let framerDamping =  2
@@ -722,6 +722,7 @@ let spring = new OrigamiSpringConverter(bounciness, speed);
 let factor = new AndroidSpringInterpolatorEvaluator(spring.stiffness, spring.damping);
 
 let dyanmic = new AndroidDynamicAnimationConverter(stiffness,dampingRatio);
+let factor2 = new AndroidSpringInterpolatorEvaluator(dyanmic.stiffness, dyanmic.damping);
 let dho = new FramerDHOConverter(framerStiffness,framerDamping);
 let rk4 = new FramerRK4Converter(framerTension,framerFriction);
 let uiviewSpring = new UIViewSpringConverter(uiviewspring_dampingratio,uiviewspring_duration);
@@ -754,6 +755,7 @@ console.log('\n[Android]SpringAnimation: \n\tdampingRatio = ' + DynamicSpring.da
 console.log('\n[Android]SpringInterpolator: \n\tfactor = ' + SpringInterpolator.factor + '\n\tduration = ' + SpringInterpolator.duration);
 console.log('\n[Android]Rebound: \n\tSpringConfig.fromBouncinessAndSpeed('+ bounciness + ',' + speed +');');
 
+console.log('Spring Duration: ' + spring.duration)
 
 console.log('DyanamicAnimation -----> Bounciness: ' + Math.round(dyanmic.bounciness))
 console.log('DyanamicAnimation ----------> Speed: ' + Math.round(dyanmic.speed))
@@ -761,12 +763,15 @@ console.log('DyanamicAnimation --> BouncyTension: ' + Math.round(dyanmic.bouncyT
 console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyFriction))
 console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
 console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
+console.log('DyanamicAnimation --------> Duration: ' + (dyanmic.duration))
 
 console.log('DHO Stiffness: ' + dho.stiffness)
 console.log('DHO DampingRatio: ' + dho.dampingRatio)
+console.log('DHO Duration: ' + dho.duration)
 
 console.log('RK4 Stiffness: ' + rk4.stiffness)
 console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
+console.log('RK4 Duration: ' + rk4.duration)
 
 console.log('UIViewSpring Stiffness' + uiviewSpring.stiffness);
 console.log('UIViewSpring DampingRatio' + uiviewSpring.dampingRatio);

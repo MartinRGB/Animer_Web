@@ -16,3 +16,5 @@ A script for better Android Motion Design,inspired by "Ease and wizz" and "After
 - convert Script to Extension with new GUI(ZXP Install)
 - show the source code of the Animation
 - add Android & iOS Example Application
+- package an Android Library,use DynamicAnimation to simulate UIViewSpring|Origami|CASpring|Framer's Animation;
+- package an UIViewAnimation style Animator in Android(estimate the spring time then use it without setting duration);
