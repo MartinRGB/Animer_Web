@@ -29,10 +29,16 @@ var DECELERATE = new Object();
 var LINEAR = new Object();
 var OVERSHOOT = new Object();
 var DIVIDE3 = new Object();
+var ORIGAMI_POP_SPRING = new Object();
+var FRAMER_RK4_SPRING = new Object();
+var FRAMER_DHO_SPRING = new Object();
+var CASPRINGANIMATION = new Object();
+var UIVIEWSPRINGANIMATION = new Object();
+var PROTOPIE_SPRING = new Object();
 var BEZIER_FUNCTION = new Object();
+var BASE_SPRING_FUNCTION;
 var NORMALIZED_EASING_FUNCTION;
 var KEYTIME_FUNCTION;
-
 
 SPRING = {
 name:"Spring",
@@ -225,9 +231,7 @@ slider3Val:null,
 slider3Text:null,
 defaultPara:null};
 
-ANDROIDSPRING = {
-name:"AndroidSpring",
-code:
+BASE_SPRING_FUNCTION =
 "//mStiffness = 1500;\n" + 
 "//mDampingRatio = 0.5;\n" + 
 "//mVelocity = 0.;\n" + 
@@ -259,7 +263,11 @@ code:
 "}\n" + 
 "function calculate(t,b,c,d) {\n" + 
 "    return c*getCurrentInterpolation(t/d,t) + b;\n" + 
-"} \n",
+"} \n";
+
+ANDROIDSPRING = {
+name:"AndroidSpring",
+code:BASE_SPRING_FUNCTION,
 index:5,
 slider1Range:3000,
 slider1Val:1500/3000,
@@ -575,6 +583,119 @@ slider3Val:null,
 slider3Text:null,
 defaultPara:null};
 
+ORIGAMI_POP_SPRING = {
+name:"Origami_POP_Spring",
+code:BASE_SPRING_FUNCTION,
+index:18,
+slider1Range:100,
+slider1Val:5/100,
+slider1FixVal:null,
+slider1Text:"Bounciness:",
+slider2Range:100,
+slider2Val:10/100,
+slider2Text:"Speed:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:"null",
+defaultPara:'var mStiffness = '+(299.61882352941177)+';\n var mDampingRatio = '+(0.7813253676752291)+';\n var mVelocity = 0;\n'};
+
+FRAMER_RK4_SPRING = {
+name:"Framer_RK4_Spring",
+code:BASE_SPRING_FUNCTION,
+index:19,
+slider1Range:1000,
+slider1Val:200/1000,
+slider1FixVal:null,
+slider1Text:"Tension:",
+slider2Range:100,
+slider2Val:25/100,
+slider2Text:"Friction:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:"null",
+defaultPara:'var mStiffness = '+(200)+';\n var mDampingRatio = '+(0.8838834764831843)+';\n var mVelocity = 0;\n'};
+
+FRAMER_DHO_SPRING = {
+name:"Framer_DHO_Spring",
+code:BASE_SPRING_FUNCTION,
+index:20,
+slider1Range:1000,
+slider1Val:50/1000,
+slider1FixVal:null,
+slider1Text:"Stiffness:",
+slider2Range:100,
+slider2Val:2/100,
+slider2Text:"Damping:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:"null",
+defaultPara:'var mStiffness = '+(50)+';\n var mDampingRatio = '+(0.1414213562373095)+';\n var mVelocity = 0;\n'};
+
+CASPRINGANIMATION = {
+name:"CASpringAnimation",
+code:BASE_SPRING_FUNCTION,
+index:21,
+slider1Range:1000,
+slider1Val:100/1000,
+slider1FixVal:null,
+slider1Text:"Stiffness:",
+slider2Range:100,
+slider2Val:10/100,
+slider2Text:"Damping:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:"null",
+defaultPara:'var mStiffness = '+(100)+';\n var mDampingRatio = '+(0.5)+';\n var mVelocity = 0;\n'};
+
+UIVIEWSPRINGANIMATION = {
+name:"UIViewSpringAnimation",
+code:BASE_SPRING_FUNCTION,
+index:22,
+slider1Range:1,
+slider1Val:0.5/1,
+slider1FixVal:null,
+slider1Text:"Damping:",
+slider2Range:1,
+slider2Val:0.5/1,
+slider2Text:"Duration:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:"null",
+defaultPara:'var mStiffness = '+(646.8780063665112)+';\n var mDampingRatio = '+(0.5)+';\n var mVelocity = 0;\n'};
+
+PROTOPIE_SPRING = {
+name:"Protopie_Spring",
+code:BASE_SPRING_FUNCTION,
+index:23,
+slider1Range:1000,
+slider1Val:300/1000,
+slider1FixVal:null,
+slider1Text:"Tension:",
+slider2Range:100,
+slider2Val:15/100,
+slider2Text:"Friction:",
+slider3Range:null,
+slider3Val:null,
+slider3Text:"null",
+defaultPara:'var mStiffness = '+(300)+';\n var mDampingRatio = '+(0.4330127018922193)+';\n var mVelocity = 0;\n'};
+
+	
+DIVIDE4 = {
+name:"-",
+code:null,
+index:24,
+slider1Range:null,
+slider1Val:null,
+slider1FixVal:null,
+slider2Range:null,
+slider2Val:null,
+slider2Text:null,
+slider3Range:null,
+slider3Val:null,
+slider3Text:null,
+defaultPara:null};
+	
+
 var point1x,point1y,point2x,point2y;
 
 BEZIER_FUNCTION = {
@@ -669,12 +790,13 @@ function OrigamiSpringConverter(bounciness,speed){
 
 	mBounciness = bounciness;
 	mSpeed = speed;
+
+	// Output
 	var b = normalize(mBounciness / 1.7, 0, 20.0);
 	b = projectNormal(b, 0.0, 0.8);
 	var s = normalize(mSpeed / 1.7, 0, 20.0);
 	mBouncyTension = projectNormal(s, 0.5, 200)
 	mBouncyFriction = quadraticOutInterpolation(b, b3Nobounce(mBouncyTension), 0.01);
-	
 	mTension = tensionConversion(mBouncyTension);
 	mFriction = frictionConversion(mBouncyFriction);
 	mStiffness = mTension;
@@ -682,14 +804,39 @@ function OrigamiSpringConverter(bounciness,speed){
 	mDampingRatio = computeDampingRatio(mTension, mFriction);
 	mDuration = computeDuration(mTension, mFriction);
 
-	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+	//alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
 }
 
 //RK4 DHO(mass = 1;initialVelocity = 0;) CASpring(mass = 1;initialVelocity = 0;)
-function FramerRK4Converter(stiffness,damping){
+//TODO: Add Mass Input to DHO | CASPRING
+//TODO: Add Velocity Input to DHO | CASPRING
+function FramerRK4Converter(tension,friction){
+
+	mTension = tension;
+	mFriction = friction;
+	
+	// Output
+	mStiffness = mTension;
+	mDamping = mFriction;
+	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
+	mBouncyTension = bouncyTesnionConversion(mTension);
+	mBouncyFriction = bouncyFrictionConversion(mFriction);
+	mDuration = computeDuration(mTension, mFriction);
+
+	var s = getParaS(mBouncyTension,0.5,200);
+	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+	mBounciness = 20*1.7*b/0.8;
+
+	//alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+}
+
+function FramerDHOConverter(stiffness,damping){
+
 	mStiffness = stiffness;
 	mDamping = damping;
 	
+	// Output
 	mTension = mStiffness;
 	mFriction = mDamping;
 	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
@@ -702,14 +849,13 @@ function FramerRK4Converter(stiffness,damping){
 	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
 	mBounciness = 20*1.7*b/0.8;
 
-	// Output
-	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
+	//alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
 }
 
 function AndroidSpringAnimationConverter(stiffness,dampingratio){
+
 	mStiffness = stiffness;
 	mDampingratio = dampingratio;
-
 
 	// Output
 	mDamping = computeDamping(mStiffness,mDampingratio);
@@ -718,15 +864,16 @@ function AndroidSpringAnimationConverter(stiffness,dampingratio){
 	mBouncyTension = bouncyTesnionConversion(mTension);
 	mBouncyFriction = bouncyFrictionConversion(mFriction);
 	mDuration = computeDuration(mTension, mFriction);
-
 	var s = getParaS(mBouncyTension,0.5,200);
 	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
 	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
 	mBounciness = 20*1.7*b/0.8;
-	alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
+
+	//alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
 }
 
 function UIViewSpringConverter(dampingratio,duration){
+
 	mDampingRatio = dampingratio;
 	mDuration = duration;
 	
@@ -735,15 +882,14 @@ function UIViewSpringConverter(dampingratio,duration){
 	mDamping = mFriction;
 	mTension = computeTension(mDampingRatio,mFriction);
 	mStiffness = mTension;
-	
 	mBouncyTension = bouncyTesnionConversion(mTension);
 	mBouncyFriction = bouncyFrictionConversion(mFriction);
-	
 	var s = getParaS(mBouncyTension,0.5,200);
 	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
 	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
 	mBounciness = 20*1.7*b/0.8;
-	alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
+
+	//alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
 }
 
 
@@ -912,7 +1058,7 @@ function android_interpolator_script(ui_reference) {
 	android_interpolator.INTERPOLATOR_SETTINGS_KEY     = "androidinterpolator"; 
 
 	// arrary for storing interpolators' object
-	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT,DIVIDE3];
+	android_interpolator.interpolatorTypesAry = [SPRING,BOUNCE,DAMPING,MOCOSSPRING,DIVIDE1,ANDROIDSPRING,ANDROIDFLING,DIVIDE2,ACCELERATEDECELERATE,ACCELERATE,ANTICIPATE,ANTICIPATEOVERSHOOT,BOUNCE2,CYCLE,DECELERATE,LINEAR,OVERSHOOT,DIVIDE3,ORIGAMI_POP_SPRING,FRAMER_RK4_SPRING,FRAMER_DHO_SPRING,CASPRINGANIMATION,UIVIEWSPRINGANIMATION,PROTOPIE_SPRING,DIVIDE4];
 
 	android_interpolator.TOOLTIP_INTERPOLATOR       = "选择插值器的类型";
 
@@ -1046,18 +1192,17 @@ function android_interpolator_script(ui_reference) {
 			an_set_interpolator_menu();
 
 			android_interpolator.interpolatorList.onChange = function() {
-				if (selection == null) {
+				if (this.selection == null) {
 					// tried to select a greyed-out item, ignore
 					an_set_interpolator_menu();
 					return;
 				} else {
-					app.settings.saveSetting("androidinterpolator", android_interpolator.INTERPOLATOR_SETTINGS_KEY, selection.toString());
+					app.settings.saveSetting("androidinterpolator", android_interpolator.INTERPOLATOR_SETTINGS_KEY, this.selection.toString());
 					//alert("yo, you selected item " + selection.index);
-					INTERPOLATOR_MODE = selection.index;
+					INTERPOLATOR_MODE = this.selection.index;
 
 					// Default Easing(Cubic-Bezier)in iOS/Web/Material  
 					if (BEZIER_FUNCTION.hasOwnProperty(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE])){
-
 						slGrp1.visible = false;
 					}
 
@@ -1140,7 +1285,6 @@ function android_interpolator_script(ui_reference) {
 	// get selected interpolator's code 
 	//////////////////////////////////////////////////////////////
 
-	//TODO:Use for loop for select
 	function getParameters(mode_num){
 		switch(android_interpolator.interpolatorTypesAry[mode_num].name) {
 			case "Spring":
@@ -1161,6 +1305,31 @@ function android_interpolator_script(ui_reference) {
 			case "AndroidFling":
 				prefixParameters = 'var mStartVelocity = '+factor1.toString()+';\nvar mDampingRatio = '+factor2.toString()+';\n';
 				break;
+			case "Origami_POP_Spring":
+				OrigamiSpringConverter(factor1,factor2);
+				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				break;
+			case "Framer_RK4_Spring":
+				FramerRK4Converter(factor1,factor2);
+				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				break;
+			case "Framer_DHO_Spring":
+				FramerDHOConverter(factor1,factor2);
+				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				break;
+			case "CASpringAnimation":
+				FramerDHOConverter(factor1,factor2);
+				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				break;
+			case "UIViewSpringAnimation":
+				UIViewSpringConverter(factor1,factor2);
+				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				break;
+			case "Protopie_Spring":
+				FramerRK4Converter(factor1,factor2);
+				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				break;
+			
 			default:
 				if(android_interpolator.interpolatorTypesAry[mode_num].defaultPara == null){
 					prefixParameters = '';
@@ -1172,7 +1341,6 @@ function android_interpolator_script(ui_reference) {
 		}
 	}
 
-	//TODO:Use for loop for select
 	function getInterpolatorType(mode_num){
 		for (var i = 0; i < android_interpolator.interpolatorTypesAry.length; i++){
 			if(mode_num == android_interpolator.interpolatorTypesAry[i].index){
@@ -1192,13 +1360,14 @@ function android_interpolator_script(ui_reference) {
 		}
 		else{
 
-			//alert(point1x+","+point1y+","+point2x+","+point2y+"")
 			var k0 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][0];
 			var k1 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][1];
 			var k2 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][2];
 			var k3 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][3];
-			
+
+			//alert(k0+","+k1+","+k2+","+k3+"")
 			an_two_keyframe_cubicbeziers(k0,k1,k2,k3);
+
 			//an_two_keyframe_cubicbeziers(0.42, 0.00, 1.00, 1.00);
 		}
 	}
@@ -1236,7 +1405,6 @@ function android_interpolator_script(ui_reference) {
 					"value;\n" + 
 					"}\n";
 	
-					//#TODO,2 Layers Add Keyframe
 					currentLayer[x].Marker.setValueAtTime(myTime1,myMarker1);
 					currentLayer[x].Marker.setValueAtTime(myTime2,myMarker2);
 
@@ -1403,14 +1571,6 @@ function android_interpolator_script(ui_reference) {
 					}
 
 
-						// Material_LinearOutSlowIn:[0.00, 0.00, 0.20, 1.00],
-						// Material_FastOutLinear:[0.40, 0.00, 1.00, 1.00],
-						// iOS_CSS_EaseIn:[0.42, 0.00, 1.00, 1.00],
-						// iOS_CSS_EaseOut:[0.00, 0.00, 0.58, 1.00],
-
-						// Material_FastOutSlowIn:[0.40, 0.00, 0.20, 1.00],
-						// iOS_CSS_EaseInOut:[0.42, 0.00, 0.58, 1.00]
-						// iOS_CSS_Ease_Deafult:[0.25, 0.10, 0.25, 1.00],
 
 					if (val1<val2){//, this should reproduce your website:     
 						
@@ -1419,14 +1579,23 @@ function android_interpolator_script(ui_reference) {
 						// p.keyInTemporalEase(p.selectedKeys[1])[0].influence = (1.-x2)*100.;
 						// p.keyInTemporalEase(p.selectedKeys[1])[0].speed = (1 - y2)/(1. - x2)*avSpeed;
 						// alert('2-0')
+
 						var prevIn = new KeyframeEase(p.keyInTemporalEase(p.selectedKeys[0])[0].speed,p.keyInTemporalEase(p.selectedKeys[0])[0].influence);
 						var nextOut = new KeyframeEase(p.keyOutTemporalEase(p.selectedKeys[1])[0].speed,p.keyOutTemporalEase(p.selectedKeys[1])[0].influence);
 						var easeOut = (p1x == 0) ? new KeyframeEase(0.,0.1):new KeyframeEase(p1y * avSpeed / p1x, p1x*100);
 						var easeIn  = (p2x == 1) ? new KeyframeEase(0.,0.1):new KeyframeEase((1.- p2y)/(1. - p2x)*avSpeed, (1.-p2x)*100);
-						p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
-						p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+
+
+						if(p.name == 'Scale'){
+							p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn,prevIn,prevIn], [easeOut,easeOut,easeOut]);
+							p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn,easeIn,easeIn], [nextOut,nextOut,nextOut]);
+						}
+						else{
+							p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
+							p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+						}
 						
-						// alert('2-3')
+						
 					}
 					if (val2<val1){//, to get a curve starting from point [0,1] going to point [1,0], it would be:
 						p2x = 1-p2x;
@@ -1434,15 +1603,20 @@ function android_interpolator_script(ui_reference) {
 						// p.keyOutTemporalEase(p.selectedKeys[0])[0].speed = y1 * avSpeed /(-x1);
 						// p.keyInTemporalEase(p.selectedKeys[1])[0].influence = x2*100.;
 						// p.keyInTemporalEase(p.selectedKeys[1])[0].speed = (y2-1.)/x2*avSpeed;
+
 						var prevIn = new KeyframeEase(p.keyInTemporalEase(p.selectedKeys[0])[0].speed,p.keyInTemporalEase(p.selectedKeys[0])[0].influence);
 						var nextOut = new KeyframeEase(p.keyOutTemporalEase(p.selectedKeys[1])[0].speed,p.keyOutTemporalEase(p.selectedKeys[1])[0].influence);
-						
-
 						var easeOut = (p1x == 0) ? new KeyframeEase(0.,0.1):new KeyframeEase(p1y * avSpeed / (-p1x), p1x*100);
 						var easeIn  = (p2x == 0) ? new KeyframeEase(0.,0.1):new KeyframeEase((p2y-1.)/p2x*avSpeed, p2x*100);
 
-						p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
-						p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+						if(p.name == 'Scale'){
+							p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn,prevIn,prevIn], [easeOut,easeOut,easeOut]);
+							p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn,easeIn,easeIn], [nextOut,nextOut,nextOut]);
+						}
+						else{
+							p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
+							p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+						}
 					}
 					if (val1==val2){
 						p2x = 1-p2x;
@@ -1451,13 +1625,19 @@ function android_interpolator_script(ui_reference) {
 						// p.keyOutTemporalEase(p.selectedKeys[0])[0].influence = x1*100.;
 						// var y1 = 0. ;
 						// var x2 = p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
+
 						var prevIn = new KeyframeEase(p.keyInTemporalEase(p.selectedKeys[0])[0].speed,p.keyInTemporalEase(p.selectedKeys[0])[0].influence);
 						var nextOut = new KeyframeEase(p.keyOutTemporalEase(p.selectedKeys[1])[0].speed,p.keyOutTemporalEase(p.selectedKeys[1])[0].influence);
 						var easeOut = new KeyframeEase(0., p1x*100);
 						var easeIn = new KeyframeEase(0., p2x*100);
-						p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
-						p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
-						
+						if(p.name == 'Scale'){
+							p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn,prevIn,prevIn], [easeOut,easeOut,easeOut]);
+							p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn,easeIn,easeIn], [nextOut,nextOut,nextOut]);
+						}
+						else{
+							p.setTemporalEaseAtKey(p.selectedKeys[0], [prevIn], [easeOut]);
+							p.setTemporalEaseAtKey(p.selectedKeys[1], [easeIn], [nextOut]);
+						}
 					}
 					
 					
