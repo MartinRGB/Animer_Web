@@ -685,27 +685,7 @@ function OrigamiSpringConverter(bounciness,speed){
 	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
 }
 
-
-function FramerDHOConverter(stiffness,damping){
-	mStiffness = stiffness;
-	mDamping = damping;
-	
-	mTension = mStiffness;
-	mFriction = mDamping;
-	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
-	mBouncyTension = bouncyTesnionConversion(mTension);
-	mBouncyFriction = bouncyFrictionConversion(mFriction);
-	mDuration = computeDuration(mTension, mFriction);
-
-	var s = getParaS(mBouncyTension,0.5,200);
-	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
-	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
-	mBounciness = 20*1.7*b/0.8;
-
-	// Output
-	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
-}
-
+//RK4 DHO(mass = 1;initialVelocity = 0;) CASpring(mass = 1;initialVelocity = 0;)
 function FramerRK4Converter(stiffness,damping){
 	mStiffness = stiffness;
 	mDamping = damping;
@@ -726,33 +706,9 @@ function FramerRK4Converter(stiffness,damping){
 	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
 }
 
-function CASpringConverter(stiffness,damping){
-	//mass = 1;initialVelocity = 0;
-	mStiffness = stiffness;
-	mDamping = damping;
-	
-	mTension = mStiffness;
-	mFriction = mDamping;
-	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
-	mBouncyTension = bouncyTesnionConversion(mTension);
-	mBouncyFriction = bouncyFrictionConversion(mFriction);
-	mDuration = computeDuration(mTension, mFriction);
-
-	var s = getParaS(mBouncyTension,0.5,200);
-	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
-	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
-	mBounciness = 20*1.7*b/0.8;
-
-	// Output
-	alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
-}
-
-//TODO: duration + dampingratio(UIViewSpring) -> android
-
 function AndroidSpringAnimationConverter(stiffness,dampingratio){
 	mStiffness = stiffness;
 	mDampingratio = dampingratio;
-
 
 
 	// Output
@@ -763,6 +719,26 @@ function AndroidSpringAnimationConverter(stiffness,dampingratio){
 	mBouncyFriction = bouncyFrictionConversion(mFriction);
 	mDuration = computeDuration(mTension, mFriction);
 
+	var s = getParaS(mBouncyTension,0.5,200);
+	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+	mBounciness = 20*1.7*b/0.8;
+	alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
+}
+
+function UIViewSpringConverter(dampingratio,duration){
+	mDampingRatio = dampingratio;
+	mDuration = duration;
+	
+	// Output
+	mFriction = computeFriction(mDampingRatio,mDuration);
+	mDamping = mFriction;
+	mTension = computeTension(mDampingRatio,mFriction);
+	mStiffness = mTension;
+	
+	mBouncyTension = bouncyTesnionConversion(mTension);
+	mBouncyFriction = bouncyFrictionConversion(mFriction);
+	
 	var s = getParaS(mBouncyTension,0.5,200);
 	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
 	var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
@@ -798,6 +774,18 @@ function getParaB(finalVal,startVal,endVal){
 	}
 	return Math.min(root1,root2)
 }
+
+function computeFriction(dampingratio, duration){
+	var a = Math.sqrt(1 - Math.pow(dampingratio, 2));
+	var d = (dampingratio/a)*1000.;
+
+	return 2*Math.log(d)/duration;
+}
+
+function computeTension(dampingratio, friction){
+	return Math.pow(friction/(dampingratio*2),2);
+}
+
 
 function bouncyTesnionConversion(tension){
 	return (tension - 194.0)/3.62 + 30.;
