@@ -279,6 +279,7 @@ slider2Text:"Damping:",
 slider3Range:500,
 slider3Val:0/500,
 slider3Text:"Velocity:",
+duration:0.328,
 defaultPara:'var mStiffness = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n var mVelocity = '+factor3.toString()+';\n'};
 
 
@@ -597,6 +598,7 @@ slider2Text:"Speed:",
 slider3Range:null,
 slider3Val:null,
 slider3Text:"null",
+duration:0.527,
 defaultPara:'var mStiffness = '+(299.61882352941177)+';\n var mDampingRatio = '+(0.7813253676752291)+';\n var mVelocity = 0;\n'};
 
 FRAMER_RK4_SPRING = {
@@ -613,6 +615,7 @@ slider2Text:"Friction:",
 slider3Range:null,
 slider3Val:null,
 slider3Text:"null",
+duration:0.604,
 defaultPara:'var mStiffness = '+(200)+';\n var mDampingRatio = '+(0.8838834764831843)+';\n var mVelocity = 0;\n'};
 
 FRAMER_DHO_SPRING = {
@@ -629,6 +632,7 @@ slider2Text:"Damping:",
 slider3Range:null,
 slider3Val:null,
 slider3Text:"null",
+duration:4.962,
 defaultPara:'var mStiffness = '+(50)+';\n var mDampingRatio = '+(0.1414213562373095)+';\n var mVelocity = 0;\n'};
 
 CASPRINGANIMATION = {
@@ -645,6 +649,7 @@ slider2Text:"Damping:",
 slider3Range:null,
 slider3Val:null,
 slider3Text:"null",
+duration:1.271,
 defaultPara:'var mStiffness = '+(100)+';\n var mDampingRatio = '+(0.5)+';\n var mVelocity = 0;\n'};
 
 UIVIEWSPRINGANIMATION = {
@@ -677,6 +682,7 @@ slider2Text:"Friction:",
 slider3Range:null,
 slider3Val:null,
 slider3Text:"null",
+duration:0.823,
 defaultPara:'var mStiffness = '+(300)+';\n var mDampingRatio = '+(0.4330127018922193)+';\n var mVelocity = 0;\n'};
 
 	
@@ -890,6 +896,60 @@ function UIViewSpringConverter(dampingratio,duration){
 	mBounciness = 20*1.7*b/0.8;
 
 	//alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
+}
+
+function AndroidDynamicAnimationConverter (stiffness,dampingratio){
+        mStiffness = stiffness;
+        mDampingratio = dampingratio;
+
+        // Output
+        mDamping = computeDamping(mStiffness,mDampingratio);
+        mTension = mStiffness;
+        mFriction = mDamping;
+        mBouncyTension = bouncyTesnionConversion(mTension);
+        mBouncyFriction = bouncyFrictionConversion(mFriction);
+        mDuration = computeDuration(mTension, mFriction);
+
+        var s = getParaS(mBouncyTension,0.5,200);
+        mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
+        var b = getParaB(mBouncyFriction,b3Nobounce(mBouncyTension), 0.01);
+		mBounciness = 20*1.7*b/0.8;
+		
+		//alert('mBounciness: ' + mBounciness + 'mSpeed: ' + mSpeed);
+
+}
+
+function DurationCalculator(factor1,factor2,springname){
+	switch(springname){
+		case "AndroidSpring":
+			var dampingVal = computeDamping(factor1,factor2);
+			mDuration = computeDuration(factor1, dampingVal);
+			break;
+		case "Origami_POP_Spring":
+			var b = normalize(factor1 / 1.7, 0, 20.0);
+			b = projectNormal(b, 0.0, 0.8);
+			var s = normalize(factor2 / 1.7, 0, 20.0);
+			var bouncyTensionVal = projectNormal(s, 0.5, 200)
+			var bouncyFrictionVal = quadraticOutInterpolation(b, b3Nobounce(bouncyTensionVal), 0.01);
+			var tensionVal = tensionConversion(bouncyTensionVal);
+			var frictionVal = frictionConversion(bouncyFrictionVal);
+			mDuration = computeDuration(tensionVal, frictionVal);
+			break;
+		case "Framer_RK4_Spring":
+			mDuration = computeDuration(factor1, factor2);
+			break;
+		case "Framer_DHO_Spring":
+			mDuration = computeDuration(factor1, factor2);
+			break;
+		case "CASpringAnimation":
+			mDuration = computeDuration(factor1, factor2);
+			break;
+		case "Protopie_Spring":
+			mDuration = computeDuration(factor1, factor2);
+			break;
+		default:
+	}
+
 }
 
 
@@ -1131,9 +1191,13 @@ function android_interpolator_script(ui_reference) {
 						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(2);
 					}
 					value1.text = factor1.toString() + 'f';
+
+					if(android_interpolator.interpolatorTypesAry[i].duration != null){
+						DurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						value4.text = mDuration.toFixed(3).toString() + 'f'
+					}
 				}
 			}
-			
 
 		}
 		slider1.value = 50.;
@@ -1151,6 +1215,11 @@ function android_interpolator_script(ui_reference) {
 					if(android_interpolator.interpolatorTypesAry[i].slider2Val !=null){
 						factor2 = (slider2.value/100. * android_interpolator.interpolatorTypesAry[i].slider2Range).toFixed(2);
 						value2.text = factor2.toString() + 'f';
+					}
+
+					if(android_interpolator.interpolatorTypesAry[i].duration != null){
+						DurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						value4.text = mDuration.toFixed(3).toString() + 'f'
 					}
 				}
 			}
@@ -1174,6 +1243,11 @@ function android_interpolator_script(ui_reference) {
 			}
 
 		}
+
+		var	slGrp4 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 3');
+		slGrp4.visible = false;
+		var text4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, 'Duration:');
+		var value4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
 				
 
 		///////////////////////////////
@@ -1205,6 +1279,9 @@ function android_interpolator_script(ui_reference) {
 					if (BEZIER_FUNCTION.hasOwnProperty(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE])){
 						slGrp1.visible = false;
 					}
+					
+
+
 
 					// Android Timing Function Interpolator
 					for (var i = 0;i < android_interpolator.interpolatorTypesAry.length;i++){
@@ -1227,6 +1304,14 @@ function android_interpolator_script(ui_reference) {
 							else{
 								slGrp3.visible = true;
 							}
+							if(android_interpolator.interpolatorTypesAry[i].duration != null){
+								slGrp4.visible = true;
+								value4.text = android_interpolator.interpolatorTypesAry[i].duration.toString()+'f';
+							}
+							else{
+								slGrp4.visible = false;
+							}
+
 							text1.text = android_interpolator.interpolatorTypesAry[i].slider1Text;
 							text2.text = android_interpolator.interpolatorTypesAry[i].slider2Text;
 							text3.text = android_interpolator.interpolatorTypesAry[i].slider3Text;
@@ -1307,27 +1392,27 @@ function android_interpolator_script(ui_reference) {
 				break;
 			case "Origami_POP_Spring":
 				OrigamiSpringConverter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
 				break;
 			case "Framer_RK4_Spring":
 				FramerRK4Converter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
 				break;
 			case "Framer_DHO_Spring":
 				FramerDHOConverter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
 				break;
 			case "CASpringAnimation":
 				FramerDHOConverter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
 				break;
 			case "UIViewSpringAnimation":
 				UIViewSpringConverter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
 				break;
 			case "Protopie_Spring":
 				FramerRK4Converter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+mStiffness.toFixed(3).toString()+';\nvar mDampingRatio = '+mDampingRatio.toFixed(3).toString()+';\nvar mVelocity = 0;\n';
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString()+ ';\nvar mVelocity = 0;\n';
 				break;
 			
 			default:
