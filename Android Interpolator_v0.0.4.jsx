@@ -294,7 +294,7 @@ code:
 "    var startVal = b;\n" + 
 "    var deltaT = t;\n" + 
 "    mRealFriction = mDampingRatio*(-4.2);\n" + 
-"    mFlingVelocity = ( mStartVelocity)*Math.exp(t *mRealFriction) ;\n" + 
+"    mFlingVelocity = (mStartVelocity)*Math.exp(t *mRealFriction) ;\n" + 
 "    valTransition =  (valueAtTime(time - 1/60) - mStartVelocity/mRealFriction) + ( mStartVelocity/ mRealFriction) * (Math.exp(mRealFriction * t ) ) \n" + 
 "    mLastVal = valTransition;\n" + 
 "    if(deltaT == 0)\n" + 
@@ -313,6 +313,7 @@ slider2Text:"Damping:",
 slider3Range:null,
 slider3Val:null,
 slider3Text:null,
+duration:2.233,
 defaultPara:'var mStartVelocity = '+factor1.toString()+';\n var mDampingRatio = '+factor2.toString()+';\n'};
 
 DIVIDE2 = {
@@ -919,7 +920,7 @@ function AndroidDynamicAnimationConverter (stiffness,dampingratio){
 
 }
 
-function DurationCalculator(factor1,factor2,springname){
+function SpringDurationCalculator(factor1,factor2,springname){
 	switch(springname){
 		case "AndroidSpring":
 			var dampingVal = computeDamping(factor1,factor2);
@@ -950,6 +951,25 @@ function DurationCalculator(factor1,factor2,springname){
 		default:
 	}
 
+}
+
+function FlingDurationCalculator(velocity,dampingRatio){
+	var mRealFriction = dampingRatio*-4.2;
+
+    for (var i = 1/60;i < 4.;i += 1/60){
+       
+        var mFlingVelocity = velocity * Math.exp(i * mRealFriction) ;
+        var valTransition = (velocity/ mRealFriction) * (Math.exp(mRealFriction * i ) - 1);
+
+        if(Math.abs(mFlingVelocity) <=  2.3){
+			mDuration = i;
+            return;
+        }
+        else{
+            //console.log('transitionVal is: ' + valTransition + 'currentVelocity is: ' + mFlingVelocity + 'currentFrame is: ' + Math.round(i*60));
+        }
+
+    }
 }
 
 
@@ -1193,7 +1213,14 @@ function android_interpolator_script(ui_reference) {
 					value1.text = factor1.toString() + 'f';
 
 					if(android_interpolator.interpolatorTypesAry[i].duration != null){
-						DurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+
+						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
+							FlingDurationCalculator(factor1,factor2);
+						}
+						else{
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						}
+						
 						value4.text = mDuration.toFixed(3).toString() + 'f'
 					}
 				}
@@ -1218,7 +1245,12 @@ function android_interpolator_script(ui_reference) {
 					}
 
 					if(android_interpolator.interpolatorTypesAry[i].duration != null){
-						DurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
+							FlingDurationCalculator(factor1,factor2);
+						}
+						else{
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						}
 						value4.text = mDuration.toFixed(3).toString() + 'f'
 					}
 				}
@@ -1244,9 +1276,9 @@ function android_interpolator_script(ui_reference) {
 
 		}
 
-		var	slGrp4 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 3');
+		var	slGrp4 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 4');
 		slGrp4.visible = false;
-		var text4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, 'Duration:');
+		var text4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, 'Estimated Duration:');
 		var value4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
 				
 
@@ -1278,6 +1310,7 @@ function android_interpolator_script(ui_reference) {
 					// Default Easing(Cubic-Bezier)in iOS/Web/Material  
 					if (BEZIER_FUNCTION.hasOwnProperty(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE])){
 						slGrp1.visible = false;
+						slGrp2.visible = false;
 					}
 					
 
