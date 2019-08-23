@@ -773,10 +773,10 @@ console.log('RK4 Stiffness: ' + rk4.stiffness)
 console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
 console.log('RK4 Duration: ' + rk4.duration)
 
-console.log('UIViewSpring Stiffness' + uiviewSpring.stiffness);
-console.log('UIViewSpring DampingRatio' + uiviewSpring.dampingRatio);
+console.log('UIViewSpring Stiffness: ' + uiviewSpring.stiffness);
+console.log('UIViewSpring DampingRatio: ' + uiviewSpring.dampingRatio);
 
-// console.log('UIViewSpring Bounciness' + uiviewSpring.bounciness);
-// console.log('UIViewSpring Speed' + uiviewSpring.speed);
+console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
+console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
 
 

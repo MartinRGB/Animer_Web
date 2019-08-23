@@ -17,8 +17,9 @@ class FlingAnimationCalculator {
            
             var currentVelocity = velocity * Math.exp(i * friction) ;
             var currentTransition = (velocity/ friction) * (Math.exp(friction * i ) - 1);
-    
-            if(Math.abs(currentVelocity) <= 2.3){
+            var speedThereshold = 2.3;
+
+            if(Math.abs(currentVelocity) <= speedThereshold){
                 return [currentTransition,i]; //Math.round(i*60)
             }
             else{

@@ -307,8 +307,8 @@ slider1Range:10000,
 slider1FixVal:5000,
 slider1Val:(10000 - 5000 + (-4000))/10000,
 slider1Text:"Velocity:",
-slider2Range:1,
-slider2Val:0.8/1,
+slider2Range:10,
+slider2Val:0.8/10,
 slider2Text:"Damping:",
 slider3Range:null,
 slider3Val:null,
@@ -791,7 +791,7 @@ KEYTIME_FUNCTION =
 // spring converter
 /////////////////////////////////////////////
 
-var mBounciness,mSpeed,mBouncyTension,mBouncyFriction,mTension,mFriction,mStiffness,mDamping,mDampingRatio,mDuration;
+var mBounciness,mSpeed,mBouncyTension,mBouncyFriction,mTension,mFriction,mStiffness,mDamping,mDampingRatio,mDuration,mTransition;
 
 function OrigamiSpringConverter(bounciness,speed){
 
@@ -958,11 +958,13 @@ function FlingDurationCalculator(velocity,dampingRatio){
 
     for (var i = 1/60;i < 4.;i += 1/60){
        
-        var mFlingVelocity = velocity * Math.exp(i * mRealFriction) ;
-        var valTransition = (velocity/ mRealFriction) * (Math.exp(mRealFriction * i ) - 1);
+        var currentVelocity = velocity * Math.exp(i * mRealFriction) ;
+        var currentTransition = (velocity/ mRealFriction) * (Math.exp(mRealFriction * i ) - 1);
+		var speedThereshold = 2.3;
 
-        if(Math.abs(mFlingVelocity) <=  2.3){
+        if(Math.abs(currentVelocity) <=  speedThereshold){
 			mDuration = i;
+			mTransition = currentTransition;
             return;
         }
         else{
@@ -1178,8 +1180,9 @@ function android_interpolator_script(ui_reference) {
 
 	function an_createPavarte(thisObj)
 	{
-		var LIST_DIMENSIONS = [0, 0, 180, 15];
-		var STATIC_TEXT_DIMENSIONS = [0, 0, 60, 15];
+		var LIST_DIMENSIONS = [0, 0, 206, 15];
+		var STATIC_TEXT_DIMENSIONS = [0, 0, 80, 15];
+		var STATIC_TEXT_DIMENSIONS_2 = [0, 0, 71, 15];
 
 		android_interpolator.pavarte = (thisObj instanceof Panel) ? thisObj : new Window("pavarte", "Easing", undefined, {resizeable: true});
 		android_interpolator.pavarte.margins       = 6;
@@ -1197,11 +1200,12 @@ function android_interpolator_script(ui_reference) {
 		///////////////////////////////
 
 		var	slGrp1 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 1');
-		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor:');
+		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS_2, 'Factor:');
 		var slider1 = slGrp1.add("slider", undefined, thisObj.numRows, 0, 100.);
 		slider1.size = 'width: 150, height: 20';
-		var value1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, '0.5f');
-		slider1.onChanging = function () {  
+		//var value1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, '0.5f');
+		var value1 = slGrp1.add('edittext {text: 0.5, characters: 7, justify: "center", active: true}');
+		slider1.onChanging = function () {
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
 					if(android_interpolator.interpolatorTypesAry[i].slider1FixVal !=null){
@@ -1210,48 +1214,99 @@ function android_interpolator_script(ui_reference) {
 					else{
 						factor1 = (slider1.value/100. * android_interpolator.interpolatorTypesAry[i].slider1Range).toFixed(2);
 					}
-					value1.text = factor1.toString() + 'f';
+					value1.text = factor1.toString();
 
 					if(android_interpolator.interpolatorTypesAry[i].duration != null){
 
 						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
 							FlingDurationCalculator(factor1,factor2);
+							value4_1.text = mTransition.toFixed(1).toString() + 'f';
 						}
 						else{
 							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
 						}
 						
-						value4.text = mDuration.toFixed(3).toString() + 'f'
+						value4.text = mDuration.toFixed(3).toString() + 's'
 					}
 				}
 			}
-
 		}
+		value1.onChanging = function () {
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					factor1 = Number(value1.text);
+					if(android_interpolator.interpolatorTypesAry[i].slider1FixVal !=null){
+						slider1.value = (factor1 + android_interpolator.interpolatorTypesAry[i].slider1FixVal)/android_interpolator.interpolatorTypesAry[i].slider1Range*(100).toFixed(2);
+					}
+					else{
+						slider1.value = factor1/android_interpolator.interpolatorTypesAry[i].slider1Range*(100).toFixed(2);
+					}
+
+					if(android_interpolator.interpolatorTypesAry[i].duration != null){
+
+						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
+							FlingDurationCalculator(factor1,factor2);
+							value4_1.text = mTransition.toFixed(1).toString() + 'f';
+						}
+						else{
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						}
+						
+						value4.text = mDuration.toFixed(3).toString() + 's'
+					}
+				}
+			}
+		}
+
 		slider1.value = 50.;
 		factor1 = 0.5;
 				
 		var	slGrp2 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 2');
 		slGrp2.visible = false;
-		var text2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor2:');
+		var text2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS_2, 'Factor2:');
 		var slider2 = slGrp2.add("slider", undefined, thisObj.numRows, 0, 100);
 		slider2.size = 'width: 150, height: 20';
-		var value2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
+		//var value2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
+		var value2 = slGrp2.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
 		slider2.onChanging = function () {  
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
 					if(android_interpolator.interpolatorTypesAry[i].slider2Val !=null){
 						factor2 = (slider2.value/100. * android_interpolator.interpolatorTypesAry[i].slider2Range).toFixed(2);
-						value2.text = factor2.toString() + 'f';
+						value2.text = factor2.toString();
 					}
 
 					if(android_interpolator.interpolatorTypesAry[i].duration != null){
 						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
 							FlingDurationCalculator(factor1,factor2);
+							value4_1.text = mTransition.toFixed(1).toString() + 'f';
 						}
 						else{
 							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
 						}
-						value4.text = mDuration.toFixed(3).toString() + 'f'
+						value4.text = mDuration.toFixed(3).toString() + 's'
+					}
+				}
+			}
+		}
+
+		value2.onChanging = function () {  
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					factor2 = Number(value2.text);
+					if(android_interpolator.interpolatorTypesAry[i].slider2Val !=null){
+						slider2.value = factor2/android_interpolator.interpolatorTypesAry[i].slider2Range*(100).toFixed(2);
+					}
+
+					if(android_interpolator.interpolatorTypesAry[i].duration != null){
+						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
+							FlingDurationCalculator(factor1,factor2);
+							value4_1.text = mTransition.toFixed(1).toString() + 'f';
+						}
+						else{
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						}
+						value4.text = mDuration.toFixed(3).toString() + 's'
 					}
 				}
 			}
@@ -1260,26 +1315,40 @@ function android_interpolator_script(ui_reference) {
 
 		var	slGrp3 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 3');
 		slGrp3.visible = false;
-		var text3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor3:');
+		var text3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS_2, 'Factor3:');
 		var slider3 = slGrp3.add("slider", undefined, thisObj.numRows, 0, 100);
 		slider3.size = 'width: 150, height: 20';
-		var value3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
+		//var value3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
+		var value3 = slGrp3.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
 		slider3.onChanging = function () {  
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
 					if(android_interpolator.interpolatorTypesAry[i].slider3Val !=null){
 						factor3 = (slider3.value/100. * android_interpolator.interpolatorTypesAry[i].slider3Range).toFixed(2);
-						value3.text = factor3.toString() + 'f';
+						value3.text = factor3.toString();
 					}
 				}
 			}
 
 		}
 
+		value3.onChanging = function () {  
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					factor3 = Number(value3.text);
+					if(android_interpolator.interpolatorTypesAry[i].slider3Val !=null){
+						slider3.value = factor3/android_interpolator.interpolatorTypesAry[i].slider3Range*(100).toFixed(2);
+					}
+				}
+			}
+		}
+
 		var	slGrp4 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 4');
 		slGrp4.visible = false;
-		var text4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, 'Estimated Duration:');
-		var value4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
+		var text4 = slGrp4.add('statictext', [0, 0, 80, 15], 'Estimated Time:');
+		var value4 = slGrp4.add('statictext', [0, 0, 60, 15], '100.s');
+		var text4_1 = slGrp4.add('statictext', [0, 0, 84, 15], 'Transition Value: ');
+		var value4_1 = slGrp4.add('statictext', [0, 0, 64, 15], '-1190.0f');
 				
 
 		///////////////////////////////
@@ -1291,7 +1360,6 @@ function android_interpolator_script(ui_reference) {
 
 
 			android_interpolator.interpolatorList                          = interpolatorGrp.add('dropdownlist', LIST_DIMENSIONS, INTERPOLAOTR_STRING_ARRAY);
-
 			android_interpolator.interpolatorList.helpTip                  = android_interpolator.TOOLTIP_INTERPOLATOR;
 			android_interpolator.interpolatorList.graphics.foregroundColor = darkColorBrush;
 
@@ -1311,11 +1379,10 @@ function android_interpolator_script(ui_reference) {
 					if (BEZIER_FUNCTION.hasOwnProperty(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE])){
 						slGrp1.visible = false;
 						slGrp2.visible = false;
+						slGrp3.visible = false;
+						slGrp4.visible = false;
 					}
 					
-
-
-
 					// Android Timing Function Interpolator
 					for (var i = 0;i < android_interpolator.interpolatorTypesAry.length;i++){
 						if(INTERPOLATOR_MODE == android_interpolator.interpolatorTypesAry[i].index){
@@ -1339,7 +1406,15 @@ function android_interpolator_script(ui_reference) {
 							}
 							if(android_interpolator.interpolatorTypesAry[i].duration != null){
 								slGrp4.visible = true;
-								value4.text = android_interpolator.interpolatorTypesAry[i].duration.toString()+'f';
+								value4.text = android_interpolator.interpolatorTypesAry[i].duration.toString()+'s';
+								if(android_interpolator.interpolatorTypesAry[i].name != 'AndroidFling'){
+									value4_1.visible = false;
+									text4_1.visible = false;
+								}
+								else{
+									value4_1.visible = true;
+									text4_1.visible = true;
+								}
 							}
 							else{
 								slGrp4.visible = false;
@@ -1362,9 +1437,9 @@ function android_interpolator_script(ui_reference) {
 							factor2 = android_interpolator.interpolatorTypesAry[i].slider2Val * android_interpolator.interpolatorTypesAry[i].slider2Range;
 							factor3 = android_interpolator.interpolatorTypesAry[i].slider3Val * android_interpolator.interpolatorTypesAry[i].slider3Range;
 
-							value1.text = (factor1).toFixed(2).toString() + 'f';
-							value2.text = (factor2).toFixed(2).toString() + 'f';
-							value3.text = (factor3).toFixed(2).toString() + 'f';
+							value1.text = (factor1).toFixed(2).toString();
+							value2.text = (factor2).toFixed(2).toString();
+							value3.text = (factor3).toFixed(2).toString();
 							prefixParameters = android_interpolator.interpolatorTypesAry[i].defaultPara;
 
 						}
