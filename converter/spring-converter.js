@@ -703,6 +703,40 @@ class UIViewSpringConverter {
 
 
 
+
+
+
+class FlingAnimationDurationEvaluator {
+    constructor(velocity, dampingRatio) {
+
+        this.friction = dampingRatio*-4.2;
+        this.velocity = velocity;
+        this.value = this.flingCalculator(this.velocity,this.friction);
+    }
+
+    flingCalculator(velocity,friction){
+
+        for (var i = 1/60;i < 5.;i += 1/60){
+           
+            var currentVelocity = velocity * Math.exp(i * friction) ;
+            var currentTransition = (velocity/ friction) * (Math.exp(friction * i ) - 1);
+            var speedThereshold = 2.3;
+
+            if(Math.abs(currentVelocity) <= speedThereshold){
+                return [currentTransition,i]; //Math.round(i*60)
+            }
+            else{
+                //console.log('transitionVal is: ' + currentTransition + 'currentVelocity is: ' + currentVelocity + 'currentFrame is: ' + Math.round(i*60));
+            }
+    
+        }
+    }
+    
+}
+
+
+
+
 let bounciness = 5;
 let speed = 10.;
 
@@ -718,6 +752,10 @@ let framerFriction =  25
 let uiviewspring_dampingratio = 0.5;
 let uiviewspring_duration = 0.5;
 
+let flingVelocity = -4000;
+let flingDampingRatio = 0.8;
+
+
 let spring = new OrigamiSpringConverter(bounciness, speed);
 let factor = new AndroidSpringInterpolatorEvaluator(spring.stiffness, spring.damping);
 
@@ -726,6 +764,7 @@ let factor2 = new AndroidSpringInterpolatorEvaluator(dyanmic.stiffness, dyanmic.
 let dho = new FramerDHOConverter(framerStiffness,framerDamping);
 let rk4 = new FramerRK4Converter(framerTension,framerFriction);
 let uiviewSpring = new UIViewSpringConverter(uiviewspring_dampingratio,uiviewspring_duration);
+let mFling = new FlingAnimationDurationEvaluator(flingVelocity, flingDampingRatio);
 
 let UIViewSpring = {
     dampingRatio: spring.dampingRatio,
@@ -749,34 +788,65 @@ let SpringInterpolator = {
     duration: spring.duration
 }
 
-console.log('\n[iOS]UIView.animate:usingSpringWithDamping: \n\tdampingRatio: ' + UIViewSpring.dampingRatio + '\n\tduration: ' + UIViewSpring.duration);
-console.log('\n[iOS]CASpringAnimation: \n\tmass = ' + CASpring.mass + '\n\tstiffness = ' + CASpring.stiffness + '\n\tdamping = ' + CASpring.damping + '\n\tinitialVelocity = ' + CASpring.initialVelocity);
-console.log('\n[Android]SpringAnimation: \n\tdampingRatio = ' + DynamicSpring.dampingRatio + '\n\tstiffness = ' + DynamicSpring.stiffness);
-console.log('\n[Android]SpringInterpolator: \n\tfactor = ' + SpringInterpolator.factor + '\n\tduration = ' + SpringInterpolator.duration);
-console.log('\n[Android]Rebound: \n\tSpringConfig.fromBouncinessAndSpeed('+ bounciness + ',' + speed +');');
+function OutputPara(isLog){
+    
+    if(isLog){
+        console.log('\n[iOS]UIView.animate:usingSpringWithDamping: \n\tdampingRatio: ' + UIViewSpring.dampingRatio + '\n\tduration: ' + UIViewSpring.duration);
+        console.log('\n[iOS]CASpringAnimation: \n\tmass = ' + CASpring.mass + '\n\tstiffness = ' + CASpring.stiffness + '\n\tdamping = ' + CASpring.damping + '\n\tinitialVelocity = ' + CASpring.initialVelocity);
+        console.log('\n[Android]SpringAnimation: \n\tdampingRatio = ' + DynamicSpring.dampingRatio + '\n\tstiffness = ' + DynamicSpring.stiffness);
+        console.log('\n[Android]SpringInterpolator: \n\tfactor = ' + SpringInterpolator.factor + '\n\tduration = ' + SpringInterpolator.duration);
+        console.log('\n[Android]Rebound: \n\tSpringConfig.fromBouncinessAndSpeed('+ bounciness + ',' + speed +');');
 
-console.log('Spring Duration: ' + spring.duration)
+        console.log('Spring Duration: ' + spring.duration)
 
-console.log('DyanamicAnimation -----> Bounciness: ' + Math.round(dyanmic.bounciness))
-console.log('DyanamicAnimation ----------> Speed: ' + Math.round(dyanmic.speed))
-console.log('DyanamicAnimation --> BouncyTension: ' + Math.round(dyanmic.bouncyTension))
-console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyFriction))
-console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
-console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
-console.log('DyanamicAnimation --------> Duration: ' + (dyanmic.duration))
+        console.log('DyanamicAnimation -----> Bounciness: ' + Math.round(dyanmic.bounciness))
+        console.log('DyanamicAnimation ----------> Speed: ' + Math.round(dyanmic.speed))
+        console.log('DyanamicAnimation --> BouncyTension: ' + Math.round(dyanmic.bouncyTension))
+        console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyFriction))
+        console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
+        console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
+        console.log('DyanamicAnimation --------> Duration: ' + (dyanmic.duration))
 
-console.log('DHO Stiffness: ' + dho.stiffness)
-console.log('DHO DampingRatio: ' + dho.dampingRatio)
-console.log('DHO Duration: ' + dho.duration)
+        console.log('DHO Stiffness: ' + dho.stiffness)
+        console.log('DHO DampingRatio: ' + dho.dampingRatio)
+        console.log('DHO Duration: ' + dho.duration)
 
-console.log('RK4 Stiffness: ' + rk4.stiffness)
-console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
-console.log('RK4 Duration: ' + rk4.duration)
+        console.log('RK4 Stiffness: ' + rk4.stiffness)
+        console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
+        console.log('RK4 Duration: ' + rk4.duration)
 
-console.log('UIViewSpring Stiffness: ' + uiviewSpring.stiffness);
-console.log('UIViewSpring DampingRatio: ' + uiviewSpring.dampingRatio);
+        console.log('UIViewSpring Stiffness: ' + uiviewSpring.stiffness);
+        console.log('UIViewSpring DampingRatio: ' + uiviewSpring.dampingRatio);
 
-console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
-console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
+        console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
+        console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
 
+        console.log('transitionVal is: ' + mFling.value[0]  + 'totalTime is: ' + mFling.value[1]);
+    }
 
+}
+
+OutputPara(false);
+/////////////////////////
+//  Backup
+/////////////////////////
+
+// function flingCalculator(velocity,dampingRatio){
+//     var mRealFriction = dampingRatio*-4.2;
+
+//     for (var i = 1/60;i < 4.;i += 1/60){
+       
+//         var mFlingVelocity = velocity * Math.exp(i * mRealFriction) ;
+//         var valTransition = (velocity/ mRealFriction) * (Math.exp(mRealFriction * i ) - 1);
+
+//         if(Math.abs(mFlingVelocity) <= 0.08){
+//             return;
+//         }
+//         else{
+//             console.log('transitionVal is: ' + valTransition + 'currentVelocity is: ' + mFlingVelocity + 'currentFrame is: ' + Math.round(i*60));
+//         }
+
+//     }
+// }
+
+//flingCalculator(-4000,0.8);
