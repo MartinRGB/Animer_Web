@@ -11,6 +11,7 @@
 /////////////////////////////////////////////
 
 var factor1 = 0.5,factor2 = 0.,factor3 = 0.;
+var bezier1 = 0.00,bezier2 = 0.00,bezier3 = 1.00,bezier4 = 1.00;
 var SPRING = new Object();
 var BOUNCE = new Object();
 var DAMPING = new Object();
@@ -712,7 +713,8 @@ BEZIER_FUNCTION = {
 	iOS_CSS_Ease_Deafult:[0.25, 0.10, 0.25, 1.00],
 	iOS_CSS_EaseIn:[0.42, 0.00, 1.00, 1.00],
 	iOS_CSS_EaseOut:[0.00, 0.00, 0.58, 1.00],
-	iOS_CSS_EaseInOut:[0.42, 0.00, 0.58, 1.00]
+	iOS_CSS_EaseInOut:[0.42, 0.00, 0.58, 1.00],
+	Custom_CubicBezier:[0.00, 0.00, 1.00, 1.00]
 }
 
 NORMALIZED_EASING_FUNCTION = 
@@ -1182,9 +1184,9 @@ function android_interpolator_script(ui_reference) {
 	{
 		var LIST_DIMENSIONS = [0, 0, 206, 15];
 		var STATIC_TEXT_DIMENSIONS = [0, 0, 80, 15];
-		var STATIC_TEXT_DIMENSIONS_2 = [0, 0, 71, 15];
+		var theTextColorArray = [0, 0.96, 0.94, 1];
 
-		android_interpolator.pavarte = (thisObj instanceof Panel) ? thisObj : new Window("pavarte", "Easing", undefined, {resizeable: true});
+		android_interpolator.pavarte = (thisObj instanceof Panel) ? thisObj : new Window("pavarte", "Animator", undefined, {resizeable: true});
 		android_interpolator.pavarte.margins       = 6;
 		android_interpolator.pavarte.alignChildren = 'left';
 
@@ -1192,7 +1194,6 @@ function android_interpolator_script(ui_reference) {
 		var winGfx          = android_interpolator.pavarte.graphics;
 		var darkColorBrush  = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 		var lightColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [1,1,1], 1);
-
 		// popup menus
 
 		///////////////////////////////
@@ -1200,11 +1201,12 @@ function android_interpolator_script(ui_reference) {
 		///////////////////////////////
 
 		var	slGrp1 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 1');
-		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS_2, 'Factor:');
+		var text1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor:');
+		var value1 = slGrp1.add('edittext {text: 0.5, characters: 7, justify: "left", active: true}');
 		var slider1 = slGrp1.add("slider", undefined, thisObj.numRows, 0, 100.);
-		slider1.size = 'width: 150, height: 20';
+		slider1.size = 'width: 146, height: 20';
 		//var value1 = slGrp1.add('statictext', STATIC_TEXT_DIMENSIONS, '0.5f');
-		var value1 = slGrp1.add('edittext {text: 0.5, characters: 7, justify: "center", active: true}');
+		
 		slider1.onChanging = function () {
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
@@ -1263,11 +1265,12 @@ function android_interpolator_script(ui_reference) {
 				
 		var	slGrp2 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 2');
 		slGrp2.visible = false;
-		var text2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS_2, 'Factor2:');
+		var text2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor2:');
+		var value2 = slGrp2.add('edittext {text: 100, characters: 7, justify: "left", active: true}');
 		var slider2 = slGrp2.add("slider", undefined, thisObj.numRows, 0, 100);
-		slider2.size = 'width: 150, height: 20';
+		slider2.size = 'width: 146, height: 20';
 		//var value2 = slGrp2.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
-		var value2 = slGrp2.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
+		
 		slider2.onChanging = function () {  
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
@@ -1315,11 +1318,12 @@ function android_interpolator_script(ui_reference) {
 
 		var	slGrp3 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 3');
 		slGrp3.visible = false;
-		var text3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS_2, 'Factor3:');
+		var text3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor3:');
+		var value3 = slGrp3.add('edittext {text: 100, characters: 7, justify: "left", active: true}');
 		var slider3 = slGrp3.add("slider", undefined, thisObj.numRows, 0, 100);
-		slider3.size = 'width: 150, height: 20';
+		slider3.size = 'width: 146, height: 20';
 		//var value3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
-		var value3 = slGrp3.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
+		
 		slider3.onChanging = function () {  
 			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
 				if(INTERPOLATOR_MODE == i){
@@ -1345,12 +1349,27 @@ function android_interpolator_script(ui_reference) {
 
 		var	slGrp4 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 4');
 		slGrp4.visible = false;
-		var text4 = slGrp4.add('statictext', [0, 0, 80, 15], 'Estimated Time:');
+		var text4 = slGrp4.add('statictext', [0, 0, 82, 15], 'Estimated Time:');
 		var value4 = slGrp4.add('statictext', [0, 0, 60, 15], '100.s');
 		var text4_1 = slGrp4.add('statictext', [0, 0, 84, 15], 'Transition Value: ');
 		var value4_1 = slGrp4.add('statictext', [0, 0, 64, 15], '-1190.0f');
-				
 
+		var	slGrp5 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 5');
+		slGrp5.add('statictext', STATIC_TEXT_DIMENSIONS, 'Bezier Value:');
+		slGrp5.visible = false;
+		var value5 = slGrp5.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
+		value5.text = '0.00,0.00,1.00,1.00'
+		value5.size = 'width:206,height:20'
+
+		value5.onChanging = function () {  
+		
+			bezier1 = Number(value5.text.split(',',1).pop().toString());
+			bezier2 = Number(value5.text.split(',',2).pop().toString());
+			bezier3 = Number(value5.text.split(',',3).pop().toString());
+			bezier4 = Number(value5.text.split(',',4).pop().toString());
+		
+		}
+	
 		///////////////////////////////
 		// interpolator menu
 		///////////////////////////////
@@ -1381,6 +1400,18 @@ function android_interpolator_script(ui_reference) {
 						slGrp2.visible = false;
 						slGrp3.visible = false;
 						slGrp4.visible = false;
+						slGrp5.visible = true;
+						if(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE] == 'Custom_CubicBezier'){
+							value5.enabled = true;
+						}else{
+							value5.enabled = false;
+						}
+						bezier1 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][0];
+						bezier2 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][1];
+						bezier3 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][2];
+						bezier4 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][3];
+
+						value5.text = bezier1.toFixed(2).toString() + ',' + bezier2.toFixed(2).toString() + ',' + bezier3.toFixed(2).toString() + ',' + bezier4.toFixed(2).toString();
 					}
 					
 					// Android Timing Function Interpolator
@@ -1419,6 +1450,7 @@ function android_interpolator_script(ui_reference) {
 							else{
 								slGrp4.visible = false;
 							}
+							slGrp5.visible = false;
 
 							text1.text = android_interpolator.interpolatorTypesAry[i].slider1Text;
 							text2.text = android_interpolator.interpolatorTypesAry[i].slider2Text;
@@ -1553,13 +1585,15 @@ function android_interpolator_script(ui_reference) {
 		}
 		else{
 
-			var k0 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][0];
-			var k1 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][1];
-			var k2 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][2];
-			var k3 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][3];
+			// var k0 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][0];
+			// var k1 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][1];
+			// var k2 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][2];
+			// var k3 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][3];
+
+			// alert(bezier1)
 
 			//alert(k0+","+k1+","+k2+","+k3+"")
-			an_two_keyframe_cubicbeziers(k0,k1,k2,k3);
+			an_two_keyframe_cubicbeziers(bezier1,bezier2,bezier3,bezier4);
 
 			//an_two_keyframe_cubicbeziers(0.42, 0.00, 1.00, 1.00);
 		}
