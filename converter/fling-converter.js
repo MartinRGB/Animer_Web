@@ -3,7 +3,7 @@
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-var paddingSacle = 1/5;
+var paddingScale = 1/5;
 var cWidth = c.width;
 var cHeight = c.height;
 var controlPointRadius = 10;
@@ -256,10 +256,10 @@ var point1x = 0.,point1y = 0.,point2x = 0.,point2y = 0.;
 function drawCurve(curve,halfSize,bezier){
     ctx.clearRect(0, 0, cWidth, cHeight);
 
-    var paddingLeft = cWidth*paddingSacle;
-    var paddingRight = cWidth*paddingSacle;
-    var paddingTop = halfSize?(cHeight/2):cHeight*paddingSacle;
-    var paddingBottom = cHeight*paddingSacle;
+    var paddingLeft = cWidth*paddingScale;
+    var paddingRight = cWidth*paddingScale;
+    var paddingTop = halfSize?(cHeight/2):cHeight*paddingScale;
+    var paddingBottom = cHeight*paddingScale;
     var realWidth = cWidth - paddingLeft - paddingRight;
     var realHeight = cHeight - paddingBottom - paddingTop;
 
@@ -276,8 +276,8 @@ function drawCurve(curve,halfSize,bezier){
     ctx.moveTo(0, cHeight/2);
     ctx.lineTo(cWidth, cHeight/2);
 
-    ctx.moveTo(0, cHeight*paddingSacle);
-    ctx.lineTo(cWidth, cHeight*paddingSacle);
+    ctx.moveTo(0, cHeight*paddingScale);
+    ctx.lineTo(cWidth, cHeight*paddingScale);
 
     ctx.moveTo(paddingLeft, 0);
     ctx.lineTo(paddingLeft, cHeight);
@@ -299,11 +299,11 @@ function drawCurve(curve,halfSize,bezier){
         ctx.lineTo(paddingLeft + realWidth*bezier[2], (cHeight - paddingBottom)- realHeight*bezier[3]);
         ctx.stroke();
 
-        ctx.beginPath();
-        ctx.arc(paddingLeft + realWidth*bezier[0], (cHeight - paddingBottom) - realHeight*bezier[1], controlPointRadius, 0, 2 * Math.PI);
-        ctx.arc(paddingLeft + realWidth*bezier[2], (cHeight - paddingBottom)- realHeight*bezier[3], controlPointRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(paddingLeft + realWidth*bezier[0], (cHeight - paddingBottom) - realHeight*bezier[1], controlPointRadius, 0, 2 * Math.PI);
+        // ctx.arc(paddingLeft + realWidth*bezier[2], (cHeight - paddingBottom)- realHeight*bezier[3], controlPointRadius, 0, 2 * Math.PI);
+        // ctx.fillStyle = 'blue';
+        // ctx.fill();
 
         point1x = paddingLeft + realWidth*bezier[0];
         point1y = (cHeight - paddingBottom) - realHeight*bezier[1];
@@ -355,61 +355,16 @@ var point1StartX,point1StartY,point2StartX,point2StartY;
 
 drawCurve(mBe,false,mBe.bezier);
 
-function getCursorClickState(canvas, event) {
-    const rect = canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
-    console.log("x: " + x + " y: " + y)
-    if(Math.pow(x-point1x/canvasScaleFactor,2)+Math.pow(y-point1y/canvasScaleFactor,2) < Math.pow(controlPointRadius/canvasScaleFactor,2)){
-        console.log('point1 clicked');
-        point1Down = true;
-        point2Down = false;
-        point1StartX = x;
-        point1StartY = y;
-        //c.style.cursor = 'pointer'
-    }else if(Math.pow(x-point2x/canvasScaleFactor,2)+Math.pow(y-point2y/canvasScaleFactor,2) < Math.pow(controlPointRadius/canvasScaleFactor,2)){
-        console.log('point2 clicked');
-        point2Down = true;
-        point1Down = false;
-        point2StartX = x;
-        point2StartY = y;
-        //c.style.cursor = 'pointer'
-    }
-    else{
-        point2Down = false;
-        point1Down = false;
-        //c.style.cursor = 'default'
-    }
-}
-
 function getCursorMoveState(canvas, event) {
     const rect = canvas.getBoundingClientRect()
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
     console.log("x: " + x + " y: " + y)
-    if(Math.pow(x-point1x/canvasScaleFactor,2)+Math.pow(y-point1y/canvasScaleFactor,2) < Math.pow(controlPointRadius/canvasScaleFactor,2)){
-        c.style.cursor = 'pointer'
-        if(point1Down){
-            console.log('1 drag')
-        }
-    }else if(Math.pow(x-point2x/canvasScaleFactor,2)+Math.pow(y-point2y/canvasScaleFactor,2) < Math.pow(controlPointRadius/canvasScaleFactor,2)){
-        c.style.cursor = 'pointer'
-        if(point2Down){
-            console.log('2 drag')
-        }
-    }
-    else{
-        c.style.cursor = 'default'
-    }
+    var x1 = ((x- cWidth*paddingScale/canvasScaleFactor) /((cWidth - cWidth*paddingScale*2)/canvasScaleFactor));
+    var y1 = (1. - (y- cHeight*paddingScale/canvasScaleFactor)/((cHeight - cHeight*paddingScale*2)/canvasScaleFactor));
+    mBe = new CubicBezierCalculator(x1,y1,mFactor3,1);
+    drawCurve(mBe,false,mBe.bezier)
 }
-
-c.addEventListener('mousedown', function(e) {
-    getCursorClickState(c, e);
-})
-
-c.addEventListener('mousemove', function(e) {
-    getCursorMoveState(c, e);
-})
 
 //Slider part,need reconstruct
 var slider = document.getElementById("myRange");
@@ -441,6 +396,49 @@ slider3.oninput = function() {
 }
 
 
+dragElement(document.getElementById("mydiv"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV: 
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    getCursorMoveState(c,e)
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
 
 
 

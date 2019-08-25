@@ -1,0 +1,8 @@
+#mydiv {
+  position: absolute;
+  z-index: 9;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #2196F3;
+  cursor: move;
+}

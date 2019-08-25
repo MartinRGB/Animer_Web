@@ -3,14 +3,18 @@
   <head>
     <meta charset="UTF-8">
     <title>Animation Converter & Visualizer</title>
-    <!-- <link rel="stylesheet" type="text/css" href="style.css"/> -->
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
 
     <main>
 			<div class="gl_content">
-				<div class="content">
+				<div class="content"style="width: 400px;height: 400px;">
           <canvas id="myCanvas" width="800" height="800" style="width: 400px;height:400px;"></canvas>
+          <div id="mydiv">
+            <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+            <!-- <div id="mydivheader"></div> -->
+          </div>
         </div>
         
         <div class="slidecontainer">
@@ -27,6 +31,8 @@
           <input type="range" min="0" max="1" value="0.5" step="0.05" class="slider" id="myRange-3">
           <p>Value: <span id="demo-3"></span></p>
         </div>
+
+
 
 			</div>
     </main>
