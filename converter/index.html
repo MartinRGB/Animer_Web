@@ -10,21 +10,22 @@
     <main>
 			<div class="gl_content">
 				<div class="content">
-          <canvas id="myCanvas" width="800" height="800" style="border:1px solid #d3d3d3;width: 400px;height:400px;">
+          <canvas id="myCanvas" width="800" height="800" style="width: 400px;height:400px;"></canvas>
         </div>
         
-        <svg viewBox="0 0 100 100" style="width: 400px;height: 400px; ">
-          <polyline id="graph_bezierline" class="graph_bezierline" style="fill: none;stroke: #18FF92;stroke-width: 1;"></polyline>
-        </svg>
-
         <div class="slidecontainer">
           <input type="range" min="-10000" max="10000" value="0" class="slider" id="myRange">
           <p>Value: <span id="demo"></span></p>
         </div>
 
         <div class="slidecontainer-2">
-          <input type="range" min="0" max="1" value="0.5" step="0.05" class="slider" id="myRange-2">
+          <input type="range" min="0.1" max="1" value="0.5" step="0.05" class="slider" id="myRange-2">
           <p>Value: <span id="demo-2"></span></p>
+        </div>
+
+        <div class="slidecontainer-3">
+          <input type="range" min="0" max="1" value="0.5" step="0.05" class="slider" id="myRange-3">
+          <p>Value: <span id="demo-3"></span></p>
         </div>
 
 			</div>
