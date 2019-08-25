@@ -764,7 +764,7 @@ let factor2 = new AndroidSpringInterpolatorEvaluator(dyanmic.stiffness, dyanmic.
 let dho = new FramerDHOConverter(framerStiffness,framerDamping);
 let rk4 = new FramerRK4Converter(framerTension,framerFriction);
 let uiviewSpring = new UIViewSpringConverter(uiviewspring_dampingratio,uiviewspring_duration);
-let mFling = new FlingAnimationDurationEvaluator(flingVelocity, flingDampingRatio);
+let fling = new FlingAnimationDurationEvaluator(flingVelocity, flingDampingRatio);
 
 let UIViewSpring = {
     dampingRatio: spring.dampingRatio,
@@ -821,7 +821,7 @@ function OutputPara(isLog){
         console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
         console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
 
-        console.log('transitionVal is: ' + mFling.value[0]  + 'totalTime is: ' + mFling.value[1]);
+        console.log('transitionVal is: ' + fling.value[0]  + 'totalTime is: ' + fling.value[1]);
     }
 
 }
@@ -836,14 +836,14 @@ OutputPara(false);
 
 //     for (var i = 1/60;i < 4.;i += 1/60){
        
-//         var mFlingVelocity = velocity * Math.exp(i * mRealFriction) ;
+//         var flingVelocity = velocity * Math.exp(i * mRealFriction) ;
 //         var valTransition = (velocity/ mRealFriction) * (Math.exp(mRealFriction * i ) - 1);
 
-//         if(Math.abs(mFlingVelocity) <= 0.08){
+//         if(Math.abs(flingVelocity) <= 0.08){
 //             return;
 //         }
 //         else{
-//             console.log('transitionVal is: ' + valTransition + 'currentVelocity is: ' + mFlingVelocity + 'currentFrame is: ' + Math.round(i*60));
+//             console.log('transitionVal is: ' + valTransition + 'currentVelocity is: ' + flingVelocity + 'currentFrame is: ' + Math.round(i*60));
 //         }
 
 //     }
