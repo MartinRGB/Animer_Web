@@ -3,7 +3,7 @@
   z-index: 10;
   padding: 8px;
   border-radius: 8px;
-  background-color: #2196F3;
+  background-color: #90caf9;
   cursor: move;
   left: 320px;
   top:320px;
@@ -14,8 +14,16 @@
   z-index: 10;
   padding: 8px;
   border-radius: 8px;
-  background-color: #2196F3;
+  background-color: #90caf9;
   cursor: move;
   left: 80px;
   top:80px;
+}
+
+#control_container{
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

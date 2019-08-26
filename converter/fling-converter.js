@@ -3,11 +3,14 @@
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-var paddingScale = 1/5;
+var paddingScale = 1/6;
 var cWidth = c.width;
 var cHeight = c.height;
 var controlPointRadius = 10;
 var canvasScaleFactor = cWidth/c.offsetWidth;
+
+
+
 
 class FlingAnimationCalculator {
     constructor(velocity, dampingRatio) {
@@ -236,16 +239,18 @@ class CubicBezierCalculator {
         var transitionArray = [[0,0]];
         var sampleScale = 1.;
 
-        for (var i = 1/(60*sampleScale);i < 1;i += 1/(60*sampleScale)){
+        for (var i = 1/(60*sampleScale);i < 1+1/(60*sampleScale);i += 1/(60*sampleScale)){
 
-            if(i >= (59*sampleScale)/(60*sampleScale)){
-                transitionArray.push([i,this.solve(i,this.epsilon)]);
-                return transitionArray;
-            }
-            else{
-                transitionArray.push([i,this.solve(i,this.epsilon)]);
-            }
+            transitionArray.push([i,this.solve(i,this.epsilon)]);
+            // if(i >= (59*sampleScale)/(60*sampleScale)){
+            //     transitionArray.push([i,this.solve(i,this.epsilon)]);
+            //     return transitionArray;
+            // }
+            // else{
+            //     transitionArray.push([i,this.solve(i,this.epsilon)]);
+            // }
         }
+        return transitionArray;
 
     }
 
@@ -290,8 +295,8 @@ function drawCurve(curve,halfSize,bezier){
     //Draw the BezierLine
     if(bezier !=null){
         ctx.beginPath();
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(33,150,243,0.5)";
+        ctx.lineWidth = 4;
         ctx.moveTo(paddingLeft, cHeight - paddingBottom);
         ctx.lineTo(paddingLeft + realWidth*bezier[0], (cHeight - paddingBottom) - realHeight*bezier[1]);
 
@@ -310,7 +315,6 @@ function drawCurve(curve,halfSize,bezier){
         point2x = paddingLeft + realWidth*bezier[2];
         point2y = (cHeight - paddingBottom) - realHeight*bezier[3];
 
-        
         console.log("1x: " + point1x/canvasScaleFactor + " 1y: " + point1y/canvasScaleFactor)
         console.log("2x: " + point2x/canvasScaleFactor + " 2y: " + point2y/canvasScaleFactor)
 
@@ -322,7 +326,7 @@ function drawCurve(curve,halfSize,bezier){
     ctx.strokeStyle = "green";
     ctx.moveTo(paddingLeft, cHeight-paddingBottom);
 
-    for (i = 1; i < frameCount - 1; i++)
+    for (i = 0; i < frameCount-1; i++)
     {
        var cX = i * (cWidth - paddingLeft - paddingRight) / frameCount + paddingLeft;
        var nX = (i+1) * (cWidth - paddingLeft - paddingRight) / frameCount + paddingLeft;
@@ -330,16 +334,14 @@ function drawCurve(curve,halfSize,bezier){
        var nY = (cHeight - paddingBottom - paddingTop) - transitionArray[i+1][1]*(cHeight - paddingBottom - paddingTop)/transitionArray[frameCount-1][1] + paddingTop;
        var cXCenter = (cX + nX)/2;
        var cYCenter = (cY + nY)/2;
-       ctx.quadraticCurveTo(cX, cY, cXCenter, cYCenter);
+       if(i == frameCount - 2){
+           ctx.quadraticCurveTo(cX, cY, (cWidth - paddingRight),(paddingTop));
+       } 
+       else{
+            ctx.quadraticCurveTo(cX, cY, cXCenter, cYCenter);
+       }
     }
 
-    var currentX = (frameCount-2) * (cWidth - paddingLeft - paddingRight) / frameCount + paddingLeft;
-    var endX = (frameCount-1) * (cWidth - paddingLeft - paddingRight) / frameCount + paddingLeft
-    var currentY = (cHeight - paddingBottom - paddingTop) - transitionArray[frameCount-2][1]*(cHeight - paddingBottom - paddingTop)/transitionArray[frameCount-2][1] + paddingTop;
-    var endY = (cHeight - paddingBottom - paddingTop) - transitionArray[frameCount-1][1]*(cHeight - paddingBottom - paddingTop)/transitionArray[frameCount-1][1] + paddingTop;
-
-    //ctx.quadraticCurveTo(currentX,currentY,endX,endY);
-    ctx.quadraticCurveTo(endX,endY,(cWidth - paddingRight),(paddingTop));
     ctx.lineWidth = 4;
     ctx.lineCap = "round";
     ctx.stroke();
@@ -353,6 +355,8 @@ var mSpring = new SpringAnimationCalculator(1500, 0.5,0);
 var mIn = new InterpolatorCalculator(0.5);
 var mBe = new CubicBezierCalculator(bezierPoint1,bezierPoint2,bezierPoint3,bezierPoint4);
 var mFactor1 = 1500,mFactor2 = 0.5,mFactor3 = 0.;
+
+console.log(mBe.array)
 
 drawCurve(mBe,false,mBe.bezier);
 
@@ -389,7 +393,15 @@ slider3.oninput = function() {
 
 var controller_1 = document.getElementById("controller_1");
 var controller_2 = document.getElementById("controller_2");
+var control_container = document.getElementById("control_container");
 var bezier_value = document.getElementById("bezier_value");
+
+controller_2.style.left = c.offsetWidth * paddingScale + 'px'
+controller_2.style.top = c.offsetHeight * paddingScale + 'px'
+
+controller_1.style.left = c.offsetWidth * (1 - paddingScale)  + 'px'
+controller_1.style.top = c.offsetHeight * (1 - paddingScale) + 'px'
+
 bezier_value.innerHTML = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
 dragElement(controller_1);
 dragElement(controller_2);
