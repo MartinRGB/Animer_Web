@@ -315,8 +315,8 @@ function drawCurve(curve,halfSize,bezier){
         point2x = paddingLeft + realWidth*bezier[2];
         point2y = (cHeight - paddingBottom) - realHeight*bezier[3];
 
-        console.log("1x: " + point1x/canvasScaleFactor + " 1y: " + point1y/canvasScaleFactor)
-        console.log("2x: " + point2x/canvasScaleFactor + " 2y: " + point2y/canvasScaleFactor)
+        // console.log("1x: " + point1x/canvasScaleFactor + " 1y: " + point1y/canvasScaleFactor)
+        // console.log("2x: " + point2x/canvasScaleFactor + " 2y: " + point2y/canvasScaleFactor)
 
     }
 
@@ -384,12 +384,14 @@ slider2.oninput = function() {
   output2.innerHTML = this.value;
 }
 slider3.oninput = function() {
-  mFactor3 = this.value;
-  var mBe = new CubicBezierCalculator(1,0,mFactor3,1);
-  drawCurve(mBe,false,mBe.bezier)
-  output3.innerHTML = this.value;
+//   mFactor3 = this.value;
+//   var mBe = new CubicBezierCalculator(1,0,mFactor3,1);
+//   drawCurve(mBe,false,mBe.bezier)
+//   output3.innerHTML = this.value;
 }
 
+
+// TODO - ADD Bezier Constraint of Dragging and Inputting
 
 var controller_1 = document.getElementById("controller_1");
 var controller_2 = document.getElementById("controller_2");
@@ -402,31 +404,40 @@ controller_2.style.top = c.offsetHeight * paddingScale + 'px'
 controller_1.style.left = c.offsetWidth * (1 - paddingScale)  + 'px'
 controller_1.style.top = c.offsetHeight * (1 - paddingScale) + 'px'
 
-bezier_value.innerHTML = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
-dragElement(controller_1);
-dragElement(controller_2);
+bezier_value.value = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
+bezierDragInteraction(controller_1);
+bezierDragInteraction(controller_2);
+bezierInputInteration(bezier_value);
 
-
-function getControllerBezier(element,mX,mY) {
-    var x = ((mX- cWidth*paddingScale/canvasScaleFactor) /((cWidth - cWidth*paddingScale*2)/canvasScaleFactor));
-    var y = (1. - (mY- cHeight*paddingScale/canvasScaleFactor)/((cHeight - cHeight*paddingScale*2)/canvasScaleFactor));
-    if(element.id == 'controller_1'){
-        bezierPoint1 = x;
-        bezierPoint2 = y;
-        console.log('x1: ' + x + 'y1: ' + y )
-    }
-    else if (element.id == 'controller_2'){
-        bezierPoint3 = x;
-        bezierPoint4 = y;
-        console.log('x2: ' + x + 'y2: ' + y )
-    }
-
-    bezier_value.innerHTML = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
+function drawBezierCurve(){
+    bezier_value.value = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
     mBe = new CubicBezierCalculator(bezierPoint1,bezierPoint2,bezierPoint3,bezierPoint4);
     drawCurve(mBe,false,mBe.bezier)
 }
 
-function dragElement(elmnt) {
+function bezierInputInteration(element){
+    element.onchange = function(e){
+        var mString = e.target.value;
+
+        bezierPoint1 = Number(mString.split(',')[0]);
+        bezierPoint2 = Number(mString.split(',')[1].split(',')[0]);
+        bezierPoint3 = Number(mString.split(',')[2].split(',')[0]);
+        bezierPoint4 = Number(mString.split(',')[3]);
+
+        drawBezierCurve();
+
+        // 0,1
+        controller_2.style.left = c.offsetWidth * paddingScale + (c.offsetWidth*(1 - 2*paddingScale))*bezierPoint3  + 'px'
+        controller_2.style.top = c.offsetHeight * paddingScale + (c.offsetHeight*(1 - 2*paddingScale))*(1-bezierPoint4) + 'px'
+
+        //1,0
+        //controller_1.style.left = c.offsetWidth * (1 - paddingScale)  + 'px'
+        controller_1.style.left = c.offsetWidth * paddingScale + (c.offsetWidth*(1 - 2*paddingScale))*bezierPoint1  + 'px'
+        controller_1.style.top = c.offsetHeight * paddingScale + (c.offsetHeight*(1 - 2*paddingScale))*(1-bezierPoint2) + 'px'
+    }
+}
+
+function bezierDragInteraction(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   if (document.getElementById(elmnt.id + "header")) {
     // if present, the header is where you move the DIV from:
@@ -461,12 +472,30 @@ function dragElement(elmnt) {
     
     getControllerBezier(elmnt,(elmnt.offsetLeft),(elmnt.offsetTop))
 
+
   }
 
   function closeDragElement() {
     // stop moving when mouse button is released:
     document.onmouseup = null;
     document.onmousemove = null;
+  }
+
+  function getControllerBezier(element,mX,mY) {
+    var x = ((mX- cWidth*paddingScale/canvasScaleFactor) /((cWidth - cWidth*paddingScale*2)/canvasScaleFactor));
+    var y = (1. - (mY- cHeight*paddingScale/canvasScaleFactor)/((cHeight - cHeight*paddingScale*2)/canvasScaleFactor));
+    if(element.id == 'controller_1'){
+        bezierPoint1 = x;
+        bezierPoint2 = y;
+        //console.log('x1: ' + x + 'y1: ' + y )
+    }
+    else if (element.id == 'controller_2'){
+        bezierPoint3 = x;
+        bezierPoint4 = y;
+        //console.log('x2: ' + x + 'y2: ' + y )
+    }
+    drawBezierCurve();
+
   }
 }
 
