@@ -291,7 +291,7 @@ function drawCurve(curve,halfSize,bezier){
     if(bezier !=null){
         ctx.beginPath();
         ctx.strokeStyle = "blue";
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         ctx.moveTo(paddingLeft, cHeight - paddingBottom);
         ctx.lineTo(paddingLeft + realWidth*bezier[0], (cHeight - paddingBottom) - realHeight*bezier[1]);
 
@@ -299,11 +299,11 @@ function drawCurve(curve,halfSize,bezier){
         ctx.lineTo(paddingLeft + realWidth*bezier[2], (cHeight - paddingBottom)- realHeight*bezier[3]);
         ctx.stroke();
 
-        // ctx.beginPath();
-        // ctx.arc(paddingLeft + realWidth*bezier[0], (cHeight - paddingBottom) - realHeight*bezier[1], controlPointRadius, 0, 2 * Math.PI);
-        // ctx.arc(paddingLeft + realWidth*bezier[2], (cHeight - paddingBottom)- realHeight*bezier[3], controlPointRadius, 0, 2 * Math.PI);
-        // ctx.fillStyle = 'blue';
-        // ctx.fill();
+        ctx.beginPath();
+        ctx.arc(paddingLeft + realWidth*bezier[0], (cHeight - paddingBottom) - realHeight*bezier[1], controlPointRadius, 0, 2 * Math.PI);
+        ctx.arc(paddingLeft + realWidth*bezier[2], (cHeight - paddingBottom)- realHeight*bezier[3], controlPointRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = 'blue';
+        ctx.fill();
 
         point1x = paddingLeft + realWidth*bezier[0];
         point1y = (cHeight - paddingBottom) - realHeight*bezier[1];
@@ -345,26 +345,17 @@ function drawCurve(curve,halfSize,bezier){
     ctx.stroke();
 }
 
+
+var bezierPoint1 = 1,bezierPoint2 = 0,bezierPoint3 = 0,bezierPoint4 = 1;
+
 var mFling = new FlingAnimationCalculator(-4000, 0.8);
 var mSpring = new SpringAnimationCalculator(1500, 0.5,0);
 var mIn = new InterpolatorCalculator(0.5);
-var mBe = new CubicBezierCalculator(1,0,0,1);
-var mFactor1 = 1500,mFactor2 = 0.5,mFactor3 = 0.5;
-var point1Down = false,point2Down = false;
-var point1StartX,point1StartY,point2StartX,point2StartY;
+var mBe = new CubicBezierCalculator(bezierPoint1,bezierPoint2,bezierPoint3,bezierPoint4);
+var mFactor1 = 1500,mFactor2 = 0.5,mFactor3 = 0.;
 
 drawCurve(mBe,false,mBe.bezier);
 
-function getCursorMoveState(canvas, event) {
-    const rect = canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
-    console.log("x: " + x + " y: " + y)
-    var x1 = ((x- cWidth*paddingScale/canvasScaleFactor) /((cWidth - cWidth*paddingScale*2)/canvasScaleFactor));
-    var y1 = (1. - (y- cHeight*paddingScale/canvasScaleFactor)/((cHeight - cHeight*paddingScale*2)/canvasScaleFactor));
-    mBe = new CubicBezierCalculator(x1,y1,mFactor3,1);
-    drawCurve(mBe,false,mBe.bezier)
-}
 
 //Slider part,need reconstruct
 var slider = document.getElementById("myRange");
@@ -396,7 +387,32 @@ slider3.oninput = function() {
 }
 
 
-dragElement(document.getElementById("mydiv"));
+var controller_1 = document.getElementById("controller_1");
+var controller_2 = document.getElementById("controller_2");
+var bezier_value = document.getElementById("bezier_value");
+bezier_value.innerHTML = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
+dragElement(controller_1);
+dragElement(controller_2);
+
+
+function getControllerBezier(element,mX,mY) {
+    var x = ((mX- cWidth*paddingScale/canvasScaleFactor) /((cWidth - cWidth*paddingScale*2)/canvasScaleFactor));
+    var y = (1. - (mY- cHeight*paddingScale/canvasScaleFactor)/((cHeight - cHeight*paddingScale*2)/canvasScaleFactor));
+    if(element.id == 'controller_1'){
+        bezierPoint1 = x;
+        bezierPoint2 = y;
+        console.log('x1: ' + x + 'y1: ' + y )
+    }
+    else if (element.id == 'controller_2'){
+        bezierPoint3 = x;
+        bezierPoint4 = y;
+        console.log('x2: ' + x + 'y2: ' + y )
+    }
+
+    bezier_value.innerHTML = bezierPoint1.toFixed(2) + ',' + bezierPoint2.toFixed(2) + ',' + bezierPoint3.toFixed(2) + ',' + bezierPoint4.toFixed(2)
+    mBe = new CubicBezierCalculator(bezierPoint1,bezierPoint2,bezierPoint3,bezierPoint4);
+    drawCurve(mBe,false,mBe.bezier)
+}
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -420,7 +436,6 @@ function dragElement(elmnt) {
   }
 
   function elementDrag(e) {
-    getCursorMoveState(c,e)
     e = e || window.event;
     e.preventDefault();
     // calculate the new cursor position:
@@ -429,8 +444,11 @@ function dragElement(elmnt) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
     elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    
+    getControllerBezier(elmnt,(elmnt.offsetLeft),(elmnt.offsetTop))
+
   }
 
   function closeDragElement() {
