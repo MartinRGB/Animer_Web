@@ -56,9 +56,7 @@ class BezierController{
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       
         var _this = this;
-        var cWidth = canvas.width;
-        var cHeight = canvas.height;
-        var canvasDensity = cWidth/canvas.offsetWidth;
+        var canvasDensity = canvas.width/canvas.offsetWidth;
 
         elmnt.onmousedown = dragMouseDown;
       
@@ -104,8 +102,8 @@ class BezierController{
         }
       
         function getControllerBezier(element,mX,mY) {
-          var x = ((mX- cWidth*canvas.paddingScale/canvasDensity) /((cWidth - cWidth*canvas.paddingScale*2)/canvasDensity));
-          var y = (1. - (mY- cHeight*canvas.paddingScale/canvasDensity)/((cHeight - cHeight*canvas.paddingScale*2)/canvasDensity));
+          var x = ((mX- canvas.width*canvas.paddingScale/canvasDensity) /((canvas.width - canvas.width*canvas.paddingScale*2)/canvasDensity));
+          var y = (1. - (mY- canvas.height*canvas.paddingScale/canvasDensity)/((canvas.height - canvas.height*canvas.paddingScale*2)/canvasDensity));
           if(element.id == c1_id){
               _this.x1 = x;
               _this.y1 = y;
