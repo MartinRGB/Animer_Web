@@ -1,4 +1,4 @@
-#controller_1 {
+#bezier-control-point-2 {
   position: absolute;
   z-index: 10;
   padding: 8px;
@@ -9,7 +9,7 @@
   top:320px;
 }
 
-#controller_2 {
+#bezier-control-point-1 {
   position: absolute;
   z-index: 10;
   padding: 8px;
@@ -20,10 +20,15 @@
   top:80px;
 }
 
-#control_container{
+#bezier-control-container{
   width: 400px;
   height: 400px;
   position: absolute;
   top: 0;
   left: 0;
+}
+
+#curve-canvas{
+  width: 400px;
+  height:400px;
 }

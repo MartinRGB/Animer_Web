@@ -4,19 +4,32 @@
     <meta charset="UTF-8">
     <title>Animation Converter & Visualizer</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="./js/calculator/SpringAnimationCalculator.js"></script>
+    <script src="./js/calculator/FlingAnimationCalculator.js"></script>
+    <script src="./js/calculator/InterpolatorCalculator.js"></script>
+    <script src="./js/calculator/CubicBezierCalculator.js"></script>
+    <script src="./js/converter/AndroidSpringAnimationConverter.js"></script>
+    <script src="./js/converter/AndroidSpringInterpolatorEvaluator.js"></script>
+    <script src="./js/converter/FlingAnimationDurationEvaluator.js"></script>
+    <script src="./js/converter/FramerDHOConverter.js"></script>
+    <script src="./js/converter/FramerRK4Converter.js"></script>
+    <script src="./js/converter/OrigamiSpringConverter.js"></script>
+    <script src="./js/converter/UIViewSpringConverter.js"></script>
+    <script src="./js/DrawCurve.js"></script>
+    <script src="./js/Bezier/BezierController.js"></script>
   </head>
   <body>
 
     <main>
 			<div class="gl_content">
 				<div class="content"style="width: 400px;height: 400px;">
-          <canvas id="myCanvas" width="800" height="800" style="width: 400px;height:400px;"></canvas>
-          <div id="control_container"style="width: 400px;height: 400px;">
-              <div id="controller_1"></div>
-              <div id="controller_2"></div>
+          <canvas id="curve-canvas" width="800" height="800"></canvas>
+          <div id="bezier-control-container">
+              <div id="bezier-control-point-1"></div>
+              <div id="bezier-control-point-2"></div>
           </div>
         </div>
-        <p>Bezier Value: <input id="bezier_value" type="text" value="1.00,0.00,0.00,1.00"></p>
+        <p>Bezier Value: <input id="bezier-input" type="text" value="1.00,0.00,0.00,1.00"></p>
 
         <div class="slidecontainer">
           <input type="range" min="-10000" max="10000" value="0" class="slider" id="myRange">
@@ -37,10 +50,7 @@
 
 			</div>
     </main>
-    
-    <script src="smooth.js"></script>
-    <script src="smoothpolyline.js"></script>
-    <script src="spring-converter.js"></script>
+
     <script src="fling-converter.js"></script>
     <!-- <script src="fling-converter_copy.js"></script> -->
   </body>
