@@ -1,34 +1,118 @@
+body{
+  background: #0F0C0E;
+  margin:0px;
+}
+
+p{
+  color:white;
+  font-family: Colfax_Regular;
+}
+
+::selection {
+  background: #009CFF; /* WebKit/Blink Browsers */
+}
+
+@font-face {
+  font-family: Colfax_Regular;
+  src: url("./font/Colfax-Regular.otf") format("opentype");
+}
+
+
 #bezier-control-point-2 {
   position: absolute;
   z-index: 10;
-  padding: 8px;
-  border-radius: 8px;
-  background-color: #90caf9;
+  padding: 5px;
+  border-radius: 100px;
+  border: 3px solid #8255FF;
+  background-color: #ffffff;
   cursor: move;
-  left: 320px;
-  top:320px;
+  transform: scale(0.8);
+  left:20px;
+  top:20px;
+  box-shadow: 0px 0px 5px 3px #0000003b;
 }
 
 #bezier-control-point-1 {
   position: absolute;
   z-index: 10;
-  padding: 8px;
-  border-radius: 8px;
-  background-color: #90caf9;
+  padding: 5px;
+  border-radius: 100px;
+  border: 3px solid #8255FF;
+  background-color: #ffffff;
   cursor: move;
-  left: 80px;
-  top:80px;
+  transform: scale(0.8);
+  /* left: 166.667px;
+  top:166.667px; */
+  left: 180px;
+  top:180px;
+  box-shadow: 0px 0px 5px 3px #0000003b;
 }
 
 #bezier-control-container{
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   position: absolute;
-  top: 0;
-  left: 0;
+  transform: translate3d(-8px, -213px, 0px);
 }
 
 #curve-canvas{
-  width: 400px;
-  height:400px;
+  width: 200px;
+  height:200px;
+}
+
+.card-container{
+  width: 200px;
+  margin: 20px auto;
+  padding: 20px;
+
+  /* transition:all 0.3s; */
+
+
+  /* padding-left: 200px;
+  padding-right: 200px; */
+  
+  /* background: #0F0C0E;
+  border: 0.5px solid #161516;
+  border-radius: 8px; */
+}
+
+.grid{
+  width: 160px;
+  height: 160px;
+  /* transform:translate3d(20px, 20px, 0px); */
+  position: absolute;
+  border-top: 0.25px solid #ffffff33;
+  border-bottom: 0.25px solid #ffffff33;
+  border-right: 0.25px solid #ffffff33;
+  background: linear-gradient(0deg, #ffffff33 0.5px, #00000000 0.5px), linear-gradient(90deg, #ffffff33 0.5px, #00000000 0.5px), linear-gradient(0deg, #ffffff1a 0.5px, #00000000 0.5px), linear-gradient(90deg, #ffffff1a 0.5px, #00000000 0.5px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+  opacity: 0.4;
+}
+
+.top-content{
+  border-bottom:0.5px solid #8080805c;
+  background: #0A0A0A;
+  padding-top: 1px;
+}
+
+.bezier-input{
+  font-family: Montserrat;
+  font-size: 14px;
+  display: inline-block;
+  position: relative;
+  color: white;
+  font-weight: 200;
+  margin: 0 auto;
+  margin-top: 0px;
+  /* width: calc(100% - 40px);
+  transform: translate3d(20px, 0px, 0px); */
+  width: calc(100% - 4px);
+  transform: translate3d(0px, 0px, 0px);
+  height: 29px;
+  text-align: center;
+  background: transparent;
+  /* border: 0.5px solid #ffffff14; */
+  border:none;
+  border-radius: 4px;
+  outline: none;
 }

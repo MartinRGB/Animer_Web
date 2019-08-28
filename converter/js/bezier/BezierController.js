@@ -83,7 +83,8 @@ class BezierController{
           pos4 = e.clientY;
           // set the element's new position:
           var mDistanceX = elmnt.offsetLeft - pos1;
-          if(mDistanceX >= canvas.offsetWidth * canvas.paddingScale && mDistanceX<= canvas.offsetWidth*(1 - canvas.paddingScale)){
+          var mDistanceY = elmnt.offsetTop - pos2;
+          if(mDistanceX >= canvas.offsetWidth * canvas.paddingScale && mDistanceX<= canvas.offsetWidth*(1 - canvas.paddingScale) && mDistanceY >= canvas.offsetHeight * canvas.paddingScale && mDistanceY<= canvas.offsetHeight*(1 - canvas.paddingScale)){
               elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
               elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
               getControllerBezier(elmnt,(elmnt.offsetLeft),(elmnt.offsetTop))
