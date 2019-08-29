@@ -1,8 +1,7 @@
 function DrawCurve(canvas,dataSet,halfSize){
     var context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // context.fillStyle = "#262626";
-    // context.fillRect(0, 0, canvas.width, canvas.height);
+
     var paddingLeft = canvas.width*canvas.paddingScale;
     var paddingRight = canvas.width*canvas.paddingScale;
     var paddingTop = halfSize?(canvas.height/2):canvas.height*canvas.paddingScale;
@@ -13,10 +12,23 @@ function DrawCurve(canvas,dataSet,halfSize){
     var frameCount = dataSet.array.length;
     var transitionArray = dataSet.array;
 
+    context.fillStyle = "#FFFFFF08";
+    context.fillRect(paddingLeft, paddingTop, canvas.width - paddingLeft - paddingRight, canvas.height - paddingTop - paddingBottom);
+
     //Draw the Coordinate
     context.beginPath();
-    context.strokeStyle = "grey";
+
+    //Gradient Path
+    var grad= context.createLinearGradient(0, canvas.height-paddingBottom, canvas.width, canvas.height-paddingBottom);
+    grad.addColorStop(0, "transparent");
+    grad.addColorStop(0.08, "grey");
+    grad.addColorStop(0.92, "grey");
+    grad.addColorStop(1.0, "transparent");
+    context.strokeStyle = grad;
+    // context.strokeStyle = "grey";
     context.lineWidth = 0.5;
+
+
     context.moveTo(0, canvas.height-paddingBottom);
     context.lineTo(canvas.width, canvas.height-paddingBottom);
 
@@ -25,9 +37,20 @@ function DrawCurve(canvas,dataSet,halfSize){
     //     context.lineTo(canvas.width, canvas.height/2);
     // }
 
-
     context.moveTo(0, canvas.height*canvas.paddingScale);
     context.lineTo(canvas.width, canvas.height*canvas.paddingScale);
+
+    context.stroke();
+
+    context.beginPath();
+
+    var grad2= context.createLinearGradient(paddingLeft, 0, paddingLeft,canvas.height);
+    grad2.addColorStop(0, "transparent");
+    grad2.addColorStop(0.08, "grey");
+    grad2.addColorStop(0.92, "grey");
+    grad2.addColorStop(1.0, "transparent");
+    context.strokeStyle = grad2;
+    context.lineWidth = 0.5;
 
     context.moveTo(paddingLeft, 0);
     context.lineTo(paddingLeft, canvas.height);
@@ -40,7 +63,7 @@ function DrawCurve(canvas,dataSet,halfSize){
     //Draw the BezierLine
     if(dataSet.bezier !=null){
         context.beginPath();
-        context.strokeStyle = "#8255FF";
+        context.strokeStyle = "#009CFF";
         context.lineWidth = 4;
         context.moveTo(paddingLeft, canvas.height - paddingBottom);
         context.lineTo(paddingLeft + realWidth*dataSet.bezier[0], (canvas.height - paddingBottom) - realHeight*dataSet.bezier[1]);
@@ -68,7 +91,7 @@ function DrawCurve(canvas,dataSet,halfSize){
 
     //Draw the Curve
     context.beginPath();
-    context.strokeStyle = "#009CFF";
+    context.strokeStyle = "#8255FF";
     context.shadowColor = '#0000003b';
     context.shadowBlur = 4;
     context.moveTo(paddingLeft, canvas.height-paddingBottom);

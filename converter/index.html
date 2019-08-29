@@ -16,51 +16,102 @@
     <script src="./js/converter/OrigamiSpringConverter.js"></script>
     <script src="./js/converter/UIViewSpringConverter.js"></script>
     <script src="./js/animator/rebound.js"></script>
+    <script src="./js/animator/anime.js"></script>
     <script src="./js/DrawCurve.js"></script>
     <script src="./js/Bezier/BezierController.js"></script>
   </head>
   <body>
 
     <main>
-			<div class="top-content">
+      <div id="pannel-container">
+        <div id ="left-pannel">
 
-          <div  id="card-container" class="card-container">
-              <div id="curve-container">   
-                <!-- <div id="grid" class="grid"></div> -->
-                <canvas id="curve-canvas" width="400" height="400"></canvas>
-                <div id="bezier-control-container">
-                    <div id="bezier-control-point-1"></div>
-                    <div id="bezier-control-point-2"></div>
-                </div>
-              </div>     
-              <input class="bezier-input" id="bezier-input" type="text" value="1.00,0.00,0.00,1.00">
+          <div id="logo-area">
+            <div id="logo"></div>
+            <p id="logo-title">Select an Animator</p>
           </div>
 
+          <ul id="someID">
+              <li>Book 1
+                <ul>
+                  <li><a href="someHref">Chapter 1</a></li>
+                  <li><a href="someHref">Chapter 2</a></li>
+                  <li><a href="someHref">Chapter 3</a></li>
+                  <li><a href="someHref">Chapter 4</a></li>
+                </ul>
+              </li>
+              <li>Book 2
+                <ul>
+                  <li><a href="someHref">Chapter 1</a></li>
+                  <li><a href="someHref">Chapter 2</a></li>
+                  <li>Chapter 3
+                    <ul>
+                      <li><a href="listCollapseExample.html">Ex 1</a></li>
+                      <li><a href="someHref">Ex 2</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="javascript:notA();">Chapter 4</a></li>
+                </ul>
+              </li>
+              <li>Book 3
+                <ul>
+                  <li><a href="someHref">Chapter 1</a></li>
+                  <li><a href="someHref">Chapter 2</a></li>
+                  <li><a href="someHref">Chapter 3</a></li>
+                  <li><a href="someHref">Chapter 4</a></li>
+                </ul>
+              </li>
+            </ul>
+
         </div>
+        <div id="right-pannel">
+          <div class="top-content">
+              <div  id="graph-container" class="graph-container">
+                  <p id="graph-title">Cubic Bezier</p>
+                  <div id="curve-container">   
+                    <canvas id="curve-canvas" width="400" height="400"></canvas>
+                    <div id="bezier-control-container">
+                        <div id="bezier-control-point-1"></div>
+                        <div id="bezier-control-point-2"></div>
+                    </div>
+                  </div>     
+                  <input class="bezier-input" id="bezier-input" type="text" value="1.00,0.00,0.00,1.00">
+              </div>
+            </div>
 
-       
 
-        <div class="slidecontainer">
-          <input type="range" min="-10000" max="10000" value="0" class="slider" id="myRange">
-          <p>Value: <span id="demo"></span></p>
+            <div class="bottom-content">
+                  <div class="slidercontainer" id="slidecontainer-1">
+                      <p class="slider-para" id="slider-para-1">Value: </p>
+                      <input class="slider-input" id="slider-input-1" type="text" value="1500">
+                      <input type="range" min="-10000" max="10000" value="0" class="slider" id="myRange-1">
+                  </div>
+        
+                  <div class="slidercontainer" id="slidecontainer-2">
+                    <p class="slider-para" id="slider-para-2">Value: </p>
+                    <input class="slider-input" id="slider-input-2" type="text" value="0.5">
+                    <input type="range" min="0.1" max="1" value="0.5" step="0.05" class="slider" id="myRange-2">
+      
+                  </div>
+        
+                  <div class="slidercontainer" id="slidecontainer-3">
+                    <p class="slider-para" id="slider-para-3">Value: </p>
+                    <input class="slider-input" id="slider-input-3" type="text" value="0">
+                    <input type="range" min="0" max="1" value="0.5" step="0.05" class="slider" id="myRange-3">
+                  </div>
+
+                  <div class="slidercontainer" id="slidecontainer-4">
+                      <p class="slider-para" id="slider-para-4">Value: </p>
+                      <input class="slider-input" id="slider-input-4" type="text" value="0">
+                      <input type="range" min="0" max="1" value="0.5" step="0.05" class="slider" id="myRange-4">
+                  </div>
+                  <button id="Spring" onclick="expand()">Spring</button>
+                  <button id="Fling" onclick="collapse()">Fling</button>
+                  <button id="Bezier">Bezier</button>
+            </div>
+
         </div>
-
-        <div class="slidecontainer-2">
-          <input type="range" min="0.1" max="1" value="0.5" step="0.05" class="slider" id="myRange-2">
-          <p>Value: <span id="demo-2"></span></p>
-        </div>
-
-        <div class="slidecontainer-3">
-          <input type="range" min="0" max="1" value="0.5" step="0.05" class="slider" id="myRange-3">
-          <p>Value: <span id="demo-3"></span></p>
-        </div>
-        <button id="Spring" onclick="expand()">Spring</button>
-        <button id="Fling" onclick="collapse()">Fling</button>
-        <button id="Bezier">Bezier</button>
-
-
-
-			</div>
+    </div>
     </main>
 
     <script src="./main.js"></script>
