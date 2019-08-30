@@ -76,12 +76,14 @@ li{
   margin: 0;
   overflow-y: scroll;
   padding: 0px;
+  overflow-x: hidden;
 }
 
 .animator-platform {
   /* height: 25px; */
   /* border-top: 0.5px solid #8080805c;
   border-bottom: 0.5px solid #8080805c; */
+  position: relative;
 }
 
 .animator-platform-arrow{
