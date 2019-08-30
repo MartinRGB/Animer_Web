@@ -389,7 +389,7 @@ function createAnimatorListView(listView,dataSet){
               animatorTitleArray[b].style.color ='#029CFF'
 
 
-              //TODO Switch By caculatorType
+              //TODO ### Switch By caculatorType
               if(animationDataArray[b][0] != null){
                 if(typeof(animationDataArray[b][0]) == 'string'){
                   var dataNumber = animationDataArray[b].length/4;
