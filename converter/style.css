@@ -53,6 +53,7 @@ li{
   height: 54px;
   background: #0A0A0A;
   padding-top: 12px;
+  border-bottom: 0.5px solid #8080805c;
 }
 
 #logo{
@@ -70,6 +71,63 @@ li{
   text-align: center;
 }
 
+#animator-list-view{
+  height: 483px;
+  margin: 0;
+  overflow-y: scroll;
+  padding: 0px;
+}
+
+.animator-platform {
+  /* height: 25px; */
+  /* border-top: 0.5px solid #8080805c;
+  border-bottom: 0.5px solid #8080805c; */
+}
+
+.animator-platform-arrow{
+  background: url(./image/li-collapsed.png);
+  width: 29px;
+  height: 27px;
+  position: absolute;
+}
+
+.animator-platform-title {
+  text-decoration: none;
+  color: white;
+  text-indent: 28px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  display: block;
+  border-top: 0.5px solid #8080805c;
+  border-bottom: 0.5px solid #8080805c;
+}
+
+.animator-type{
+  padding-left: 28px;
+}
+
+.animator{
+  height: 28px;
+}
+
+/* .animator-selected{
+  color:#029CFF;
+} */
+
+.animator-divide{
+  margin-top: 2px;
+  width: 180px;
+  border: 0.5px solid #8080805c;
+  position: relative;
+  left: -28px;
+}
+
+.animator-title{
+  text-decoration: none;
+  color: white;
+  position: relative;
+  top: 7px;
+}
 /* .collapsibleList li{
   list-style-image : none;
   cursor           : pointer;

@@ -1,3 +1,330 @@
+var mAnimatorDataSet = {
+  "platform": [
+    {
+      "id": 0,
+      "type": "Android",
+      "subclass":[
+        {
+          "id": 0,
+          "type": "Spring",
+          "calculator":"SpringAnimationCalculator"
+        },
+        {
+          "id": 1,
+          "type": "Fling",
+          "calculator":"FlingAnimationCalculator"
+        },
+        {
+          "id": 2,
+          "type": "Divide"
+        },
+        {
+          "id": 3,
+          "type": "AccelerateDecelerate",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 4,
+          "type": "Accelerate",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 5,
+          "type": "Decelerate",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 6,
+          "type": "Anticipate",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 7,
+          "type": "Overshoot",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 8,
+          "type": "AnticipateOvershoot",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 9,
+          "type": "Bounce",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 10,
+          "type": "Cycle",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 11,
+          "type": "Linear",
+          "calculator":"InterpolatorCalculator"
+        },
+        {
+          "id": 12,
+          "type": "Divide"
+        },
+        {
+          "id": 13,
+          "type": "FastOutSlowIn",
+          "calculator":"CubicBezierCalculator"
+        },
+        {
+          "id": 14,
+          "type": "LinearOutSlowIn",
+          "calculator":"CubicBezierCalculator"
+        },
+        {
+          "id": 15,
+          "type": "FastOutLinear",
+          "calculator":"CubicBezierCalculator"
+        }
+        // ,{
+        //   "id": 16,
+        //   "type": "Divide"
+        // },
+        // {
+        //   "id": 17,
+        //   "type": "CustomSpring",
+        //   "calculator":"CustomSpringCalculator"
+        // },
+        // {
+        //   "id": 18,
+        //   "type": "CustomBounce",
+        //   "calculator":"CustomBounceCalculator"
+        // },
+        // {
+        //   "id": 19,
+        //   "type": "CustomDamping",
+        //   "calculator":"CustomDampingCalculator"
+        // },
+        // {
+        //   "id": 20,
+        //   "type": "CustomMocosSpring",
+        //   "calculator":"CustomMocosSpringCalculator"
+        // }
+      ]
+    },
+    {
+      "id": 1,
+      "type": "iOS",
+      "subclass":[
+        {
+          "id": 0,
+          "type": "UIViewSpring",
+          "calculator":"SpringAnimationCalculator",
+          "converter":"UIViewSpringConverter"
+        },
+        {
+          "id": 1,
+          "type": "CASpring",
+          "calculator":"SpringAnimationCalculator",
+          "converter":"FramerDHOConverter"
+        },
+        {
+          "id": 2,
+          "type": "Divide"
+        },
+        {
+          "id": 3,
+          "type": "Linear",
+          "calculator":"CubicBezierCalculator",
+        },
+        {
+          "id": 4,
+          "type": "Default",
+          "calculator":"CubicBezierCalculator",
+        },
+        {
+          "id": 5,
+          "type": "EaseIn",
+          "calculator":"CubicBezierCalculator",
+        },
+        {
+          "id": 6,
+          "type": "EaseOut",
+          "calculator":"CubicBezierCalculator",
+        },
+        {
+          "id": 7,
+          "type": "EaseInOut",
+          "calculator":"CubicBezierCalculator",
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "Web",
+      "subclass":[
+        {
+          "id": 0,
+          "type": "Ease",
+          "calculator":"CubicBezierCalculator"
+        },
+        {
+          "id": 1,
+          "type": "Linear",
+          "calculator":"CubicBezierCalculator"
+        },
+        {
+          "id": 2,
+          "type": "EaseIn",
+          "calculator":"CubicBezierCalculator"
+        },
+        {
+          "id": 3,
+          "type": "EaseOut",
+          "calculator":"CubicBezierCalculator",
+        },
+        {
+          "id": 3,
+          "type": "EaseInOut",
+          "calculator":"CubicBezierCalculator",
+        },
+      ]
+    },
+    {
+      "id": 3,
+      "type": "Cubic Beizer",
+      "subclass":[
+        {
+          "id": 0,
+          "type": "Cubic Bezier",
+          "calculator":"CubicBezierCalculator"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "Design Tools",
+      "subclass":[
+        {
+          "id": 0,
+          "type": "Origami POP Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "OrigamiSpringConverter"
+        },
+        {
+          "id": 1,
+          "type": "Framer RK4 Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "FramerRK4Converter"
+        },
+        {
+          "id": 2,
+          "type": "Framer DHO Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "FramerDHOConverter"
+        },
+        {
+          "id": 3,
+          "type": "Protopie Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "FramerRK4Converter"
+        }
+      ]
+    }
+  ]
+}
+
+var mAnimatorListView = document.getElementById("animator-list-view")
+
+function createAnimatorListView(listView,dataSet){
+
+  var animatorTitleArray = [];
+
+  for (var i = 0; i < dataSet.platform.length; i++) {
+    var platform = document.createElement('li');
+    platform.className = 'animator-platform';
+
+    var platformArrow = document.createElement('div');
+    platformArrow.className = 'animator-platform-arrow';
+    
+
+    var platformTitle = document.createElement('a');
+    platformTitle.className = 'animator-platform-title';
+    platformTitle.href = "#"        
+    platformTitle.innerHTML = dataSet.platform[i].type;
+
+
+    platformTitle.addEventListener('click',function(e){
+      //e.target.parentElement;
+      if(e.target.nextSibling.style.display == 'none'){
+        e.target.nextSibling.style.display = 'block';
+        e.target.previousSibling.style.transform = 'rotate(90deg)'
+      }
+      else{
+        e.target.nextSibling.style.display = 'none';
+        e.target.previousSibling.style.transform = 'rotate(0deg)'
+      }
+    })
+
+
+    var subUlElement = document.createElement('ul');
+    subUlElement.className = "animator-type"
+    subUlElement.style.display = 'none';
+
+
+    for (var a = 0; a < dataSet.platform[i].subclass.length; a++) {
+      if(dataSet.platform[i].subclass[a].type == 'Divide'){
+        var divide = document.createElement('div');
+        divide.className = 'animator-divide';
+        subUlElement.appendChild(divide)
+
+      }
+      else{
+        var animator = document.createElement('li');
+        animator.className = 'animator';
+    
+        var animatorTitle = document.createElement('a');
+        animatorTitle.className = 'animator-title';
+        animatorTitle.href = "#"
+        animatorTitle.innerHTML = dataSet.platform[i].subclass[a].type;
+  
+        animatorTitleArray.push(animatorTitle);
+        animatorTitle.addEventListener('click',function(e){
+  
+          console.log(e.target.innerHTML)
+          for (var b = 0; b < animatorTitleArray.length; b++) {
+            console.log(animatorTitleArray[b].innerHTML)
+            if(animatorTitleArray[b].innerHTML == e.target.innerHTML){
+              animatorTitleArray[b].style.color ='#029CFF'
+            }
+            else{
+              animatorTitleArray[b].style.color ='white'
+            }
+          }
+        })
+    
+        animator.appendChild(animatorTitle)
+        subUlElement.appendChild(animator)
+      }
+    }
+
+
+
+    platform.appendChild(platformArrow)
+    platform.appendChild(platformTitle)
+    if(dataSet.platform[i].subclass.length != 0){
+      platform.appendChild(subUlElement);
+    }
+
+    listView.appendChild(platform)
+
+  }
+  console.log(animatorTitleArray.length);
+}
+
+createAnimatorListView(mAnimatorListView,mAnimatorDataSet)
+
+
+
+
+
+
 var curve_canvas = document.getElementById("curve-canvas");
 curve_canvas.paddingScale = 1/10;
 
@@ -5,6 +332,7 @@ curve_canvas.paddingScale = 1/10;
 var graph_container = document.getElementById("graph-container")
 
 
+// Beizer 
 var bezier_container = document.getElementById("bezier-control-container")
 var bezier_controller_1 = document.getElementById("bezier-control-point-1");
 var bezier_controller_2 = document.getElementById("bezier-control-point-2");
@@ -31,6 +359,8 @@ function resizeCanvas(canvas,width,height){
 }
 
 resizeCanvas(curve_canvas,200,200)
+
+
 
 var mFling = new FlingAnimationCalculator(-4000, 0.8);
 var mSpring = new SpringAnimationCalculator(1500, 0.5,0);
@@ -77,6 +407,8 @@ DrawCurve(curve_canvas,mBe,false);
 // }
 
 
+
+// ################## Graph Scale Test ##################
 
 
 var mSpringSystem = new rebound.SpringSystem();
@@ -153,9 +485,6 @@ window.addEventListener('resize', function(e){
   this.console.log(width + 'width')
   this.console.log(height + 'height')
 });
-
-// CollapsibleLists.apply();
-
 
 
 
