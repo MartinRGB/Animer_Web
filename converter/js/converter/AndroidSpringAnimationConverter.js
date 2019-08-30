@@ -29,7 +29,7 @@ class AndroidSpringAnimationConverter {
 
     computeDuration(tension, friction) {
         let epsilon = 0.001
-        let velocity = 0.0
+        let velocity = 0
         let mass = 1.0
         let dampingRatio = this.computeDampingRatio(tension, friction)
         let undampedFrequency = Math.sqrt(tension / mass)

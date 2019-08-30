@@ -89,17 +89,19 @@ li{
   width: 29px;
   height: 27px;
   position: absolute;
+  transform: translate3d(0px, 2px, 0px);
 }
 
 .animator-platform-title {
   text-decoration: none;
   color: white;
   text-indent: 28px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   display: block;
   border-top: 0.5px solid #8080805c;
   border-bottom: 0.5px solid #8080805c;
+  font-family: Montserrat-Regular;
 }
 
 .animator-type{
@@ -107,7 +109,10 @@ li{
 }
 
 .animator{
-  height: 28px;
+  height: 31px;
+  transform: scale(0.916);
+  position: relative;
+  left: -6px;
 }
 
 /* .animator-selected{
@@ -117,7 +122,7 @@ li{
 .animator-divide{
   margin-top: 2px;
   width: 180px;
-  border: 0.5px solid #8080805c;
+  border: 0.5px solid #80808033;
   position: relative;
   left: -28px;
 }
@@ -126,7 +131,8 @@ li{
   text-decoration: none;
   color: white;
   position: relative;
-  top: 7px;
+  top: 8px;
+  left:-1px;
 }
 /* .collapsibleList li{
   list-style-image : none;
@@ -316,3 +322,19 @@ input[type='range']::-moz-range-thumb {
   transform: translate3d(0,0.5px,0);
 }
 
+#apply{
+  width: 162px;
+  background-color: #029CFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin: 0 auto;
+  margin-top: 27px;
+  outline: none;
+  cursor: pointer;
+  display: block;
+  font-family: Montserrat-Regular;
+  padding-top: 10px;
+  font-size: 12px;
+  padding-bottom: 12px;
+}

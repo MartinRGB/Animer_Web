@@ -10,7 +10,7 @@
 // aescript timing function expressions
 /////////////////////////////////////////////
 
-var factor1 = 0.5,factor2 = 0.,factor3 = 0.;
+var factor1 = 0.5,factor2 = 0.,factor3 = 0.,factor4 = 0.;
 var bezier1 = 0.00,bezier2 = 0.00,bezier3 = 1.00,bezier4 = 1.00;
 var SPRING = new Object();
 var BOUNCE = new Object();
@@ -631,9 +631,12 @@ slider1Text:"Stiffness:",
 slider2Range:100,
 slider2Val:2/100,
 slider2Text:"Damping:",
-slider3Range:null,
-slider3Val:null,
-slider3Text:"null",
+slider3Range:20,
+slider3Val:1/20,
+slider3Text:"Mass:",
+slider4Range:1000,
+slider4Val:0/1000,
+slider4Text:"Velocity:",
 duration:4.962,
 defaultPara:'var mStiffness = '+(50)+';\n var mDampingRatio = '+(0.1414213562373095)+';\n var mVelocity = 0;\n'};
 
@@ -648,9 +651,12 @@ slider1Text:"Stiffness:",
 slider2Range:100,
 slider2Val:10/100,
 slider2Text:"Damping:",
-slider3Range:null,
-slider3Val:null,
-slider3Text:"null",
+slider3Range:20,
+slider3Val:1/20,
+slider3Text:"Mass:",
+slider4Range:1000,
+slider4Val:0/1000,
+slider4Text:"Velocity:",
 duration:1.271,
 defaultPara:'var mStiffness = '+(100)+';\n var mDampingRatio = '+(0.5)+';\n var mVelocity = 0;\n'};
 
@@ -793,7 +799,7 @@ KEYTIME_FUNCTION =
 // spring converter
 /////////////////////////////////////////////
 
-var mBounciness,mSpeed,mBouncyTension,mBouncyFriction,mTension,mFriction,mStiffness,mDamping,mDampingRatio,mDuration,mTransition;
+var mBounciness,mSpeed,mBouncyTension,mBouncyFriction,mTension,mFriction,mStiffness,mDamping,mDampingRatio,mDuration,mTransition,mMass;
 
 function OrigamiSpringConverter(bounciness,speed){
 
@@ -840,18 +846,18 @@ function FramerRK4Converter(tension,friction){
 	//alert('mStiffness: ' + mStiffness + 'mDampingRatio: ' + mDampingRatio)
 }
 
-function FramerDHOConverter(stiffness,damping){
+function FramerDHOConverter(stiffness,damping,mass,velocity){
 
 	mStiffness = stiffness;
 	mDamping = damping;
-	
+	mMass = mass;
 	// Output
 	mTension = mStiffness;
 	mFriction = mDamping;
-	mDampingRatio = computeDampingRatio(mStiffness, mDamping);
+	mDampingRatio = computeDampingRatio(mStiffness, mDamping,mMass);
 	mBouncyTension = bouncyTesnionConversion(mTension);
 	mBouncyFriction = bouncyFrictionConversion(mFriction);
-	mDuration = computeDuration(mTension, mFriction);
+	mDuration = computeDuration(mTension, mFriction,mMass);
 
 	var s = getParaS(mBouncyTension,0.5,200);
 	mSpeed = computeSpeed(getParaS(mBouncyTension,0.5,200),0.,20.);
@@ -922,7 +928,7 @@ function AndroidDynamicAnimationConverter (stiffness,dampingratio){
 
 }
 
-function SpringDurationCalculator(factor1,factor2,springname){
+function SpringDurationCalculator(factor1,factor2,springname,mass){
 	switch(springname){
 		case "AndroidSpring":
 			var dampingVal = computeDamping(factor1,factor2);
@@ -942,10 +948,10 @@ function SpringDurationCalculator(factor1,factor2,springname){
 			mDuration = computeDuration(factor1, factor2);
 			break;
 		case "Framer_DHO_Spring":
-			mDuration = computeDuration(factor1, factor2);
+			mDuration = computeDuration(factor1, factor2,mass);
 			break;
 		case "CASpringAnimation":
-			mDuration = computeDuration(factor1, factor2);
+			mDuration = computeDuration(factor1, factor2,mass);
 			break;
 		case "Protopie_Spring":
 			mDuration = computeDuration(factor1, factor2);
@@ -1028,22 +1034,32 @@ function computeSpeed(value,startValue,endValue){
 	return (value * (endValue - startValue) + startValue)*1.7 ;
 }
 
-function computeDamping(stiffness,dampingRatio){
-	var mass = 1.0;
-	return dampingRatio * (2 * Math.sqrt(mass * stiffness));
+function computeDamping(stiffness,dampingRatio,mass){
+	var myMass = 1.0;
+	if(mass != null){
+		myMass = mass;
+	}
+	return dampingRatio * (2 * Math.sqrt(myMass * stiffness));
 }
 
-function computeDampingRatio(tension, friction) {
-	var mass = 1.0;
-	return friction / (2 * Math.sqrt(mass * tension));
+function computeDampingRatio(tension, friction,mass) {
+	var myMass = 1.0;
+	if(mass != null){
+		myMass = mass;
+	}
+
+	return friction / (2 * Math.sqrt(myMass * tension));
 }
 
-function computeDuration(tension, friction) {
+function computeDuration(tension, friction,mass) {
 	var epsilon = 0.001
 	var velocity = 0.0
-	var mass = 1.0
-	var dampingRatio = computeDampingRatio(tension, friction)
-	var undampedFrequency = Math.sqrt(tension / mass)
+	var myMass = 1.0;
+	if(mass != null){
+		myMass = mass;
+	}
+	var dampingRatio = computeDampingRatio(tension, friction,myMass)
+	var undampedFrequency = Math.sqrt(tension / myMass)
 	if (dampingRatio < 1) {
 		var a = Math.sqrt(1 - Math.pow(dampingRatio, 2))
 		var b = velocity / (a * undampedFrequency)
@@ -1222,13 +1238,16 @@ function android_interpolator_script(ui_reference) {
 
 						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
 							FlingDurationCalculator(factor1,factor2);
-							value4_1.text = mTransition.toFixed(1).toString() + 'f';
+							value5_1.text = mTransition.toFixed(1).toString() + 'f';
+						}
+						else if(android_interpolator.interpolatorTypesAry[i].name == 'Framer_DHO_Spring' || android_interpolator.interpolatorTypesAry[i].name == 'CASpringAnimation'){
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name,factor3)
 						}
 						else{
 							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
 						}
 						
-						value4.text = mDuration.toFixed(3).toString() + 's'
+						value5.text = mDuration.toFixed(3).toString() + 's'
 					}
 				}
 			}
@@ -1248,13 +1267,16 @@ function android_interpolator_script(ui_reference) {
 
 						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
 							FlingDurationCalculator(factor1,factor2);
-							value4_1.text = mTransition.toFixed(1).toString() + 'f';
+							value5_1.text = mTransition.toFixed(1).toString() + 'f';
+						}
+						else if(android_interpolator.interpolatorTypesAry[i].name == 'Framer_DHO_Spring' || android_interpolator.interpolatorTypesAry[i].name == 'CASpringAnimation'){
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name,factor3)
 						}
 						else{
 							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
 						}
 						
-						value4.text = mDuration.toFixed(3).toString() + 's'
+						value5.text = mDuration.toFixed(3).toString() + 's'
 					}
 				}
 			}
@@ -1282,12 +1304,15 @@ function android_interpolator_script(ui_reference) {
 					if(android_interpolator.interpolatorTypesAry[i].duration != null){
 						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
 							FlingDurationCalculator(factor1,factor2);
-							value4_1.text = mTransition.toFixed(1).toString() + 'f';
+							value5_1.text = mTransition.toFixed(1).toString() + 'f';
+						}
+						else if(android_interpolator.interpolatorTypesAry[i].name == 'Framer_DHO_Spring' || android_interpolator.interpolatorTypesAry[i].name == 'CASpringAnimation'){
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name,factor3)
 						}
 						else{
 							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
 						}
-						value4.text = mDuration.toFixed(3).toString() + 's'
+						value5.text = mDuration.toFixed(3).toString() + 's'
 					}
 				}
 			}
@@ -1304,12 +1329,15 @@ function android_interpolator_script(ui_reference) {
 					if(android_interpolator.interpolatorTypesAry[i].duration != null){
 						if(android_interpolator.interpolatorTypesAry[i].name == 'AndroidFling'){
 							FlingDurationCalculator(factor1,factor2);
-							value4_1.text = mTransition.toFixed(1).toString() + 'f';
+							value5_1.text = mTransition.toFixed(1).toString() + 'f';
+						}
+						else if(android_interpolator.interpolatorTypesAry[i].name == 'Framer_DHO_Spring' || android_interpolator.interpolatorTypesAry[i].name == 'CASpringAnimation'){
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name,factor3)
 						}
 						else{
 							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
 						}
-						value4.text = mDuration.toFixed(3).toString() + 's'
+						value5.text = mDuration.toFixed(3).toString() + 's'
 					}
 				}
 			}
@@ -1331,6 +1359,15 @@ function android_interpolator_script(ui_reference) {
 						factor3 = (slider3.value/100. * android_interpolator.interpolatorTypesAry[i].slider3Range).toFixed(2);
 						value3.text = factor3.toString();
 					}
+					if(android_interpolator.interpolatorTypesAry[i].duration != null){
+						if(android_interpolator.interpolatorTypesAry[i].name == 'Framer_DHO_Spring' || android_interpolator.interpolatorTypesAry[i].name == 'CASpringAnimation'){
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name,factor3)
+						}
+						else{
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						}
+						value5.text = mDuration.toFixed(3).toString() + 's'
+					}
 				}
 			}
 
@@ -1343,30 +1380,71 @@ function android_interpolator_script(ui_reference) {
 					if(android_interpolator.interpolatorTypesAry[i].slider3Val !=null){
 						slider3.value = factor3/android_interpolator.interpolatorTypesAry[i].slider3Range*(100).toFixed(2);
 					}
+					if(android_interpolator.interpolatorTypesAry[i].duration != null){
+						if(android_interpolator.interpolatorTypesAry[i].name == 'Framer_DHO_Spring' || android_interpolator.interpolatorTypesAry[i].name == 'CASpringAnimation'){
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name,factor3)
+						}
+						else{
+							SpringDurationCalculator(factor1,factor2,android_interpolator.interpolatorTypesAry[i].name)
+						}
+						value5.text = mDuration.toFixed(3).toString() + 's'
+					}
 				}
 			}
 		}
 
 		var	slGrp4 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 4');
 		slGrp4.visible = false;
-		var text4 = slGrp4.add('statictext', [0, 0, 82, 15], 'Estimated Time:');
-		var value4 = slGrp4.add('statictext', [0, 0, 60, 15], '100.s');
-		var text4_1 = slGrp4.add('statictext', [0, 0, 84, 15], 'Transition Value: ');
-		var value4_1 = slGrp4.add('statictext', [0, 0, 64, 15], '-1190.0f');
+		var text4 = slGrp4.add('statictext', STATIC_TEXT_DIMENSIONS, 'Factor4:');
+		var value4 = slGrp4.add('edittext {text: 100, characters: 7, justify: "left", active: true}');
+		var slider4 = slGrp4.add("slider", undefined, thisObj.numRows, 0, 100);
+		slider4.size = 'width: 146, height: 20';
+		//var value3 = slGrp3.add('statictext', STATIC_TEXT_DIMENSIONS, '100.f');
+		
+		slider4.onChanging = function () {  
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					if(android_interpolator.interpolatorTypesAry[i].slider4Val !=null){
+						factor4 = (slider4.value/100. * android_interpolator.interpolatorTypesAry[i].slider4Range).toFixed(2);
+						value4.text = factor4.toString();
+					}
+				}
+			}
+		}
+
+		value4.onChanging = function () {  
+			for (var i = 0;i< android_interpolator.interpolatorTypesAry.length;i++){
+				if(INTERPOLATOR_MODE == i){
+					factor4 = Number(value4.text);
+					if(android_interpolator.interpolatorTypesAry[i].slider4Val !=null){
+						slider4.value = factor4/android_interpolator.interpolatorTypesAry[i].slider4Range*(100).toFixed(2);
+					}
+				}
+			}
+		}
+
+		
 
 		var	slGrp5 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 5');
-		slGrp5.add('statictext', STATIC_TEXT_DIMENSIONS, 'Bezier Value:');
 		slGrp5.visible = false;
-		var value5 = slGrp5.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
-		value5.text = '0.00,0.00,1.00,1.00'
-		value5.size = 'width:206,height:20'
+		var text5 = slGrp5.add('statictext', [0, 0, 82, 15], 'Estimated Time:');
+		var value5 = slGrp5.add('statictext', [0, 0, 60, 15], '100.s');
+		var text5_1 = slGrp5.add('statictext', [0, 0, 84, 15], 'Transition Value: ');
+		var value5_1 = slGrp5.add('statictext', [0, 0, 64, 15], '-1190.0f');
 
-		value5.onChanging = function () {  
+		var	slGrp6 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 6');
+		slGrp6.add('statictext', STATIC_TEXT_DIMENSIONS, 'Bezier Value:');
+		slGrp6.visible = false;
+		var value6 = slGrp6.add('edittext {text: 100, characters: 7, justify: "center", active: true}');
+		value6.text = '0.00,0.00,1.00,1.00'
+		value6.size = 'width:206,height:20'
+
+		value6.onChanging = function () {  
 		
-			bezier1 = Number(value5.text.split(',',1).pop().toString());
-			bezier2 = Number(value5.text.split(',',2).pop().toString());
-			bezier3 = Number(value5.text.split(',',3).pop().toString());
-			bezier4 = Number(value5.text.split(',',4).pop().toString());
+			bezier1 = Number(value6.text.split(',',1).pop().toString());
+			bezier2 = Number(value6.text.split(',',2).pop().toString());
+			bezier3 = Number(value6.text.split(',',3).pop().toString());
+			bezier4 = Number(value6.text.split(',',4).pop().toString());
 		
 		}
 	
@@ -1400,18 +1478,19 @@ function android_interpolator_script(ui_reference) {
 						slGrp2.visible = false;
 						slGrp3.visible = false;
 						slGrp4.visible = false;
-						slGrp5.visible = true;
+						slGrp5.visible = false;
+						slGrp6.visible = true;
 						if(INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE] == 'Custom_CubicBezier'){
-							value5.enabled = true;
+							value6.enabled = true;
 						}else{
-							value5.enabled = false;
+							value6.enabled = false;
 						}
 						bezier1 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][0];
 						bezier2 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][1];
 						bezier3 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][2];
 						bezier4 = BEZIER_FUNCTION[INTERPOLAOTR_STRING_ARRAY[INTERPOLATOR_MODE]][3];
 
-						value5.text = bezier1.toFixed(2).toString() + ',' + bezier2.toFixed(2).toString() + ',' + bezier3.toFixed(2).toString() + ',' + bezier4.toFixed(2).toString();
+						value6.text = bezier1.toFixed(2).toString() + ',' + bezier2.toFixed(2).toString() + ',' + bezier3.toFixed(2).toString() + ',' + bezier4.toFixed(2).toString();
 					}
 					
 					// Android Timing Function Interpolator
@@ -1435,30 +1514,39 @@ function android_interpolator_script(ui_reference) {
 							else{
 								slGrp3.visible = true;
 							}
-							if(android_interpolator.interpolatorTypesAry[i].duration != null){
+							if(android_interpolator.interpolatorTypesAry[i].slider4Val == null){
+								slGrp4.visible = false;
+							}
+							else{
 								slGrp4.visible = true;
-								value4.text = android_interpolator.interpolatorTypesAry[i].duration.toString()+'s';
+							}
+
+							if(android_interpolator.interpolatorTypesAry[i].duration != null){
+								slGrp5.visible = true;
+								value5.text = android_interpolator.interpolatorTypesAry[i].duration.toString()+'s';
 								if(android_interpolator.interpolatorTypesAry[i].name != 'AndroidFling'){
-									value4_1.visible = false;
-									text4_1.visible = false;
+									value5_1.visible = false;
+									text5_1.visible = false;
 								}
 								else{
-									value4_1.visible = true;
-									text4_1.visible = true;
+									value5_1.visible = true;
+									text5_1.visible = true;
 								}
 							}
 							else{
-								slGrp4.visible = false;
+								slGrp5.visible = false;
 							}
-							slGrp5.visible = false;
+							slGrp6.visible = false;
 
 							text1.text = android_interpolator.interpolatorTypesAry[i].slider1Text;
 							text2.text = android_interpolator.interpolatorTypesAry[i].slider2Text;
 							text3.text = android_interpolator.interpolatorTypesAry[i].slider3Text;
+							text4.text = android_interpolator.interpolatorTypesAry[i].slider4Text;
 
 							slider1.value = android_interpolator.interpolatorTypesAry[i].slider1Val*100.;
 							slider2.value = android_interpolator.interpolatorTypesAry[i].slider2Val*100.;
 							slider3.value = android_interpolator.interpolatorTypesAry[i].slider3Val*100.;
+							slider4.value = android_interpolator.interpolatorTypesAry[i].slider4Val*100.;
 
 							if(android_interpolator.interpolatorTypesAry[i].slider1FixVal !=null){
 								factor1 = (android_interpolator.interpolatorTypesAry[i].slider1Val * android_interpolator.interpolatorTypesAry[i].slider1Range - android_interpolator.interpolatorTypesAry[i].slider1FixVal);
@@ -1468,10 +1556,12 @@ function android_interpolator_script(ui_reference) {
 							}
 							factor2 = android_interpolator.interpolatorTypesAry[i].slider2Val * android_interpolator.interpolatorTypesAry[i].slider2Range;
 							factor3 = android_interpolator.interpolatorTypesAry[i].slider3Val * android_interpolator.interpolatorTypesAry[i].slider3Range;
+							factor4 = android_interpolator.interpolatorTypesAry[i].slider4Val * android_interpolator.interpolatorTypesAry[i].slider4Range;
 
 							value1.text = (factor1).toFixed(2).toString();
 							value2.text = (factor2).toFixed(2).toString();
 							value3.text = (factor3).toFixed(2).toString();
+							value4.text = (factor4).toFixed(2).toString();
 							prefixParameters = android_interpolator.interpolatorTypesAry[i].defaultPara;
 
 						}
@@ -1539,12 +1629,12 @@ function android_interpolator_script(ui_reference) {
 				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
 				break;
 			case "Framer_DHO_Spring":
-				FramerDHOConverter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
+				FramerDHOConverter(factor1,factor2,factor3,factor4);
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = ' + factor4.toString() +';\n';
 				break;
 			case "CASpringAnimation":
-				FramerDHOConverter(factor1,factor2);
-				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity = 0;\n';
+				FramerDHOConverter(factor1,factor2,factor3,factor4);
+				prefixParameters = 'var mStiffness = '+ mStiffness.toString() +';\nvar mDampingRatio = '+ mDampingRatio.toString() +';\nvar mVelocity =' + factor4.toString() +';\n';
 				break;
 			case "UIViewSpringAnimation":
 				UIViewSpringConverter(factor1,factor2);

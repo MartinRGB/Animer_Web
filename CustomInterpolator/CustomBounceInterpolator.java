@@ -1,6 +1,6 @@
 import android.view.animation.Interpolator;
 
-public class CustomBouncerInterpolator implements Interpolator{
+public class CustomBounceInterpolator implements Interpolator{
 
     //Parameters
     private static final float maxStifness = 50.f;
@@ -36,7 +36,7 @@ public class CustomBouncerInterpolator implements Interpolator{
         computeFriction();
     }
 
-    public CustomBouncerInterpolator( float tension, float friction) {
+    public CustomBounceInterpolator( float tension, float friction) {
 
         this.mTension = Math.min(Math.max(tension,0.f),100.f) * (maxStifness- originalStiffness)/100.f;
         this.mFriction = Math.min(Math.max(friction,0.f),100.f) * (maxFrictionMultipler - originalFrictionMultipler)/100.f;
@@ -44,7 +44,7 @@ public class CustomBouncerInterpolator implements Interpolator{
         computeInternalParameters();
     }
 
-    public CustomBouncerInterpolator() {
+    public CustomBounceInterpolator() {
         computeInternalParameters();
     }
 

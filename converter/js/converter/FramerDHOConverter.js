@@ -1,16 +1,18 @@
 class FramerDHOConverter {
-    constructor(stiffness, damping) {
+    constructor(stiffness, damping,mass,velocity) {
         this.stiffness = stiffness;
         this.damping = damping;
+        this.mass = mass;
+        this.velocity = velocity;
 
         // Output
         
         this.tension = this.stiffness;
         this.friction = this.damping;
-        this.dampingRatio = this.computeDampingRatio(stiffness, damping);
+        this.dampingRatio = this.computeDampingRatio(this.stiffness, this.damping,this.mass);
         this.bouncyTension = this.bouncyTesnionConversion(this.tension);
         this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
-        this.duration = this.computeDuration(this.tension, this.friction);
+        this.duration = this.computeDuration(this.tension, this.friction,this.mass);
 
         this.s = this.getParaS(this.bouncyTension,0.5,200);
         this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
@@ -21,16 +23,16 @@ class FramerDHOConverter {
 
 
     //#M
-    computeDamping(stiffness,dampingRatio){
-        let mass = 1.0;
+    computeDamping(stiffness,dampingRatio,mass){
+        //let mass = this.mass;
         return dampingRatio * (2 * Math.sqrt(mass * stiffness));
     }
 
-    computeDuration(tension, friction) {
+    computeDuration(tension, friction,mass) {
         let epsilon = 0.001
         let velocity = 0.0
-        let mass = 1.0
-        let dampingRatio = this.computeDampingRatio(tension, friction)
+        //let mass = this.mass;
+        let dampingRatio = this.computeDampingRatio(tension, friction,mass)
         let undampedFrequency = Math.sqrt(tension / mass)
         if (dampingRatio < 1) {
             let a = Math.sqrt(1 - Math.pow(dampingRatio, 2))
@@ -46,8 +48,8 @@ class FramerDHOConverter {
         }
     }
 
-    computeDampingRatio(stiffness,damping){
-        let mass = 1.0;
+    computeDampingRatio(stiffness,damping,mass){
+        //let mass = this.mass;
         return damping/ (2 * Math.sqrt(mass * stiffness));
     }
     

@@ -13,7 +13,7 @@ function DrawCurve(canvas,dataSet,halfSize){
     var transitionArray = dataSet.array;
 
     context.fillStyle = "#FFFFFF08";
-    context.fillRect(paddingLeft, paddingTop, canvas.width - paddingLeft - paddingRight, canvas.height - paddingTop - paddingBottom);
+    context.fillRect(paddingLeft, canvas.height*canvas.paddingScale, canvas.width - paddingLeft - paddingRight, canvas.height*(1- canvas.paddingScale*2));
 
     //Draw the Coordinate
     context.beginPath();
