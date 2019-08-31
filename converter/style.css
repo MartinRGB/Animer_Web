@@ -136,26 +136,6 @@ li{
   top: 8px;
   left:-1px;
 }
-/* .collapsibleList li{
-  list-style-image : none;
-  cursor           : pointer;
-}
-
-.collapsibleList p{
-  height: 27px;
-  position: relative;
-  top: 6px;
-}
-
-li.collapsibleListOpen{
-  list-style-image : url('./image/li-opened.png');
-  cursor           : pointer;
-}
-
-li.collapsibleListClosed{
-  list-style-image : url('./image/li-closed.png');
-  cursor           : pointer;
-} */
 
 #right-pannel{
   width: 180px;
@@ -167,6 +147,7 @@ li.collapsibleListClosed{
 .top-content{
   /* border-bottom:0.5px solid #8080805c; */
   padding-top: 1px;
+  height: 317px;
 }
 
 #graph-title{
@@ -245,11 +226,37 @@ li.collapsibleListClosed{
   outline: none;
   letter-spacing: 0.5px;
   transform: scale(0.916);
+  display: none;
+}
+
+#time-para{
+  text-align: left;
+  font-family: Montserrat-Regular;
+  color: #A9A9A9;
+  transform: scale(0.916);
+  margin-top: 0px;
+  width: 302px;
+  position: relative;
+  left: -51px;
+  display: none;
 }
 
 
 .bottom-content{
-  margin-top: -24px;
+  margin-top: 0px;
+}
+
+#slider-control-container{
+  display: none;
+  height: 140px;
+}
+
+.slidergroup{
+  width: 284px;
+  height: 29px;
+  margin: 0 auto;
+  margin-bottom: 8px;
+  display: none;
 }
 
 .slider-para{
@@ -262,6 +269,8 @@ li.collapsibleListClosed{
   position: relative;
   top: 4px;
 }
+
+
 
 .slider-input{
   width: 51px;
@@ -296,15 +305,11 @@ li.collapsibleListClosed{
   top: 1px;
 }
 
-.slidercontainer{
-  width: 284px;
-  height: 29px;
-  margin: 0 auto;
-  margin-bottom: 8px;
-}
+
 
 input[type='range']::-webkit-slider-thumb {  
   -webkit-appearance: none;
+  appearance: none;
   border: 3px solid #029CFF;
   height: 13px;
   width: 13px;
@@ -313,16 +318,25 @@ input[type='range']::-webkit-slider-thumb {
   cursor: pointer;
   box-shadow: 0px 0px 5px 3px #0000003b;
   transform: translate3d(0,-1px,0);
+  opacity: 0;
 }
-input[type='range']::-moz-range-thumb {
-  border: 3px solid #029CFF;
-  height: 13px;
-  width: 13px;
+
+.thumb{
+  position: relative; 
+  /* 266 */
+  left: 149px;
+  display: block;
+  bottom: 14px;
+  opacity: 1;
+  height: 7px;
+  width: 7px;
   border-radius: 100px;
   background: white;
   cursor: pointer;
   box-shadow: 0px 0px 5px 3px #0000003b;
-  transform: translate3d(0,0.5px,0);
+  border: 3px solid #029CFF;
+  pointer-events: none;
+  /* opacity: 0.5; */
 }
 
 #apply{
@@ -332,7 +346,7 @@ input[type='range']::-moz-range-thumb {
   border: none;
   border-radius: 4px;
   margin: 0 auto;
-  margin-top: 27px;
+  margin-top: 167px;
   outline: none;
   cursor: pointer;
   display: block;

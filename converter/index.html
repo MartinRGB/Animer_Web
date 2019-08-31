@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <title>Animation Converter & Visualizer</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="./js/converter/AndroidSpringAnimationConverter.js"></script>
+    <script src="./js/converter/AndroidSpringInterpolatorEvaluator.js"></script>
+    <script src="./js/converter/FlingAnimationDurationEvaluator.js"></script>
+    <script src="./js/converter/FramerDHOConverter.js"></script>
+    <script src="./js/converter/FramerRK4Converter.js"></script>
+    <script src="./js/converter/OrigamiSpringConverter.js"></script>
+    <script src="./js/converter/UIViewSpringConverter.js"></script>
+
     <script src="./js/calculator/SpringAnimationCalculator.js"></script>
     <script src="./js/calculator/FlingAnimationCalculator.js"></script>
     <script src="./js/calculator/InterpolatorCalculator.js"></script>
@@ -12,16 +21,14 @@
     <script src="./js/calculator/CustomMocosSpringCalculator.js"></script>
     <script src="./js/calculator/CustomBounceCalculator.js"></script>
     <script src="./js/calculator/CustomDampingCalculator.js"></script>
-    <script src="./js/converter/AndroidSpringAnimationConverter.js"></script>
-    <script src="./js/converter/AndroidSpringInterpolatorEvaluator.js"></script>
-    <script src="./js/converter/FlingAnimationDurationEvaluator.js"></script>
-    <script src="./js/converter/FramerDHOConverter.js"></script>
-    <script src="./js/converter/FramerRK4Converter.js"></script>
-    <script src="./js/converter/OrigamiSpringConverter.js"></script>
-    <script src="./js/converter/UIViewSpringConverter.js"></script>
+
     <script src="./js/animator/rebound.js"></script>
+
+    <script src="./js/global/global_util.js"></script>
+
     <script src="./js/graph/DrawCurve.js"></script>
     <script src="./js/bezier/BezierController.js"></script>
+    <script src="./js/listview/listCreater.js"></script>
   </head>
   <body>
 
@@ -35,42 +42,13 @@
           </div>
 
           <ul id="animator-list-view">
-              <!-- <li>Book 1
-                <ul>
-                  <li><a href="someHref">Chapter 1</a></li>
-                  <li><a href="someHref">Chapter 2</a></li>
-                  <li><a href="someHref">Chapter 3</a></li>
-                  <li><a href="someHref">Chapter 4</a></li>
-                </ul>
-              </li>
-              <li>Book 2
-                <ul>
-                  <li><a href="someHref">Chapter 1</a></li>
-                  <li><a href="someHref">Chapter 2</a></li>
-                  <li>Chapter 3
-                    <ul>
-                      <li><a href="listCollapseExample.html">Ex 1</a></li>
-                      <li><a href="someHref">Ex 2</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="javascript:notA();">Chapter 4</a></li>
-                </ul>
-              </li>
-              <li>Book 3
-                <ul>
-                  <li><a href="someHref">Chapter 1</a></li>
-                  <li><a href="someHref">Chapter 2</a></li>
-                  <li><a href="someHref">Chapter 3</a></li>
-                  <li><a href="someHref">Chapter 4</a></li>
-                </ul>
-              </li> -->
-            </ul>
+          </ul>
 
         </div>
         <div id="right-pannel">
           <div class="top-content">
               <div  id="graph-container" class="graph-container">
-                  <p id="graph-title">Cubic Bezier</p>
+                  <p id="graph-title">Animation Curve</p>
                   <div id="curve-container">   
                     <canvas id="curve-canvas" width="400" height="800"></canvas>
                     <div id="bezier-control-container">
@@ -79,37 +57,43 @@
                     </div>
                   </div>     
                   <input class="bezier-input" id="bezier-input" type="text" value="1.00,0.00,0.00,1.00">
-              </div>
+                  <p id="time-para">Estimated time:</p>
+                </div>
             </div>
 
 
             <div class="bottom-content">
-                  <div class="slidercontainer" id="slidecontainer-1">
+                <div id="slider-control-container">
+                    <div class="slidergroup" id="slidergroup-1">
                       <p class="slider-para" id="slider-para-1">Value: </p>
                       <input class="slider-input" id="slider-input-1" type="text" value="1500">
-                      <input type="range" min="0.01" max="3000" value="0" class="slider" id="myRange-1">
-                  </div>
-        
-                  <div class="slidercontainer" id="slidecontainer-2">
-                    <p class="slider-para" id="slider-para-2">Value: </p>
-                    <input class="slider-input" id="slider-input-2" type="text" value="0.5">
-                    <input type="range" min="0.,01" max="1" value="0.5" step="0.05" class="slider" id="myRange-2">
-      
-                  </div>
-        
-                  <div class="slidercontainer" id="slidecontainer-3">
-                    <p class="slider-para" id="slider-para-3">Value: </p>
-                    <input class="slider-input" id="slider-input-3" type="text" value="0">
-                    <input type="range" min="0" max="1000" value="0.5" step="0.5" class="slider" id="myRange-3">
-                  </div>
+                      <input type="range" min="0.01" max="1" value="0" step="0.01" class="slider" id="myRange-1">
+                      <div class="thumb"></div>
+                    </div>
+          
+                    <div class="slidergroup" id="slidergroup-2">
+                      <p class="slider-para" id="slider-para-2">Value: </p>
+                      <input class="slider-input" id="slider-input-2" type="text" value="0.5">
+                      <input type="range" min="0.01" max="1" value="0.5" step="0.01" class="slider" id="myRange-2">
+                      <div class="thumb"></div>
+                    </div>
+          
+                    <div class="slidergroup" id="slidergroup-3">
+                      <p class="slider-para" id="slider-para-3">Value: </p>
+                      <input class="slider-input" id="slider-input-3" type="text" value="0">
+                      <input type="range" min="0.01" max="1" value="0.5" step="0.01" class="slider" id="myRange-3">
+                      <div class="thumb"></div>
+                    </div>
 
-                  <div class="slidercontainer" id="slidecontainer-4">
+                    <div class="slidergroup" id="slidergroup-4">
                       <p class="slider-para" id="slider-para-4">Value: </p>
                       <input class="slider-input" id="slider-input-4" type="text" value="0">
-                      <input type="range" min="0" max="1000" value="0.5" step="0.05" class="slider" id="myRange-4">
-                  </div>
+                      <input type="range" min="0.01" max="1" value="0.5" step="0.01" class="slider" id="myRange-4">
+                      <div class="thumb"></div>
+                    </div>
+                </div>
 
-                  <button id="apply" onclick="setCurve()">Apply</button>
+                <button id="apply" onclick="setCurve()">Apply</button>
             </div>
 
         </div>

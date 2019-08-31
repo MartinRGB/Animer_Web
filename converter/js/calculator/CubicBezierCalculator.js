@@ -5,6 +5,7 @@ class CubicBezierCalculator {
         this.UnitBezier(p1x,p1y,p2x,p2y);
         this.array = this.bezierCalculator(p1x,p1y,p2x,p2y);
         this.bezier = [p1x,p1y,p2x,p2y];
+        this.editable = true;
         
     }
 

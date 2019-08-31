@@ -1,10 +1,10 @@
 
 class BezierController{
     constructor(canvas,calculator,input,c1,c2) {
-        this.x1 = 1;
-        this.y1 = 0;
-        this.x2 = 0;
-        this.y2 = 1;
+        this.x1 = 0.50;
+        this.y1 = 0.00;
+        this.x2 = 0.50;
+        this.y2 = 1.00;
         this.c1 = c1;
         this.c2 = c2;
         this.input = input
@@ -15,6 +15,7 @@ class BezierController{
         this.setupBezierInputInteration(input)
         this.setupBezierDragInteraction(c1,canvas,c1.id,c2.id)
         this.setupBezierDragInteraction(c2,canvas,c1.id,c2.id)
+        this.editable = true;
     }
 
     initBezier(){
@@ -31,6 +32,11 @@ class BezierController{
         this.y1 = y1;
         this.y2 = y2;
         this.drawBezierCurve(this.x1,this.y1,this.x2,this.y2);
+
+    }
+
+    setBezierWithCalculator(calculator){
+        this.drawBezierCurveWithCalculator(calculator.bezier[0],calculator.bezier[1],calculator.bezier[2],calculator.bezier[3],calculator);
     }
 
     setupBezierInputInteration(element){
@@ -121,13 +127,12 @@ class BezierController{
 
       drawBezierCurve(x1,y1,x2,y2){
         this.calculator = new CubicBezierCalculator(x1,y1,x2,y2);
+        this.calculator.editable = this.editable;
         this.input.value = x1.toFixed(2) + ',' + y1.toFixed(2) + ',' + x2.toFixed(2) + ',' + y2.toFixed(2)
         // 0,1
         if(this.isDragBezier){
-            console.log('123')
         }
         else{
-            console.log('456')
             this.c2.style.left = this.canvas.offsetWidth * this.canvas.paddingScale + (this.canvas.offsetWidth*(1 - 2*this.canvas.paddingScale))*x2  + 'px'
             this.c2.style.top = this.canvas.offsetHeight * this.canvas.paddingScale + (this.canvas.offsetHeight*(1 - 2*this.canvas.paddingScale))*(1-y2) + 'px'
             //1,0
@@ -137,6 +142,24 @@ class BezierController{
         }
     
         DrawCurve(this.canvas,this.calculator,false)
+    }
+
+    drawBezierCurveWithCalculator(x1,y1,x2,y2,mCalculator){
+        mCalculator.editable = this.editable;
+        this.input.value = x1.toFixed(2) + ',' + y1.toFixed(2) + ',' + x2.toFixed(2) + ',' + y2.toFixed(2)
+        // 0,1
+        if(this.isDragBezier){
+        }
+        else{
+            this.c2.style.left = this.canvas.offsetWidth * this.canvas.paddingScale + (this.canvas.offsetWidth*(1 - 2*this.canvas.paddingScale))*x2  + 'px'
+            this.c2.style.top = this.canvas.offsetHeight * this.canvas.paddingScale + (this.canvas.offsetHeight*(1 - 2*this.canvas.paddingScale))*(1-y2) + 'px'
+            //1,0
+            //bezier_controller_1.style.left = this.canvasoffsetWidth * (1 - this.canvaspaddingScale)  + 'px'
+            this.c1.style.left = this.canvas.offsetWidth * this.canvas.paddingScale + (this.canvas.offsetWidth*(1 - 2*this.canvas.paddingScale))*x1  + 'px'
+            this.c1.style.top = this.canvas.offsetHeight * this.canvas.paddingScale + (this.canvas.offsetHeight*(1 - 2*this.canvas.paddingScale))*(1-y1) + 'px'
+        }
+    
+        DrawCurve(this.canvas,mCalculator,false)
     }
 
 

@@ -1,500 +1,43 @@
-const mAnimatorDataSet = {
-  "platform": [
-    {
-      "id": 0,
-      "type": "Android",
-      "subclass":[
-        {
-          "id": 0,
-          "tag":0,
-          "type": "Spring",
-          "calculator":"SpringAnimationCalculator",
-          "animation_data":["Stiffness:",1500,0,3000,"Damping:",0.5,0.01,1,"Velocity",0,0,500]
-        },
-        {
-          "id": 1,
-          "tag":1,
-          "type": "Fling",
-          "calculator":"FlingAnimationCalculator",
-          "animation_data":["Velocity:",0,-5000,5000,"Damping:",0.5,0.01,10]
-        },
-        {
-          "id": 2,
-          "type": "Divide"
-        },
-        {
-          "id": 3,
-          "tag":2,
-          "type": "AccelerateDecelerate",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":[null]
-        },
-        {
-          "id": 4,
-          "tag":3,
-          "type": "Accelerate",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2]
-        },
-        {
-          "id": 5,
-          "tag":4,
-          "type": "Decelerate",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2]
-        },
-        {
-          "id": 6,
-          "tag":5,
-          "type": "Anticipate",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2]
-        },
-        {
-          "id": 7,
-          "tag":6,
-          "type": "Overshoot",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2]
-        },
-        {
-          "id": 8,
-          "tag":7,
-          "type": "AnticipateOvershoot",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2]
-        },
-        {
-          "id": 9,
-          "tag":8,
-          "type": "Bounce",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":[null]
-        },
-        {
-          "id": 10,
-          "tag":9,
-          "type": "Cycle",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2]
-        },
-        {
-          "id": 11,
-          "tag":10,
-          "type": "Linear",
-          "calculator":"InterpolatorCalculator",
-          "animation_data":[null]
-        },
-        {
-          "id": 12,
-          "type": "Divide"
-        },
-        {
-          "id": 13,
-          "tag":11,
-          "type": "FastOutSlowIn",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.40, 0.00, 0.20, 1.00]
-        },
-        {
-          "id": 14,
-          "tag":12,
-          "type": "LinearOutSlowIn",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 0.20, 1.00]
-        },
-        {
-          "id": 15,
-          "tag":13,
-          "type": "FastOutLinear",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.40, 0.00, 1.00, 1.00]
-        }
-        ,{
-          "id": 16,
-          "type": "Divide"
-        },
-        {
-          "id": 17,
-          "tag":14,
-          "type": "CustomMocosSpring",
-          "calculator":"CustomMocosSpringCalculator",
-          "animation_data":["Tension:", 100, 0, 200,"Friction:",15,0,100,"Velocity:",0,0,1000]
-        },
-        {
-          "id": 18,
-          "tag":15,
-          "type": "CustomSpring",
-          "calculator":"CustomSpringCalculator",
-          "animation_data":["Factor:", 0, 0, 5]
-        },
-        {
-          "id": 19,
-          "tag":16,
-          "type": "CustomBounce",
-          "calculator":"CustomBounceCalculator",
-          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,10]
-        },
-        {
-          "id": 20,
-          "tag":17,
-          "type": "CustomDamping",
-          "calculator":"CustomDampingCalculator",
-          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,10]
-        }
-      ]
-    },
-    {
-      "id": 1,
-      "type": "iOS",
-      "subclass":[
-        {
-          "id": 0,
-          "tag":18,
-          "type": "UIViewSpring",
-          "calculator":"SpringAnimationCalculator",
-          "converter":"UIViewSpringConverter",
-          "animation_data":["Damping:", 0.5, 0, 1,"Duration:",0.5,0,1]
-        },
-        {
-          "id": 1,
-          "tag":18,
-          "type": "CASpring",
-          "calculator":"SpringAnimationCalculator",
-          "converter":"FramerDHOConverter",
-          "animation_data":["Stiffness:", 100, 0, 1000,"Damping:",10,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
-        },
-        {
-          "id": 2,
-          "type": "Divide"
-        },
-        {
-          "id": 3,
-          "tag":20,
-          "type": "Linear",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.25, 0.75, 0.75]
-        },
-        {
-          "id": 4,
-          "tag":21,
-          "type": "Default",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.10, 0.25, 1.00]
-        },
-        {
-          "id": 5,
-          "tag":22,
-          "type": "EaseIn",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 1.00, 1.00]
-        },
-        {
-          "id": 6,
-          "tag":23,
-          "type": "EaseOut",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 0.58, 1.00]
-        },
-        {
-          "id": 7,
-          "tag":24,
-          "type": "EaseInOut",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 0.58, 1.00]
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "type": "Web",
-      "subclass":[
-        {
-          "id": 0,
-          "tag":25,
-          "type": "Linear",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.25, 0.75, 0.75]
-        },
-        {
-          "id": 1,
-          "tag":26,
-          "type": "Ease",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.10, 0.25, 1.00]
-        },
-        {
-          "id": 2,
-          "tag":27,
-          "type": "EaseIn",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 1.00, 1.00]
-        },
-        {
-          "id": 3,
-          "tag":28,
-          "type": "EaseOut",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 0.58, 1.00]
-        },
-        {
-          "id": 3,
-          "tag":29,
-          "type": "EaseInOut",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 0.58, 1.00]
-        },
-      ]
-    },
-    {
-      "id": 3,
-      "type": "Cubic Beizer",
-      "subclass":[
-        {
-          "id": 0,
-          "tag":30,
-          "type": "Cubic Bezier",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 1.00, 1.00]
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "type": "Design Tools",
-      "subclass":[
-        {
-          "id": 0,
-          "tag":31,
-          "type": "Origami POP Spring",
-          "calculator": "SpringAnimationCalculator",
-          "converter": "OrigamiSpringConverter",
-          "animation_data":["Bounciness:", 5, 0, 100,"Speed:",10,0,100]
-        },
-        {
-          "id": 1,
-          "tag":32,
-          "type": "Framer RK4 Spring",
-          "calculator": "SpringAnimationCalculator",
-          "converter": "FramerRK4Converter",
-          "animation_data":["Tension:", 200, 0, 1000,"Friction:",25,0,100]
-        },
-        {
-          "id": 2,
-          "tag":33,
-          "type": "Framer DHO Spring",
-          "calculator": "SpringAnimationCalculator",
-          "converter": "FramerDHOConverter",
-          "animation_data":["Stiffness:", 50, 0, 1000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
-        },
-        {
-          "id": 3,
-          "tag":34,
-          "type": "Protopie Spring",
-          "calculator": "SpringAnimationCalculator",
-          "converter": "FramerRK4Converter",
-          "animation_data":["Tension:", 300, 0, 1000,"Friction:",15,0,100]
-        }
-      ]
-    }
-  ]
-}
+
 
 var currentCalculator;
-var currentDrawHalf = false;
+var currentCalcType;
+var currentConverter;
+var currentConverterType;
+var currentInterpolatorType;
 
-var mFactor1 = 1000,mFactor2 = 0.5,mFactor3 = 100.;
-
-var mFling = new FlingAnimationCalculator(-4000, 0.8);
-var mSpring = new SpringAnimationCalculator(mFactor1, mFactor2,mFactor3);
-var mInerpolator = new InterpolatorCalculator("Overshoot",2);
-var mBezier = new CubicBezierCalculator(1,0,0,1);
-var mCustomSpring = new CustomSpringCalculator(4);
-var mCustomMocos = new CustomMocosSpringCalculator(200,15,0);
-var mCustomBounce = new CustomBounceCalculator(0,0);
-var mCustomDamping = new CustomDampingCalculator(10,0);
-
-currentCalculator = mInerpolator;
-
-var mAnimatorListView = document.getElementById("animator-list-view")
-
-
-
-function createAnimatorListView(listView,dataSet){
-
-  var animatorTitleArray = [];
-  var calculatorArray = [];
-  var animationDataArray = [];
-  var animationIndex = 0;
-
-  for (var i = 0; i < dataSet.platform.length; i++) {
-    var platform = document.createElement('li');
-    platform.className = 'animator-platform';
-
-    var platformArrow = document.createElement('div');
-    platformArrow.className = 'animator-platform-arrow';
-    
-
-    var platformTitle = document.createElement('a');
-    platformTitle.className = 'animator-platform-title';
-    platformTitle.href = "#"        
-    platformTitle.innerHTML = dataSet.platform[i].type;
-
-
-    platformTitle.addEventListener('click',function(e){
-      //e.target.parentElement;
-      if(e.target.nextSibling.style.display == 'none'){
-        e.target.nextSibling.style.display = 'block';
-        e.target.previousSibling.style.transform = 'translate3d(0px, 2px, 0px) rotate(90deg)'
-      }
-      else{
-        e.target.nextSibling.style.display = 'none';
-        e.target.previousSibling.style.transform = 'translate3d(0px, 2px, 0px) rotate(0deg)'
-      }
-    })
-
-
-    var subUlElement = document.createElement('ul');
-    subUlElement.className = "animator-type"
-    subUlElement.style.display = 'none';
-
-
-    for (var a = 0; a < dataSet.platform[i].subclass.length; a++) {
-      if(dataSet.platform[i].subclass[a].type == 'Divide'){
-        var divide = document.createElement('div');
-        divide.className = 'animator-divide';
-        subUlElement.appendChild(divide)
-
-      }
-      else{
-        var animator = document.createElement('li');
-        animator.className = 'animator';
-    
-        var animatorTitle = document.createElement('a');
-        animatorTitle.className = 'animator-title';
-        animatorTitle.href = "#"
-        animatorTitle.innerHTML = dataSet.platform[i].subclass[a].type;
-        animatorTitle.animIndex = animationIndex;
-        animationIndex++;
-
-        var currCalculator = dataSet.platform[i].subclass[a].calculator;
-        var currAnimationData = dataSet.platform[i].subclass[a].animation_data;
-        // var currType = dataSet.platform[i].subclass[a].type;
-
-        animatorTitleArray.push(animatorTitle);
-        calculatorArray.push(currCalculator);
-        animationDataArray.push(currAnimationData);
-
-        animatorTitle.addEventListener('click',function(e){
-  
-          for (var b = 0; b < animatorTitleArray.length; b++) {
-          
-            if(b == e.target.animIndex){
-              animatorTitleArray[b].style.color ='#029CFF'
-
-
-              //TODO ### Switch By caculatorType
-              switch(calculatorArray[b]) {
-                case "SpringAnimationCalculator":
-                    currentCalculator = new SpringAnimationCalculator(1500,0.5,0);
-                    DrawCurve(curve_canvas,currentCalculator,true)
-                    bezier_container.style.display = 'none';
-                    break;
-                case "FlingAnimationCalculator":
-                    currentCalculator = new FlingAnimationCalculator(-4000,0.8);
-                    DrawCurve(curve_canvas,currentCalculator,true)
-                    bezier_container.style.display = 'none';
-                    break;
-                case "InterpolatorCalculator":
-                    currentCalculator = new InterpolatorCalculator(this.innerHTML,2);
-                    DrawCurve(curve_canvas,currentCalculator,false)
-                    bezier_container.style.display = 'none';
-                    break;
-                case "CubicBezierCalculator":
-                    var p1 = animationDataArray[b][0];
-                    var p2 = animationDataArray[b][1];
-                    var p3 = animationDataArray[b][2];
-                    var p4 = animationDataArray[b][3];
-                    var bezierString = p1+","+p2+","+p3+","+p4;
-                    eval("currentCalculator = new " + calculatorArray[b] + "(" + bezierString + ")");
-                    //currentCalculator = new CubicBezierCalculator(p1,p2,p3,p4);
-                    bezierController.setBezier(p1,p2,p3,p4);
-                    bezier_container.style.display = 'block';
-                    break;
-                case "CustomSpringCalculator":
-                    currentCalculator = new CustomSpringCalculator(2);
-                    DrawCurve(curve_canvas,currentCalculator,true)
-                    bezier_container.style.display = 'none';
-                    break;
-                case "CustomMocosSpringCalculator":
-                    currentCalculator = new CustomMocosSpringCalculator(200,15,0);
-                    DrawCurve(curve_canvas,currentCalculator,true)
-                    bezier_container.style.display = 'none';
-                    break;
-                case "CustomBounceCalculator":
-                    currentCalculator = new CustomBounceCalculator(0,0);
-                    DrawCurve(curve_canvas,currentCalculator,true)
-                    bezier_container.style.display = 'none';
-                    break;
-                case "CustomDampingCalculator":
-                    currentCalculator = new CustomDampingCalculator(0,0);
-                    DrawCurve(curve_canvas,currentCalculator,true)
-                    bezier_container.style.display = 'none';
-                    break;
-                default:
-                    bezier_container.style.display = 'none';
-              } 
-
-            }
-            else{
-              animatorTitleArray[b].style.color ='white'
-            }
-          }
-          document.getElementById("graph-title").innerHTML = (this).innerHTML
-
-        })
-    
-        animator.appendChild(animatorTitle)
-        subUlElement.appendChild(animator)
-      }
-    }
-
-    platform.appendChild(platformArrow)
-    platform.appendChild(platformTitle)
-    if(dataSet.platform[i].subclass.length != 0){
-      platform.appendChild(subUlElement);
-    }
-
-    listView.appendChild(platform)
-
-  }
-}
-
-createAnimatorListView(mAnimatorListView,mAnimatorDataSet)
-
-function setCurve(){
-  console.log('2333')
-}
-
-
-
-
-var curve_canvas = document.getElementById("curve-canvas");
-curve_canvas.paddingScale = 1/10;
-
-//var grid = document.getElementById("grid")
+// ###### Graph Part ######
 var graph_container = document.getElementById("graph-container")
 
-// Beizer 
+// ## Canvas ##
+var curve_canvas = document.getElementById("curve-canvas");
+curve_canvas.paddingScale = 1/10;
+var currentDrawHalf = false;
+
+// ## Beizer ##
 var bezier_container = document.getElementById("bezier-control-container")
 var bezier_controller_1 = document.getElementById("bezier-control-point-1");
 var bezier_controller_2 = document.getElementById("bezier-control-point-2");
 var bezier_input = document.getElementById("bezier-input");
 var bezierController = new BezierController(curve_canvas,currentCalculator,bezier_input,bezier_controller_1,bezier_controller_2);
 
+var time_para = document.getElementById("time-para");
 
-var isExpanded =false;
+// ###### Slider Part ######
+var slider_container = document.getElementById("slider-control-container")
 
+// ###### Apply Button ######
+var apply_button = document.getElementById("apply")
+
+function setCurve(){
+  console.log('2333')
+}
+
+// ###### Left Listview ######
+var mAnimatorListView = document.getElementById("animator-list-view")
+createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierController,bezier_container,bezier_input,slider_container,apply_button,time_para)
+
+// ###### Util ######
 function resizeCanvas(canvas,width,height){
   canvas.style.width = width + 'px';
   canvas.style.height = height + 'px';
@@ -506,52 +49,141 @@ function resizeCanvas(canvas,width,height){
   graph_container.style.width = width + 'px';
   bezier_container.style.transform = 'translate3d(-8px,-'+(height+12)+'px,0px)'; 
 
-  // grid.style.width = (width + 40) + 'px';
-  // grid.style.height = (height + 40) + 'px';
-  // grid.style.transform = 'translate3d(-20px,-20px,0)';
 }
 
 resizeCanvas(curve_canvas,200,200)
+
+
+
 
 
 DrawCurve(curve_canvas,null,currentDrawHalf);
 
 // ################## Slider ##################
 
-// document.getElementById("myRange-3").oninput = function() {
-//   var mGradient = this.value/(this.max - this.min)*100;
-//   //console.log( this.value)
-//   this.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mGradient +'%, #363636 ' + mGradient + '%, #363636 100%)'
-// };
+document.getElementById("myRange-3").oninput = function() {
+  console.log('233')
+
+};
 
 //Slider part,need reconstruct
 var slider1 = document.getElementById("myRange-1");
 var slider2 = document.getElementById("myRange-2");
 var slider3 = document.getElementById("myRange-3");
 var slider4 = document.getElementById("myRange-4");
+var input1 = document.getElementById("slider-input-1");
+var input2 = document.getElementById("slider-input-2");
+var input3 = document.getElementById("slider-input-3");
+var input4 = document.getElementById("slider-input-4");
+var sliderArray = [slider1,slider2,slider3,slider4];
+var inputArray = [input1,input2,input3,input4];
 
 
-slider1.oninput = function() {
-  mFactor1 = this.value;
-  currentCalculator = new SpringAnimationCalculator(mFactor1,mFactor2,mFactor3);
-  DrawCurve(curve_canvas,currentCalculator,true)
+function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,interpolatorType,converter,converterType){
+  for(var i=0;i<slArray.length;i++){
+
+    iptArray[i].oninput = function(e) {
+      currentCalcType = getCurrentCalculatorType()
+      currentInterpolatorType = getCurrentInterpolatorType();
+      currentConverterType = getCurrentConverterType();
+
+      var factor1 = Number(iptArray[0].value);
+      var factor2 = Number(iptArray[1].value);
+      var factor3 = Number(iptArray[2].value);
+      var factor4 = Number(iptArray[3].value);
+
+
+      this.nextElementSibling.value = this.value
+      var mProgress = (this.value - this.nextElementSibling.min)/(this.nextElementSibling.max - this.nextElementSibling.min)*100;
+      this.nextElementSibling.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mProgress +'%, #363636 ' + mProgress + '%, #363636 100%)'
+      this.nextElementSibling.nextElementSibling.style.left = 149 + (266-149)*mProgress/100 + 'px';
+
+  
+  
+      switch(currentCalcType){
+        case "SpringAnimationCalculator":
+            if(currentConverterType !=null){
+              console.log(currentConverterType)
+              var className = currentConverterType.constructor.name
+              eval("currentConverter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
+              console.log(currentConverter);
+              currentCalculator = new SpringAnimationCalculator(currentConverter.stiffness,currentConverter.dampingRatio,(currentConverter.velocity == null)?0:currentConverter.velocity);
+
+            }
+            else{
+              currentCalculator = new SpringAnimationCalculator(factor1,factor2,factor3);
+            }
+            DrawCurve(canvas,currentCalculator,true);
+            break;
+        case "InterpolatorCalculator":
+            currentCalculator = new InterpolatorCalculator(currentInterpolatorType,factor1);
+            DrawCurve(canvas,currentCalculator,false)
+            break;
+        case "FlingAnimationCalculator":
+            currentCalculator = new FlingAnimationCalculator(factor1,factor2);
+            DrawCurve(canvas,currentCalculator,true)
+            break;
+        default:
+      }
+      
+      //### TODO ,still bugs
+      listSelectEstimatedPara(currentCalculator,time_para);
+    }
+
+    slArray[i].oninput = function(e) {
+      currentCalcType = getCurrentCalculatorType()
+      currentInterpolatorType = getCurrentInterpolatorType();
+      currentConverterType = getCurrentConverterType();
+
+      var factor1 = Number(slArray[0].value);
+      var factor2 = Number(slArray[1].value);
+      var factor3 = Number(slArray[2].value);
+      var factor4 = Number(slArray[3].value);
+
+
+      var mProgress = (this.value - this.min)/(this.max - this.min)*100;
+      this.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mProgress +'%, #363636 ' + mProgress + '%, #363636 100%)'
+      this.nextElementSibling.style.left = 149 + (266-149)*mProgress/100 + 'px';
+      this.previousElementSibling.value = this.value
+  
+  
+      switch(currentCalcType){
+        case "SpringAnimationCalculator":
+            if(currentConverterType !=null){
+              console.log(currentConverterType)
+              var className = currentConverterType.constructor.name
+              eval("currentConverter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
+              console.log(currentConverter);
+              currentCalculator = new SpringAnimationCalculator(currentConverter.stiffness,currentConverter.dampingRatio,(currentConverter.velocity == null)?0:currentConverter.velocity);
+
+            }
+            else{
+              currentCalculator = new SpringAnimationCalculator(factor1,factor2,factor3);
+            }
+            DrawCurve(canvas,currentCalculator,true);
+            break;
+        case "InterpolatorCalculator":
+            currentCalculator = new InterpolatorCalculator(currentInterpolatorType,factor1);
+            DrawCurve(canvas,currentCalculator,false)
+            break;
+        case "FlingAnimationCalculator":
+            currentCalculator = new FlingAnimationCalculator(factor1,factor2);
+            DrawCurve(canvas,currentCalculator,true)
+            break;
+        default:
+      }
+      
+      //### TODO ,still bugs
+      listSelectEstimatedPara(currentCalculator,time_para);
+    }
+  }
 }
-slider2.oninput = function() {
-  mFactor2 = this.value;
-  currentCalculator = new SpringAnimationCalculator(mFactor1,mFactor2,mFactor3);
-  DrawCurve(curve_canvas,currentCalculator,true)
-}
-slider3.oninput = function() {
-  mFactor3 = this.value;
-  currentCalculator = new SpringAnimationCalculator(mFactor1,mFactor2,Number(mFactor3));
-  DrawCurve(curve_canvas,currentCalculator,true)
-}
 
-
+setupSliderAndInputController(curve_canvas,sliderArray,inputArray)
 
 // ################## Graph Scale Test ##################
 
-
+// var isExpanded =false;
 // var mSpringSystem = new rebound.SpringSystem();
 // var mSpringGraphWidth = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
 // var mSpringGraphTranslateX = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
@@ -626,6 +258,13 @@ slider3.oninput = function() {
 //   this.console.log(width + 'width')
 //   this.console.log(height + 'height')
 // });
+
+
+
+
+
+
+
 
 
 // ################## Converter ##################
