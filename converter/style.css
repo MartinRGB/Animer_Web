@@ -194,6 +194,7 @@ li.collapsibleListClosed{
   height: 200px;
   position: absolute;
   transform: translate3d(-8px, -213px, 0px);
+  display: none;
 }
 
 #bezier-control-point-1 {

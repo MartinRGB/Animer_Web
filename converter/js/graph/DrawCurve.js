@@ -9,9 +9,6 @@ function DrawCurve(canvas,dataSet,halfSize){
     var realWidth = canvas.width - paddingLeft - paddingRight;
     var realHeight = canvas.height - paddingBottom - paddingTop;
 
-    var frameCount = dataSet.array.length;
-    var transitionArray = dataSet.array;
-
     context.fillStyle = "#FFFFFF08";
     context.fillRect(paddingLeft, canvas.height*canvas.paddingScale, canvas.width - paddingLeft - paddingRight, canvas.height*(1- canvas.paddingScale*2));
 
@@ -61,17 +58,18 @@ function DrawCurve(canvas,dataSet,halfSize){
     context.stroke();
 
     //Draw the BezierLine
-    if(dataSet.bezier !=null){
-        context.beginPath();
-        context.strokeStyle = "#009CFF";
-        context.lineWidth = 4;
-        context.moveTo(paddingLeft, canvas.height - paddingBottom);
-        context.lineTo(paddingLeft + realWidth*dataSet.bezier[0], (canvas.height - paddingBottom) - realHeight*dataSet.bezier[1]);
+    if(dataSet != null){
+        if(dataSet.bezier !=null){
+            context.beginPath();
+            context.strokeStyle = "#009CFF";
+            context.lineWidth = 4;
+            context.moveTo(paddingLeft, canvas.height - paddingBottom);
+            context.lineTo(paddingLeft + realWidth*dataSet.bezier[0], (canvas.height - paddingBottom) - realHeight*dataSet.bezier[1]);
 
-        context.moveTo(canvas.width - paddingRight, paddingTop);
-        context.lineTo(paddingLeft + realWidth*dataSet.bezier[2], (canvas.height - paddingBottom)- realHeight*dataSet.bezier[3]);
-        context.stroke();
-
+            context.moveTo(canvas.width - paddingRight, paddingTop);
+            context.lineTo(paddingLeft + realWidth*dataSet.bezier[2], (canvas.height - paddingBottom)- realHeight*dataSet.bezier[3]);
+            context.stroke();
+        }
         // context.beginPath();
         // context.arc(paddingLeft + realWidth*bezier[0], (canvas.height - paddingBottom) - realHeight*bezier[1], controlPointRadius, 0, 2 * Math.PI);
         // context.arc(paddingLeft + realWidth*bezier[2], (canvas.height - paddingBottom)- realHeight*bezier[3], controlPointRadius, 0, 2 * Math.PI);
@@ -90,29 +88,34 @@ function DrawCurve(canvas,dataSet,halfSize){
 
 
     //Draw the Curve
-    context.beginPath();
-    context.strokeStyle = "#8255FF";
-    context.shadowColor = '#0000003b';
-    context.shadowBlur = 4;
-    context.moveTo(paddingLeft, canvas.height-paddingBottom);
+    if(dataSet != null){
+        var frameCount = dataSet.array.length;
+        var transitionArray = dataSet.array;
 
-    for (i = 0; i < frameCount-1; i++)
-    {
-       var cX = i * (canvas.width - paddingLeft - paddingRight) / frameCount + paddingLeft;
-       var nX = (i+1) * (canvas.width - paddingLeft - paddingRight) / frameCount + paddingLeft;
-       var cY = (canvas.height - paddingBottom - paddingTop) - transitionArray[i][1]*(canvas.height - paddingBottom - paddingTop)/transitionArray[frameCount-1][1] + paddingTop;
-       var nY = (canvas.height - paddingBottom - paddingTop) - transitionArray[i+1][1]*(canvas.height - paddingBottom - paddingTop)/transitionArray[frameCount-1][1] + paddingTop;
-       var cXCenter = (cX + nX)/2;
-       var cYCenter = (cY + nY)/2;
-       if(i == frameCount - 2){
-           context.quadraticCurveTo(cX, cY, (canvas.width - paddingRight),(paddingTop));
-       } 
-       else{
-            context.quadraticCurveTo(cX, cY, cXCenter, cYCenter);
-       }
+        context.beginPath();
+        context.strokeStyle = "#8255FF";
+        context.shadowColor = '#0000003b';
+        context.shadowBlur = 4;
+        context.moveTo(paddingLeft, canvas.height-paddingBottom);
+
+        for (i = 0; i < frameCount-1; i++)
+        {
+        var cX = i * (canvas.width - paddingLeft - paddingRight) / frameCount + paddingLeft;
+        var nX = (i+1) * (canvas.width - paddingLeft - paddingRight) / frameCount + paddingLeft;
+        var cY = (canvas.height - paddingBottom - paddingTop) - transitionArray[i][1]*(canvas.height - paddingBottom - paddingTop)/transitionArray[frameCount-1][1] + paddingTop;
+        var nY = (canvas.height - paddingBottom - paddingTop) - transitionArray[i+1][1]*(canvas.height - paddingBottom - paddingTop)/transitionArray[frameCount-1][1] + paddingTop;
+        var cXCenter = (cX + nX)/2;
+        var cYCenter = (cY + nY)/2;
+        if(i == frameCount - 2){
+            context.quadraticCurveTo(cX, cY, (canvas.width - paddingRight),(paddingTop));
+        } 
+        else{
+                context.quadraticCurveTo(cX, cY, cXCenter, cYCenter);
+        }
+        }
+
+        context.lineWidth = 4;
+        context.lineCap = "round";
+        context.stroke();
     }
-
-    context.lineWidth = 4;
-    context.lineCap = "round";
-    context.stroke();
 }

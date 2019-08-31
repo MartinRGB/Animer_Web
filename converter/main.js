@@ -300,22 +300,25 @@ const mAnimatorDataSet = {
   ]
 }
 
+var currentCalculator;
+var currentDrawHalf = false;
+
 var mFactor1 = 1000,mFactor2 = 0.5,mFactor3 = 100.;
 
 var mFling = new FlingAnimationCalculator(-4000, 0.8);
 var mSpring = new SpringAnimationCalculator(mFactor1, mFactor2,mFactor3);
-var mInerpolator = new InterpolatorCalculator(0.5);
+var mInerpolator = new InterpolatorCalculator("Overshoot",2);
 var mBezier = new CubicBezierCalculator(1,0,0,1);
 var mCustomSpring = new CustomSpringCalculator(4);
 var mCustomMocos = new CustomMocosSpringCalculator(200,15,0);
 var mCustomBounce = new CustomBounceCalculator(0,0);
 var mCustomDamping = new CustomDampingCalculator(10,0);
 
-currentCalculator = mSpring;
+currentCalculator = mInerpolator;
 
 var mAnimatorListView = document.getElementById("animator-list-view")
 
-var currentCalculator;
+
 
 function createAnimatorListView(listView,dataSet){
 
@@ -376,6 +379,7 @@ function createAnimatorListView(listView,dataSet){
 
         var currCalculator = dataSet.platform[i].subclass[a].calculator;
         var currAnimationData = dataSet.platform[i].subclass[a].animation_data;
+        // var currType = dataSet.platform[i].subclass[a].type;
 
         animatorTitleArray.push(animatorTitle);
         calculatorArray.push(currCalculator);
@@ -390,34 +394,57 @@ function createAnimatorListView(listView,dataSet){
 
 
               //TODO ### Switch By caculatorType
-              if(animationDataArray[b][0] != null){
-                if(typeof(animationDataArray[b][0]) == 'string'){
-                  var dataNumber = animationDataArray[b].length/4;
+              switch(calculatorArray[b]) {
+                case "SpringAnimationCalculator":
+                    currentCalculator = new SpringAnimationCalculator(1500,0.5,0);
+                    DrawCurve(curve_canvas,currentCalculator,true)
+                    bezier_container.style.display = 'none';
+                    break;
+                case "FlingAnimationCalculator":
+                    currentCalculator = new FlingAnimationCalculator(-4000,0.8);
+                    DrawCurve(curve_canvas,currentCalculator,true)
+                    bezier_container.style.display = 'none';
+                    break;
+                case "InterpolatorCalculator":
+                    currentCalculator = new InterpolatorCalculator(this.innerHTML,2);
+                    DrawCurve(curve_canvas,currentCalculator,false)
+                    bezier_container.style.display = 'none';
+                    break;
+                case "CubicBezierCalculator":
+                    var p1 = animationDataArray[b][0];
+                    var p2 = animationDataArray[b][1];
+                    var p3 = animationDataArray[b][2];
+                    var p4 = animationDataArray[b][3];
+                    var bezierString = p1+","+p2+","+p3+","+p4;
+                    eval("currentCalculator = new " + calculatorArray[b] + "(" + bezierString + ")");
+                    //currentCalculator = new CubicBezierCalculator(p1,p2,p3,p4);
+                    bezierController.setBezier(p1,p2,p3,p4);
+                    bezier_container.style.display = 'block';
+                    break;
+                case "CustomSpringCalculator":
+                    currentCalculator = new CustomSpringCalculator(2);
+                    DrawCurve(curve_canvas,currentCalculator,true)
+                    bezier_container.style.display = 'none';
+                    break;
+                case "CustomMocosSpringCalculator":
+                    currentCalculator = new CustomMocosSpringCalculator(200,15,0);
+                    DrawCurve(curve_canvas,currentCalculator,true)
+                    bezier_container.style.display = 'none';
+                    break;
+                case "CustomBounceCalculator":
+                    currentCalculator = new CustomBounceCalculator(0,0);
+                    DrawCurve(curve_canvas,currentCalculator,true)
+                    bezier_container.style.display = 'none';
+                    break;
+                case "CustomDampingCalculator":
+                    currentCalculator = new CustomDampingCalculator(0,0);
+                    DrawCurve(curve_canvas,currentCalculator,true)
+                    bezier_container.style.display = 'none';
+                    break;
+                default:
+                    bezier_container.style.display = 'none';
+              } 
 
-
-                }
-                else{
-                  
-                  // ### Case Bezier
-                  var p1 = animationDataArray[b][0]
-                  var p2 = animationDataArray[b][1]
-                  var p3 = animationDataArray[b][2]
-                  var p4 = animationDataArray[b][3]
-                  var bezierString = p1+","+p2+","+p3+","+p4;
-                  eval("currentCalculator = new " + calculatorArray[b] + "(" + bezierString + ")");
-                  bezierController.setBezier(p1,p2,p3,p4)
-                }
-
-            }
-              // console.log(animationDataArray[b])
-              // console.log(animationDataArray[b].length)
-              // console.log(animationDataArray[b][0])
-              // console.log(typeof(animationDataArray[b][0]))
-
-
-              // eval("currentCalculator = new " + calculatorArray[b] + "(0.5)");
-              // DrawCurve(curve_canvas,currentCalculator,false);
-              // currentCalculator = new this["InterpolatorCalculator"](0.5);
             }
             else{
               animatorTitleArray[b].style.color ='white'
@@ -431,8 +458,6 @@ function createAnimatorListView(listView,dataSet){
         subUlElement.appendChild(animator)
       }
     }
-
-
 
     platform.appendChild(platformArrow)
     platform.appendChild(platformTitle)
@@ -489,9 +514,7 @@ function resizeCanvas(canvas,width,height){
 resizeCanvas(curve_canvas,200,200)
 
 
-
-
-DrawCurve(curve_canvas,currentCalculator,true);
+DrawCurve(curve_canvas,null,currentDrawHalf);
 
 // ################## Slider ##################
 
