@@ -27,6 +27,8 @@ function getCurrentConverterType(){
 }
 
 function listSelectEstimatedPara(calculatorData,timeParaE){
+
+  // console.log(calculatorData)
   if(calculatorData.duration != null){
     timeParaE.style.display = 'block'
     // console.log(calculatorData)

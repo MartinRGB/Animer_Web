@@ -10,7 +10,19 @@ function DrawCurve(canvas,dataSet,halfSize){
     var realHeight = canvas.height - paddingBottom - paddingTop;
 
     // Draw the Background
+
     context.fillStyle = "#FFFFFF08";
+    if(dataSet !=null){
+        if(dataSet.duration == 0){
+            context.fillStyle = "#FF000014";
+        }
+        else{
+            
+        }
+    }
+    else{
+        
+    }
     context.fillRect(paddingLeft, canvas.height*canvas.paddingScale, canvas.width - paddingLeft - paddingRight, canvas.height*(1- canvas.paddingScale*2));
 
     // Draw the Gradient Coordinate
@@ -57,7 +69,7 @@ function DrawCurve(canvas,dataSet,halfSize){
     context.stroke();
 
 
-
+   //console.log(dataSet.duration)
 
     if(dataSet != null){
         if(dataSet.bezier !=null){

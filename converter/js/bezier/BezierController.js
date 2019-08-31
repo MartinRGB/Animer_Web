@@ -35,6 +35,14 @@ class BezierController{
 
     }
 
+    setBezierOnly(x1,y1,x2,y2){
+        this.x1 = x1;
+        this.x2 = x2;
+        this.y1 = y1;
+        this.y2 = y2;
+
+    }
+
     setBezierWithCalculator(calculator){
         this.drawBezierCurveWithCalculator(calculator.bezier[0],calculator.bezier[1],calculator.bezier[2],calculator.bezier[3],calculator);
     }
@@ -98,7 +106,6 @@ class BezierController{
           }
       
       
-      
         }
       
         function closeDragElement() {
@@ -126,6 +133,7 @@ class BezierController{
       }
 
       drawBezierCurve(x1,y1,x2,y2){
+
         this.calculator = new CubicBezierCalculator(x1,y1,x2,y2);
         this.calculator.editable = this.editable;
         this.input.value = x1.toFixed(2) + ',' + y1.toFixed(2) + ',' + x2.toFixed(2) + ',' + y2.toFixed(2)
@@ -158,7 +166,6 @@ class BezierController{
             this.c1.style.left = this.canvas.offsetWidth * this.canvas.paddingScale + (this.canvas.offsetWidth*(1 - 2*this.canvas.paddingScale))*x1  + 'px'
             this.c1.style.top = this.canvas.offsetHeight * this.canvas.paddingScale + (this.canvas.offsetHeight*(1 - 2*this.canvas.paddingScale))*(1-y1) + 'px'
         }
-    
         DrawCurve(this.canvas,mCalculator,false)
     }
 

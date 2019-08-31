@@ -21,6 +21,24 @@ var bezier_controller_2 = document.getElementById("bezier-control-point-2");
 var bezier_input = document.getElementById("bezier-input");
 var bezierController = new BezierController(curve_canvas,currentCalculator,bezier_input,bezier_controller_1,bezier_controller_2);
 
+// ## Resize Canvas Util ##
+function resizeCanvas(canvas,width,height){
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
+  bezier_container.style.width = width +'px'
+  bezier_container.style.height = height +'px'
+
+  canvas.width = width*2;
+  canvas.height = height*2;
+  graph_container.style.width = width + 'px';
+  bezier_container.style.transform = 'translate3d(-8px,-'+(height+12)+'px,0px)'; 
+
+}
+
+resizeCanvas(curve_canvas,200,200)
+
+// ## Time Estimated Parameter ##
+
 var time_para = document.getElementById("time-para");
 
 // ###### Slider Part ######
@@ -37,36 +55,10 @@ function setCurve(){
 var mAnimatorListView = document.getElementById("animator-list-view")
 createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierController,bezier_container,bezier_input,slider_container,apply_button,time_para)
 
-// ###### Util ######
-function resizeCanvas(canvas,width,height){
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-  bezier_container.style.width = width +'px'
-  bezier_container.style.height = height +'px'
-
-  canvas.width = width*2;
-  canvas.height = height*2;
-  graph_container.style.width = width + 'px';
-  bezier_container.style.transform = 'translate3d(-8px,-'+(height+12)+'px,0px)'; 
-
-}
-
-resizeCanvas(curve_canvas,200,200)
-
-
-
-
-
 DrawCurve(curve_canvas,null,currentDrawHalf);
 
 // ################## Slider ##################
 
-document.getElementById("myRange-3").oninput = function() {
-  console.log('233')
-
-};
-
-//Slider part,need reconstruct
 var slider1 = document.getElementById("myRange-1");
 var slider2 = document.getElementById("myRange-2");
 var slider3 = document.getElementById("myRange-3");
@@ -78,112 +70,18 @@ var input4 = document.getElementById("slider-input-4");
 var sliderArray = [slider1,slider2,slider3,slider4];
 var inputArray = [input1,input2,input3,input4];
 
+setupSliderAndInputController(curve_canvas,sliderArray,inputArray,currentCalculator,currentCalcType,currentInterpolatorType,currentConverter,currentConverterType)
 
-function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,interpolatorType,converter,converterType){
-  for(var i=0;i<slArray.length;i++){
+// ################## Apply Button ##################
 
-    iptArray[i].oninput = function(e) {
-      currentCalcType = getCurrentCalculatorType()
-      currentInterpolatorType = getCurrentInterpolatorType();
-      currentConverterType = getCurrentConverterType();
+document.getElementById("myRange-3").oninput = function() {
+  console.log('233')
+};
 
-      var factor1 = Number(iptArray[0].value);
-      var factor2 = Number(iptArray[1].value);
-      var factor3 = Number(iptArray[2].value);
-      var factor4 = Number(iptArray[3].value);
-
-
-      this.nextElementSibling.value = this.value
-      var mProgress = (this.value - this.nextElementSibling.min)/(this.nextElementSibling.max - this.nextElementSibling.min)*100;
-      this.nextElementSibling.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mProgress +'%, #363636 ' + mProgress + '%, #363636 100%)'
-      this.nextElementSibling.nextElementSibling.style.left = 149 + (266-149)*mProgress/100 + 'px';
-
-  
-  
-      switch(currentCalcType){
-        case "SpringAnimationCalculator":
-            if(currentConverterType !=null){
-              console.log(currentConverterType)
-              var className = currentConverterType.constructor.name
-              eval("currentConverter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
-              console.log(currentConverter);
-              currentCalculator = new SpringAnimationCalculator(currentConverter.stiffness,currentConverter.dampingRatio,(currentConverter.velocity == null)?0:currentConverter.velocity);
-
-            }
-            else{
-              currentCalculator = new SpringAnimationCalculator(factor1,factor2,factor3);
-            }
-            DrawCurve(canvas,currentCalculator,true);
-            break;
-        case "InterpolatorCalculator":
-            currentCalculator = new InterpolatorCalculator(currentInterpolatorType,factor1);
-            DrawCurve(canvas,currentCalculator,false)
-            break;
-        case "FlingAnimationCalculator":
-            currentCalculator = new FlingAnimationCalculator(factor1,factor2);
-            DrawCurve(canvas,currentCalculator,true)
-            break;
-        default:
-      }
-      
-      //### TODO ,still bugs
-      listSelectEstimatedPara(currentCalculator,time_para);
-    }
-
-    slArray[i].oninput = function(e) {
-      currentCalcType = getCurrentCalculatorType()
-      currentInterpolatorType = getCurrentInterpolatorType();
-      currentConverterType = getCurrentConverterType();
-
-      var factor1 = Number(slArray[0].value);
-      var factor2 = Number(slArray[1].value);
-      var factor3 = Number(slArray[2].value);
-      var factor4 = Number(slArray[3].value);
-
-
-      var mProgress = (this.value - this.min)/(this.max - this.min)*100;
-      this.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mProgress +'%, #363636 ' + mProgress + '%, #363636 100%)'
-      this.nextElementSibling.style.left = 149 + (266-149)*mProgress/100 + 'px';
-      this.previousElementSibling.value = this.value
-  
-  
-      switch(currentCalcType){
-        case "SpringAnimationCalculator":
-            if(currentConverterType !=null){
-              console.log(currentConverterType)
-              var className = currentConverterType.constructor.name
-              eval("currentConverter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
-              console.log(currentConverter);
-              currentCalculator = new SpringAnimationCalculator(currentConverter.stiffness,currentConverter.dampingRatio,(currentConverter.velocity == null)?0:currentConverter.velocity);
-
-            }
-            else{
-              currentCalculator = new SpringAnimationCalculator(factor1,factor2,factor3);
-            }
-            DrawCurve(canvas,currentCalculator,true);
-            break;
-        case "InterpolatorCalculator":
-            currentCalculator = new InterpolatorCalculator(currentInterpolatorType,factor1);
-            DrawCurve(canvas,currentCalculator,false)
-            break;
-        case "FlingAnimationCalculator":
-            currentCalculator = new FlingAnimationCalculator(factor1,factor2);
-            DrawCurve(canvas,currentCalculator,true)
-            break;
-        default:
-      }
-      
-      //### TODO ,still bugs
-      listSelectEstimatedPara(currentCalculator,time_para);
-    }
-  }
-}
-
-setupSliderAndInputController(curve_canvas,sliderArray,inputArray)
 
 // ################## Graph Scale Test ##################
 
-// var isExpanded =false;
+var isExpanded =false;
 // var mSpringSystem = new rebound.SpringSystem();
 // var mSpringGraphWidth = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
 // var mSpringGraphTranslateX = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);

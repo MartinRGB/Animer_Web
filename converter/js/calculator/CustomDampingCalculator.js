@@ -19,7 +19,7 @@ class CustomDampingCalculator {
     
         //Internal parameters
         this.pulsation = 0;
-        this.friction = 0;
+        // this.friction = 0;
 
         this.CustomDampingInterpolator(this.tension,this.friction)
         this.array = this.interpolatorCalculator();

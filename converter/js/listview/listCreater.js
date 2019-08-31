@@ -512,12 +512,29 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
           DrawCurve(canvas,caculator,false)
           break;
       case "CubicBezierCalculator":
+          
           var p1 = animationData[0];
           var p2 = animationData[1];
           var p3 = animationData[2];
           var p4 = animationData[3];
-          caculator = new CubicBezierCalculator(p1,p2,p3,p4);
-          bezierController.setBezierWithCalculator(caculator);
+          var bezierString = p1 + "," + p2 +"," + p3 + "," + p4;
+          // console.log(bezierContainer.children[0])
+          // var c1 = bezierContainer.children[0];
+          // var c2 = bezierContainer.children[1];
+          // c2.style.left = canvas.offsetWidth * canvas.paddingScale + (canvas.offsetWidth*(1 - 2*canvas.paddingScale))*p3  + 'px'
+          // c2.style.top = canvas.offsetHeight * canvas.paddingScale + (canvas.offsetHeight*(1 - 2*canvas.paddingScale))*(1-p4) + 'px'
+          // c1.style.left = canvas.offsetWidth * canvas.paddingScale + (canvas.offsetWidth*(1 - 2*canvas.paddingScale))*p1  + 'px'
+          // c1.style.top = canvas.offsetHeight * canvas.paddingScale + (canvas.offsetHeight*(1 - 2*canvas.paddingScale))*(1-p2) + 'px'
+          if(animatorTitle.innerHTML == "Cubic Bezier"){
+            caculator = new CubicBezierCalculator(p1,p2,p3,p4);
+            bezierController.setBezier(p1,p2,p3,p4);
+          }
+          else{
+            caculator = new CubicBezierCalculator(p1,p2,p3,p4);
+            bezierController.setBezierWithCalculator(caculator);
+          }
+
+
           break;
       default:
           switch(Math.round(animationData.length/4)){
