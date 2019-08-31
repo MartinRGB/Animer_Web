@@ -374,6 +374,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
         animatorTitle.addEventListener('click',function(e){
 
+    
           for (var b = 0; b < animatorTitleArray.length; b++) {
           
             if(b == e.target.animIndex){
@@ -506,7 +507,6 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
           }
 
           break;
-
       case "InterpolatorCalculator":
           caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2);
           DrawCurve(canvas,caculator,false)

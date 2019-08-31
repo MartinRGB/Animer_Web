@@ -43,22 +43,6 @@ var time_para = document.getElementById("time-para");
 
 // ###### Slider Part ######
 var slider_container = document.getElementById("slider-control-container")
-
-// ###### Apply Button ######
-var apply_button = document.getElementById("apply")
-
-function setCurve(){
-  console.log('2333')
-}
-
-// ###### Left Listview ######
-var mAnimatorListView = document.getElementById("animator-list-view")
-createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierController,bezier_container,bezier_input,slider_container,apply_button,time_para)
-
-DrawCurve(curve_canvas,null,currentDrawHalf);
-
-// ################## Slider ##################
-
 var slider1 = document.getElementById("myRange-1");
 var slider2 = document.getElementById("myRange-2");
 var slider3 = document.getElementById("myRange-3");
@@ -71,9 +55,21 @@ var sliderArray = [slider1,slider2,slider3,slider4];
 var inputArray = [input1,input2,input3,input4];
 
 setupSliderAndInputController(curve_canvas,sliderArray,inputArray,currentCalculator,currentCalcType,currentInterpolatorType,currentConverter,currentConverterType)
+// ###### Apply Button ######
+var apply_button = document.getElementById("apply")
+
+
+// ###### Left Listview ######
+var mAnimatorListView = document.getElementById("animator-list-view")
+createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierController,bezier_container,bezier_input,slider_container,apply_button,time_para)
+
+DrawCurve(curve_canvas,null,currentDrawHalf);
 
 // ################## Apply Button ##################
 
+function setCurve(){
+  console.log('2333')
+}
 
 
 // ################## Graph Scale Test ##################
