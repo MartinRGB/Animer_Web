@@ -74,14 +74,11 @@ setupSliderAndInputController(curve_canvas,sliderArray,inputArray,currentCalcula
 
 // ################## Apply Button ##################
 
-document.getElementById("myRange-3").oninput = function() {
-  console.log('233')
-};
 
 
 // ################## Graph Scale Test ##################
 
-var isExpanded =false;
+// var isExpanded =false;
 // var mSpringSystem = new rebound.SpringSystem();
 // var mSpringGraphWidth = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
 // var mSpringGraphTranslateX = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
