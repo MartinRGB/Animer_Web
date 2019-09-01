@@ -76,7 +76,6 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
       var factor3 = Number(slArray[2].value);
       var factor4 = Number(slArray[3].value);
 
-      console.log(factor1)
       var mProgress = (this.value - this.min)/(this.max - this.min)*100;
       this.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mProgress +'%, #363636 ' + mProgress + '%, #363636 100%)'
       this.nextElementSibling.style.left = 149 + (266-149)*mProgress/100 + 'px';
@@ -93,7 +92,6 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             }
             else{
               calc = new SpringAnimationCalculator(factor1,factor2,factor3);
-              console.log(calc)
             }
             DrawCurve(canvas,calc,true);
             break;

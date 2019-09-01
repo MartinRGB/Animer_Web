@@ -52,6 +52,11 @@ li{
   src: url("./font/Montserrat-Regular.otf") format("opentype");
 }
 
+@font-face {
+  font-family: Monaco;
+  src: url("./font/Monaco.ttf") format("truetype");
+}
+
 #pannel-container{
   /* width: 500px;
   height: 550px;
@@ -257,13 +262,15 @@ li{
   margin-top: 0px;
   width: 302px;
   position: relative;
-  left: -51px;
-  display: none;
+  left: -1px;
+  margin: 0 auto;
+  margin-top: -41px;
+  height: 14px;
 }
 
 
 .bottom-content{
-  margin-top: 0px;
+  margin-top: 27px;
 }
 
 #slider-control-container{
@@ -366,7 +373,7 @@ input[type='range']::-webkit-slider-thumb {
   border: none;
   border-radius: 4px;
   margin: 0 auto;
-  margin-top: 167px;
+  margin-top: 194px;
   outline: none;
   cursor: pointer;
   display: block;
@@ -374,4 +381,12 @@ input[type='range']::-webkit-slider-thumb {
   padding-top: 10px;
   font-size: 12px;
   padding-bottom: 12px;
+}
+
+#console{
+  background: aliceblue;
+  width: 100%;
+  height: calc(100% - 550px);
+  position: absolute;
+  display: inline-block;
 }

@@ -411,7 +411,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
   }
   // ######### Right Para #########
   function checkSliderContainer(calculatorType){
-    apply_button.style.marginTop = (calculatorType == "CubicBezierCalculator")?'167px':'27px';
+    apply_button.style.marginTop = (calculatorType == "CubicBezierCalculator")?'194px':'27px';
     sliderContainer.style.display = (calculatorType == "CubicBezierCalculator")?'none':'block';
   }
 
