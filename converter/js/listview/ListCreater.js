@@ -334,7 +334,8 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
     
     var platformTitle = document.createElement('a');
     platformTitle.className = 'animator-platform-title';
-    platformTitle.href = "#"        
+    // platformTitle.href = "#"        
+    platformTitle.style.cursor = 'pointer'
     platformTitle.innerHTML = mAnimatorDataSet.platform[i].type;
 
 
@@ -369,7 +370,8 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
     
         var animatorTitle = document.createElement('a');
         animatorTitle.className = 'animator-title';
-        animatorTitle.href = "#"
+        // animatorTitle.href = "#"
+        animatorTitle.style.cursor = 'pointer'
         animatorTitle.innerHTML = mAnimatorDataSet.platform[i].subclass[a].type;
         animatorTitle.animIndex = animationIndex;
         animationIndex++;
