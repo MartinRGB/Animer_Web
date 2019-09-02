@@ -39,7 +39,7 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
       timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
     }
     else{
-      // timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms'
+      timeParaE.innerHTML = 'Calculating...'
 
 
       // #### Web Worker Multiple Thread Calc ###

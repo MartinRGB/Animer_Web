@@ -3,6 +3,7 @@ const mAnimatorDataSet = {
       {
       "id": 0,
       "type": "Android",
+      "icon": "url(./image/icon/android_icon.png)",
       "subclass":[
           {
           "id": 0,
@@ -147,6 +148,7 @@ const mAnimatorDataSet = {
       {
       "id": 1,
       "type": "iOS",
+      "icon": "url(./image/icon/apple_icon.png)",
       "subclass":[
           {
           "id": 0,
@@ -208,6 +210,7 @@ const mAnimatorDataSet = {
       {
       "id": 2,
       "type": "Web",
+      "icon": "url(./image/icon/web_icon.png)",
       "subclass":[
           {
           "id": 0,
@@ -249,6 +252,7 @@ const mAnimatorDataSet = {
       {
       "id": 3,
       "type": "Cubic Beizer",
+      "icon": "url(./image/icon/bezier_icon.png)",
       "subclass":[
           {
           "id": 0,
@@ -262,6 +266,7 @@ const mAnimatorDataSet = {
       {
       "id": 4,
       "type": "Design Tools",
+      "icon": "url(./image/icon/tools_icon.png)",
       "subclass":[
           {
           "id": 0,
@@ -269,7 +274,8 @@ const mAnimatorDataSet = {
           "type": "Origami POP Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "OrigamiSpringConverter",
-          "animation_data":["Bounciness:", 5, 0, 100,"Speed:",10,0,100]
+          "animation_data":["Bounciness:", 5, 0, 100,"Speed:",10,0,100],
+          "icon": "url(./image/icon/origami_icon.png)"
           },
           {
           "id": 1,
@@ -277,7 +283,8 @@ const mAnimatorDataSet = {
           "type": "Framer RK4 Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerRK4Converter",
-          "animation_data":["Tension:", 200, 0, 1000,"Friction:",25,0,100]
+          "animation_data":["Tension:", 200, 0, 1000,"Friction:",25,0,100],
+          "icon": "url(./image/icon/framer_icon.png)"
           },
           {
           "id": 2,
@@ -285,7 +292,8 @@ const mAnimatorDataSet = {
           "type": "Framer DHO Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerDHOConverter",
-          "animation_data":["Stiffness:", 50, 0, 1000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
+          "animation_data":["Stiffness:", 50, 0, 1000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000],
+          "icon": "url(./image/icon/framer_icon.png)"
           },
           {
           "id": 3,
@@ -293,7 +301,8 @@ const mAnimatorDataSet = {
           "type": "Protopie Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerRK4Converter",
-          "animation_data":["Tension:", 300, 0, 1000,"Friction:",15,0,100]
+          "animation_data":["Tension:", 300, 0, 1000,"Friction:",15,0,100],
+          "icon": "url(./image/icon/protopie_icon.png)"
           }
       ]
       }
@@ -318,8 +327,11 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
     var platformArrow = document.createElement('div');
     platformArrow.className = 'animator-platform-arrow';
-    
 
+    var platformIcon = document.createElement('div');
+    platformIcon.className = 'animator-platform-icon';
+    platformIcon.style.backgroundImage = mAnimatorDataSet.platform[i].icon;
+    
     var platformTitle = document.createElement('a');
     platformTitle.className = 'animator-platform-title';
     platformTitle.href = "#"        
@@ -330,11 +342,11 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
       //e.target.parentElement;
       if(e.target.nextSibling.style.display == 'none'){
         e.target.nextSibling.style.display = 'block';
-        e.target.previousElementSibling.style.transform = 'translate3d(0px, 2px, 0px) rotate(90deg)'
+        e.target.previousElementSibling.previousElementSibling.style.transform = 'translate3d(0px, 2px, 0px) rotate(90deg)'
       }
       else{
         e.target.nextSibling.style.display = 'none';
-        e.target.previousElementSibling.style.transform = 'translate3d(0px, 2px, 0px) rotate(0deg)'
+        e.target.previousElementSibling.previousElementSibling.style.transform = 'translate3d(0px, 2px, 0px) rotate(0deg)'
       }
     })
 
@@ -361,6 +373,12 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
         animatorTitle.innerHTML = mAnimatorDataSet.platform[i].subclass[a].type;
         animatorTitle.animIndex = animationIndex;
         animationIndex++;
+
+        var animatorIcon = document.createElement('div');
+        if(mAnimatorDataSet.platform[i].subclass[a].icon !=null){
+          animatorIcon.className = 'animator-icon';
+          animatorIcon.style.backgroundImage = mAnimatorDataSet.platform[i].subclass[a].icon;
+        }
 
         var currCalculator = mAnimatorDataSet.platform[i].subclass[a].calculator;
         var currAnimationData = mAnimatorDataSet.platform[i].subclass[a].animation_data;
@@ -394,12 +412,14 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
         })
     
+        animator.appendChild(animatorIcon);
         animator.appendChild(animatorTitle)
         subUlElement.appendChild(animator)
       }
     }
 
     platform.appendChild(platformArrow)
+    platform.appendChild(platformIcon)
     platform.appendChild(platformTitle)
 
     if(mAnimatorDataSet.platform[i].subclass.length != 0){
