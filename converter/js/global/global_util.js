@@ -41,15 +41,14 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
     else{
       timeParaE.innerHTML = 'Calculating...'
 
-
       // #### Web Worker Multiple Thread Calc ###
       const myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
 
-      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping]);
+      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
       //console.log('Message posted to worker');
     
       myCalculationWorker.onmessage = function(e) {
-        timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Factor - ' + e.data +'f'
+        timeParaE.innerHTML = e.data;       
         //console.log('Message received from worker');
       }
      

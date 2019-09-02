@@ -142,5 +142,11 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
       //### TODO ,still bugs
       listSelectEstimatedPara(calc,time_para);
     }
+
+    slArray[i].onchange = function() {
+  
+      //### TODO ,still bugs
+      listSelectEstimatedPara(calc,time_para);
+    }
   }
 }
