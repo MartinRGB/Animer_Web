@@ -1,6 +1,7 @@
 body{
   margin:0px;
   font-family: Montserrat-Light;
+  overflow-x: hidden;
 }
 
 p{
@@ -50,6 +51,11 @@ li{
 @font-face {
   font-family: Montserrat-Regular;
   src: url("./font/Montserrat-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Monaco;
+  src: url("./font/Monaco.ttf") format("truetype");
 }
 
 #pannel-container{
@@ -117,7 +123,7 @@ li{
 .animator-platform-title {
   text-decoration: none;
   color: white;
-  text-indent: 28px;
+  text-indent: 54px;
   padding-top: 8px;
   padding-bottom: 8px;
   display: block;
@@ -126,8 +132,17 @@ li{
   font-family: Montserrat-Regular;
 }
 
+.animator-platform-icon{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 29px;
+  top: 5px;
+  background-size: contain;
+}
+
 .animator-type{
-  padding-left: 28px;
+  padding-left: 34px;
 }
 
 .animator{
@@ -149,12 +164,22 @@ li{
   left: -28px;
 }
 
+.animator-icon{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: -4px;
+  top: 5px;
+  background-size: contain;
+}
+
 .animator-title{
   text-decoration: none;
   color: white;
   position: relative;
   top: 8px;
-  left:-1px;
+  left:22px;
+  letter-spacing: 0px;
 }
 
 #right-pannel{
@@ -257,13 +282,15 @@ li{
   margin-top: 0px;
   width: 302px;
   position: relative;
-  left: -51px;
-  display: none;
+  left: -1px;
+  margin: 0 auto;
+  margin-top: -41px;
+  height: 14px;
 }
 
 
 .bottom-content{
-  margin-top: 0px;
+  margin-top: 27px;
 }
 
 #slider-control-container{
@@ -366,7 +393,7 @@ input[type='range']::-webkit-slider-thumb {
   border: none;
   border-radius: 4px;
   margin: 0 auto;
-  margin-top: 167px;
+  margin-top: 194px;
   outline: none;
   cursor: pointer;
   display: block;
@@ -374,4 +401,12 @@ input[type='range']::-webkit-slider-thumb {
   padding-top: 10px;
   font-size: 12px;
   padding-bottom: 12px;
+}
+
+#console{
+  background: aliceblue;
+  width: 100%;
+  height: calc(100% - 550px);
+  position: absolute;
+  display: inline-block;
 }
