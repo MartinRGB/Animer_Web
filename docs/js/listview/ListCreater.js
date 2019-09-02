@@ -525,7 +525,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
             caculator = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
             setCurrentConverterType(converter);
-            resizeCanvas(canvas,340,200,graphContainer,bezierContainer,timePara);
+            resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
             DrawCurve(canvas,caculator,true);
           }
 

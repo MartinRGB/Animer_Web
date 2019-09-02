@@ -84,5 +84,5 @@ onmessage = function(e) {
 
     workerResult =  'Estimated time - ' + (duration*1000).toFixed(0) + 'ms    |    Factor - ' + factor +'f';
     //console.log('Worker: Posting message back to main script');
-    postMessage(workerResult);
+    postMessage([workerResult,factor]);
 }

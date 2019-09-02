@@ -48,7 +48,8 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
       
       myCalculationWorker.onmessage = function(e) {
         //console.log('Message received from worker');
-        timeParaE.innerHTML = e.data;   
+        timeParaE.innerHTML = e.data[0];
+        SpringInterpolatorAnimation(Round(e.data[1],1),Round(calculatorData.duration*1000,1));   
         myCalculationWorker.terminate();   
       }
 
@@ -60,6 +61,19 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
     timeParaE.style.zIndex = -1000;
   }
 }
+
+if(calculator !=null){
+  
+}
+
+
+function SpringInterpolatorAnimation(factor,duration){
+  document.getElementById('spring-interpolator-factor').innerHTML = factor
+  document.getElementById('spring-interpolator-duration').innerHTML = duration;
+
+}
+
+
 
 // ## Resize Canvas Util ##
 function resizeCanvas(canvas,width,height,graphContianer,bezierContainer,timePara){
@@ -90,3 +104,12 @@ function windowResizeCanvas(canvas,graphContianer){
   }
 
 }
+
+function Round(value, accuracy) {
+  return Math.round(value * Math.pow(10, accuracy)) / Math.pow(10, accuracy);
+}
+
+
+//   CustomSpringInterpolator customSpringInterpolator = new CustomSpringInterpolator(factor1);
+//   [ObjectAnimator].setInterpolator(customSpringInterpolator);
+//   [ObjectAnimator].setDuration(customSpringInterpolator);

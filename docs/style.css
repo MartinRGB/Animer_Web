@@ -423,3 +423,95 @@ input[type='range']::-webkit-slider-thumb {
   position: absolute;
   display: inline-block;
 }
+
+.console-title{
+  margin-bottom: 20px;
+}
+
+#console-android-icon{
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  display: inline-block;
+  background-image:url(./image/console/android.png)
+}
+
+#console-ios-icon{
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  display: inline-block;
+  background-image:url(./image/console/ios.png)
+}
+
+#console-web-icon{
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  display: inline-block;
+  background-image:url(./image/console/web.png)
+}
+
+.console-platform{
+  display: inline-block;
+  margin: 0px;
+  height: 24px;
+  line-height: 24px;
+  top: -6px;
+  position: relative;
+  font-family: Montserrat-Regular;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  color:#32325d;
+}
+
+
+.code-block{
+  display: block;
+  width: 768px;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  margin-bottom: 30px;
+  border: 0.5px solid #1e233721;
+  border-radius: 6px;
+}
+
+.code-text{
+  display: inline-block;
+  transform: scale(1);
+  font-size: 13px;
+  font-family: Montserrat-Light;
+  line-height: 21px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.code-comment-color{
+  color: #d81b60;
+}
+
+.code-type-color{
+  color:#9c27b0;
+}
+
+.code-normal-color{
+  color:#37474f;
+}
+.code-keyword-color{
+  color:#986801;
+}
+
+.code-link-color{
+  color:#3b78e7;
+}
+
+.code-link-color a{
+  color: #3b78e7;
+}
+
+.code-para-color{
+  color:#50a14f;
+  font-family: Montserrat-Regular;
+}
