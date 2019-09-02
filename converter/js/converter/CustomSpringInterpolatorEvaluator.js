@@ -1,13 +1,14 @@
-class AndroidSpringInterpolatorEvaluator {
+class CustomSpringInterpolatorEvaluator {
     constructor(stiffness, damping) {
         this.options = {
             velocity: 0,
             epsilon: 1 / 1000,
             stiffness: stiffness,
             damping: damping,
-            mass: 1,
+            mass: 1
         }
         this.value = this.findCloseNum(this.computeMaxValue());
+        this.factor = this.value;
     }
 
     computeMaxValue() {
@@ -37,7 +38,9 @@ class AndroidSpringInterpolatorEvaluator {
 
     computeSpringMax(factor) {
         let maxValue = 0;
-        for (let i = 0; i < 1000; i++) {
+        let epsilon = this.options.epsilon;
+        let count = 1 / epsilon;
+        for (let i = 0; i < count; i++) {
             let x = i * this.options.epsilon;
             let result = Math.pow(2, -10 * x) * Math.sin((x - factor / 4) * (2 * Math.PI) / factor) + 1;
 
@@ -49,8 +52,8 @@ class AndroidSpringInterpolatorEvaluator {
     }
 
     findCloseNum(num) {
-        let arr = new Array(1000);
-        for (let i = 0; i < 1000; i++) {
+        let arr = new Array(1/this.options.epsilon);
+        for (let i = 0; i < 1/this.options.epsilon; i++) {
             arr[i] = this.computeSpringMax(i * this.options.epsilon)
         }
         var index = 0;
@@ -65,6 +68,6 @@ class AndroidSpringInterpolatorEvaluator {
                 d_value = new_d_value;
             }
         }
-        return index / 1000;
+        return index / (1/this.options.epsilon);
     }
 }

@@ -6,6 +6,13 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
       interpolatorType = getCurrentInterpolatorType();
       converterType = getCurrentConverterType();
 
+      // if(Number(this.value) <= Number(this.nextElementSibling.max) && Number(this.value) >= Number(this.nextElementSibling.min)){
+      //   this.value = Math.min(Math.max((this.value), this.nextElementSibling.min), this.nextElementSibling.max);
+      // }
+      // else{
+      //   this.value = 0;
+      // }
+
       var factor1 = Number(iptArray[0].value);
       var factor2 = Number(iptArray[1].value);
       var factor3 = Number(iptArray[2].value);
@@ -21,13 +28,13 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
       switch(calcType){
         case "SpringAnimationCalculator":
             if(converterType !=null){
-              console.log(converterType)
+              //console.log(converterType)
               var className = converterType.constructor.name
               eval("converter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
               console.log(converter);
               calc = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
 
-              console.log(calc)
+              //console.log(calc)
             }
             else{
               calc = new SpringAnimationCalculator(factor1,factor2,factor3);
@@ -59,7 +66,7 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             DrawCurve(canvas,calc,true)
             break;
         default:
-          console.log(calc)
+          //console.log(calc)
       }
       
       //### TODO ,still bugs
@@ -76,10 +83,12 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
       var factor3 = Number(slArray[2].value);
       var factor4 = Number(slArray[3].value);
 
+
+      this.previousElementSibling.value = this.value
       var mProgress = (this.value - this.min)/(this.max - this.min)*100;
       this.style.background = 'linear-gradient(to right, #029CFF 0%, #029CFF '+ mProgress +'%, #363636 ' + mProgress + '%, #363636 100%)'
       this.nextElementSibling.style.left = 149 + (266-149)*mProgress/100 + 'px';
-      this.previousElementSibling.value = this.value
+
   
   
       switch(calcType){
@@ -87,6 +96,7 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             if(converterType !=null){
               var className = converterType.constructor.name
               eval("converter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
+
               calc = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
 
             }
@@ -101,7 +111,7 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             break;
         case "FlingAnimationCalculator":
             calc = new FlingAnimationCalculator(factor1,factor2);
-            console.log(calc);
+            //console.log(calc);
             DrawCurve(canvas,calc,true);
             break;
         case "CustomMocosSpringCalculator":

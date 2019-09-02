@@ -9,7 +9,7 @@ const mAnimatorDataSet = {
           "tag":0,
           "type": "Spring",
           "calculator":"SpringAnimationCalculator",
-          "animation_data":["Stiffness:",1500,0,3000,"Damping:",0.5,0.01,1,"Velocity",0,0,500]
+          "animation_data":["Stiffness:",1500,0,5000,"Damping:",0.5,0,1,"Velocity",0,0,500]
           },
           {
           "id": 1,
@@ -302,7 +302,7 @@ const mAnimatorDataSet = {
 
 
 
-function createAnimatorListView(canvas,listView,caculator,bezierController,bezierContainer,bezierInput,sliderContainer,applyBtn,timePara){
+function createAnimatorListView(canvas,listView,caculator,bezierController,bezierContainer,bezierInput,sliderContainer,applyBtn,timePara,graphContainer){
 
   var animatorTitleArray = [];
   var calculatorArray = [];
@@ -446,12 +446,13 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
       for(var i = 0;i<Math.round(animationData.length/4);i++){
         //console.log(animationData[4*i+1])
         
-        sliderContainer.children[i].children[0].innerHTML = (calculatorType == "CubicBezierCalculator")?"Value":animationData[4*i];
-        sliderContainer.children[i].children[1].value = (calculatorType == "CubicBezierCalculator")?0:animationData[4*i+1];
-        sliderContainer.children[i].children[2].value = (calculatorType == "CubicBezierCalculator")?0:animationData[4*i+1];
-
+        // Bug source,must set min-max first
         sliderContainer.children[i].children[2].min = (calculatorType == "CubicBezierCalculator")?0:animationData[4*i+2];
         sliderContainer.children[i].children[2].max = (calculatorType == "CubicBezierCalculator")?1:animationData[4*i+3];
+
+        sliderContainer.children[i].children[0].innerHTML = (calculatorType == "CubicBezierCalculator")?"Value":animationData[4*i];
+        sliderContainer.children[i].children[1].value = (calculatorType == "CubicBezierCalculator")?0:Number(animationData[4*i+1]);
+        sliderContainer.children[i].children[2].value = (calculatorType == "CubicBezierCalculator")?0:Number(animationData[4*i+1]);
 
         var mProgress = (animationData[4*i+1] - animationData[4*i+2])/(animationData[4*i+3] - animationData[4*i+2])*100;
 
@@ -478,6 +479,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
           if(converterType == null){
             caculator = new SpringAnimationCalculator(animationData[1],animationData[5],animationData[9]);
+            resizeCanvas(canvas,340,200,graphContainer,bezierContainer,timePara);
             DrawCurve(canvas,caculator,true);
             setCurrentConverterType(null);
           }
@@ -503,12 +505,14 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
             caculator = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
             setCurrentConverterType(converter);
+            resizeCanvas(canvas,340,200,graphContainer,bezierContainer,timePara);
             DrawCurve(canvas,caculator,true);
           }
 
           break;
       case "InterpolatorCalculator":
           caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2);
+          resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
           DrawCurve(canvas,caculator,false)
           break;
       case "CubicBezierCalculator":
@@ -525,6 +529,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
           // c2.style.top = canvas.offsetHeight * canvas.paddingScale + (canvas.offsetHeight*(1 - 2*canvas.paddingScale))*(1-p4) + 'px'
           // c1.style.left = canvas.offsetWidth * canvas.paddingScale + (canvas.offsetWidth*(1 - 2*canvas.paddingScale))*p1  + 'px'
           // c1.style.top = canvas.offsetHeight * canvas.paddingScale + (canvas.offsetHeight*(1 - 2*canvas.paddingScale))*(1-p2) + 'px'
+          resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
           if(animatorTitle.innerHTML == "Cubic Bezier"){
             caculator = new CubicBezierCalculator(p1,p2,p3,p4);
             bezierController.setBezier(p1,p2,p3,p4);
@@ -537,6 +542,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
           break;
       default:
+          //Fling + Default Spring
           switch(Math.round(animationData.length/4)){
             case 1:
               eval("caculator = new " + calculatorType + "(" + animationData[1] + ")");
@@ -552,7 +558,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
               break;
             default:
           }
-
+          resizeCanvas(canvas,340,200,graphContainer,bezierContainer,timePara);
           DrawCurve(canvas,caculator,true);
           // console.log(caculator)
     }

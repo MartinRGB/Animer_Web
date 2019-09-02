@@ -39,7 +39,20 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
       timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
     }
     else{
-      timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms'
+      // timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms'
+
+
+      // #### Web Worker Multiple Thread Calc ###
+      const myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
+
+      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping]);
+      //console.log('Message posted to worker');
+    
+      myCalculationWorker.onmessage = function(e) {
+        timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Factor - ' + e.data +'f'
+        //console.log('Message received from worker');
+      }
+     
     }
 
   }
@@ -60,6 +73,9 @@ function resizeCanvas(canvas,width,height,graphContianer,bezierContainer,timePar
   canvas.height = height*2;
   graphContianer.style.width = width + 'px';
   bezierContainer.style.transform = 'translate3d(-8px,-'+(height+12)+'px,0px)'; 
+
+
+  windowResizeCanvas(canvas,graphContianer)
 }
 
 function windowResizeCanvas(canvas,graphContianer){
