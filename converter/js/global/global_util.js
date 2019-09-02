@@ -54,10 +54,12 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
       }
      
     }
+    timeParaE.style.zIndex = 0;
 
   }
   else{
     timeParaE.innerHTML = ''
+    timeParaE.style.zIndex = -1000;
   }
 }
 

@@ -272,6 +272,7 @@ li{
   letter-spacing: 0.5px;
   transform: scale(0.916);
   display: none;
+  z-index: 1000;
 }
 
 #time-para{

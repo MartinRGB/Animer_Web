@@ -1,17 +1,23 @@
 function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,interpolatorType,converter,converterType){
   for(var i=0;i<slArray.length;i++){
 
-    iptArray[i].oninput = function() {
+    iptArray[i].onchange = function() {
       calcType = getCurrentCalculatorType()
       interpolatorType = getCurrentInterpolatorType();
       converterType = getCurrentConverterType();
 
-      // if(Number(this.value) <= Number(this.nextElementSibling.max) && Number(this.value) >= Number(this.nextElementSibling.min)){
-      //   this.value = Math.min(Math.max((this.value), this.nextElementSibling.min), this.nextElementSibling.max);
-      // }
-      // else{
-      //   this.value = 0;
-      // }
+      if(Number(this.value) <= Number(this.nextElementSibling.max) && Number(this.value) >= Number(this.nextElementSibling.min)){
+        this.value = Number(this.value);
+      }
+      else if (Number(this.value) < Number(this.nextElementSibling.min)){
+        this.value = Number(this.nextElementSibling.min);
+      }
+      else if (Number(this.value) > Number(this.nextElementSibling.max)){
+        this.value = Number(this.nextElementSibling.max);
+      }
+      else{
+        this.value = Number(0);
+      }
 
       var factor1 = Number(iptArray[0].value);
       var factor2 = Number(iptArray[1].value);
