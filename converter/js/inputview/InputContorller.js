@@ -1,4 +1,4 @@
-function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,interpolatorType,converter,converterType){
+function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,interpolatorType,converter,converterType,consoleContainer){
   for(var i=0;i<slArray.length;i++){
 
     iptArray[i].onchange = function() {
@@ -144,9 +144,9 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
     }
 
     slArray[i].onchange = function() {
-  
-      //### TODO ,still bugs
+      //calc = getCurrentCalculatorType();
       listSelectEstimatedPara(calc,time_para);
     }
+
   }
 }

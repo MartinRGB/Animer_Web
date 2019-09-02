@@ -10,7 +10,7 @@ const mAnimatorDataSet = {
           "tag":0,
           "type": "Spring",
           "calculator":"SpringAnimationCalculator",
-          "animation_data":["Stiffness:",1500,0,5000,"Damping:",0.5,0,1,"Velocity",0,0,500]
+          "animation_data":["Stiffness:",1500,0.01,5000,"Damping:",0.5,0.01,0.99,"Velocity",0,0,500]
           },
           {
           "id": 1,
@@ -311,7 +311,7 @@ const mAnimatorDataSet = {
 
 
 
-function createAnimatorListView(canvas,listView,caculator,bezierController,bezierContainer,bezierInput,sliderContainer,applyBtn,timePara,graphContainer){
+function createAnimatorListView(canvas,listView,caculator,bezierController,bezierContainer,bezierInput,sliderContainer,applyBtn,timePara,graphContainer,consoleContainer){
 
   var animatorTitleArray = [];
   var calculatorArray = [];

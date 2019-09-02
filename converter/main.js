@@ -14,12 +14,15 @@ var curve_canvas = document.getElementById("curve-canvas");
 curve_canvas.paddingScale = 1/10;
 var currentDrawHalf = false;
 
+// ###### Console Pannel ######
+var consolePannel = document.getElementById("console");
+
 // ## Beizer ##
 var bezier_container = document.getElementById("bezier-control-container")
 var bezier_controller_1 = document.getElementById("bezier-control-point-1");
 var bezier_controller_2 = document.getElementById("bezier-control-point-2");
 var bezier_input = document.getElementById("bezier-input");
-var bezierController = new BezierController(curve_canvas,currentCalculator,bezier_input,bezier_controller_1,bezier_controller_2);
+var bezierController = new BezierController(curve_canvas,currentCalculator,bezier_input,bezier_controller_1,bezier_controller_2,consolePannel);
 
 // ## Time Estimated Parameter ##
 
@@ -38,9 +41,11 @@ var input4 = document.getElementById("slider-input-4");
 var sliderArray = [slider1,slider2,slider3,slider4];
 var inputArray = [input1,input2,input3,input4];
 
-setupSliderAndInputController(curve_canvas,sliderArray,inputArray,currentCalculator,currentCalcType,currentInterpolatorType,currentConverter,currentConverterType)
+setupSliderAndInputController(curve_canvas,sliderArray,inputArray,currentCalculator,currentCalcType,currentInterpolatorType,currentConverter,currentConverterType,consolePannel)
+
 // ###### Apply Button ######
 var apply_button = document.getElementById("apply")
+
 
 
 // ###### ###### ######
@@ -56,7 +61,7 @@ window.addEventListener('resize', function(e){
 
 // ###### Left Listview ######
 var mAnimatorListView = document.getElementById("animator-list-view")
-createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierController,bezier_container,bezier_input,slider_container,apply_button,time_para,graph_container)
+createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierController,bezier_container,bezier_input,slider_container,apply_button,time_para,graph_container,consolePannel)
 
 // ################## Apply Button ##################
 
@@ -120,107 +125,98 @@ function setCurve(){
 // }
 
 
-
-
-
-
-
-
-
-
 // ################## Converter ##################
 
-// let bounciness = 3;
-// let speed = 10.;
+let bounciness = 3;
+let speed = 10.;
 
-// let stiffness =  1500
-// let dampingRatio =  0.5
+let stiffness =  1500
+let dampingRatio =  0.5
 
-// let framerStiffness =  50
-// let framerDamping =  10
-// let framerMass =  1
-// let framerVelocity =  0
+let framerStiffness =  50
+let framerDamping =  10
+let framerMass =  1
+let framerVelocity =  0
 
-// let framerTension =  200
-// let framerFriction =  25
+let framerTension =  200
+let framerFriction =  25
 
-// let uiviewspring_dampingratio = 0.5;
-// let uiviewspring_duration = 0.5;
+let uiviewspring_dampingratio = 0.5;
+let uiviewspring_duration = 0.5;
 
-// let flingVelocity = -4000;
-// let flingDampingRatio = 0.8;
+let flingVelocity = -4000;
+let flingDampingRatio = 0.8;
 
 
-// let spring = new OrigamiSpringConverter(bounciness, speed);
-// let factor = new AndroidSpringInterpolatorEvaluator(spring.stiffness, spring.damping);
+let spring = new OrigamiSpringConverter(bounciness, speed);
+let factor = new CustomSpringInterpolatorEvaluator(spring.stiffness, spring.damping);
 
-// let dyanmic = new AndroidSpringAnimationConverter(stiffness,dampingRatio);
-// let factor2 = new AndroidSpringInterpolatorEvaluator(dyanmic.stiffness, dyanmic.damping);
-// let dho = new FramerDHOConverter(framerStiffness,framerDamping,framerMass,framerVelocity);
-// let rk4 = new FramerRK4Converter(framerTension,framerFriction);
-// let uiviewSpring = new UIViewSpringConverter(uiviewspring_dampingratio,uiviewspring_duration);
-// let fling = new FlingAnimationDurationEvaluator(flingVelocity, flingDampingRatio);
+let dyanmic = new AndroidSpringAnimationConverter(stiffness,dampingRatio);
+let dho = new FramerDHOConverter(framerStiffness,framerDamping,framerMass,framerVelocity);
+let rk4 = new FramerRK4Converter(framerTension,framerFriction);
+let uiviewSpring = new UIViewSpringConverter(uiviewspring_dampingratio,uiviewspring_duration);
+let fling = new FlingAnimationDurationEvaluator(flingVelocity, flingDampingRatio);
 
-// let UIViewSpring = {
-//     dampingRatio: spring.dampingRatio,
-//     duration: spring.duration
-// }
+let UIViewSpring = {
+    dampingRatio: spring.dampingRatio,
+    duration: spring.duration
+}
 
-// let CASpring = {
-//     mass: 1,
-//     stiffness: spring.stiffness,
-//     damping: spring.damping,
-//     initialVelocity: 0
-// }
+let CASpring = {
+    mass: 1,
+    stiffness: spring.stiffness,
+    damping: spring.damping,
+    initialVelocity: 0
+}
 
-// let DynamicSpring = {
-//     dampingRatio: spring.dampingRatio,
-//     stiffness: spring.stiffness
-// }
+let DynamicSpring = {
+    dampingRatio: spring.dampingRatio,
+    stiffness: spring.stiffness
+}
 
-// let SpringInterpolator = {
-//     factor: factor.value,
-//     duration: spring.duration
-// }
+let SpringInterpolator = {
+    factor: factor.value,
+    duration: spring.duration
+}
 
-// function OutputPara(isLog){
+function OutputPara(isLog){
     
-//     if(isLog){
-//         // console.log('\n[iOS]UIView.animate:usingSpringWithDamping: \n\tdampingRatio: ' + UIViewSpring.dampingRatio + '\n\tduration: ' + UIViewSpring.duration);
-//         // console.log('\n[iOS]CASpringAnimation: \n\tmass = ' + CASpring.mass + '\n\tstiffness = ' + CASpring.stiffness + '\n\tdamping = ' + CASpring.damping + '\n\tinitialVelocity = ' + CASpring.initialVelocity);
-//         // console.log('\n[Android]SpringAnimation: \n\tdampingRatio = ' + DynamicSpring.dampingRatio + '\n\tstiffness = ' + DynamicSpring.stiffness);
-//         // console.log('\n[Android]SpringInterpolator: \n\tfactor = ' + SpringInterpolator.factor + '\n\tduration = ' + SpringInterpolator.duration);
-//         // console.log('\n[Android]Rebound: \n\tSpringConfig.fromBouncinessAndSpeed('+ bounciness + ',' + speed +');');
+    if(isLog){
+        // console.log('\n[iOS]UIView.animate:usingSpringWithDamping: \n\tdampingRatio: ' + UIViewSpring.dampingRatio + '\n\tduration: ' + UIViewSpring.duration);
+        // console.log('\n[iOS]CASpringAnimation: \n\tmass = ' + CASpring.mass + '\n\tstiffness = ' + CASpring.stiffness + '\n\tdamping = ' + CASpring.damping + '\n\tinitialVelocity = ' + CASpring.initialVelocity);
+        // console.log('\n[Android]SpringAnimation: \n\tdampingRatio = ' + DynamicSpring.dampingRatio + '\n\tstiffness = ' + DynamicSpring.stiffness);
+        // console.log('\n[Android]SpringInterpolator: \n\tfactor = ' + SpringInterpolator.factor + '\n\tduration = ' + SpringInterpolator.duration);
+        // console.log('\n[Android]Rebound: \n\tSpringConfig.fromBouncinessAndSpeed('+ bounciness + ',' + speed +');');
 
-//         // console.log('Spring Duration: ' + spring.duration)
+        // console.log('Spring Duration: ' + spring.duration)
 
-//         // console.log('DyanamicAnimation -----> Bounciness: ' + Math.round(dyanmic.bounciness))
-//         // console.log('DyanamicAnimation ----------> Speed: ' + Math.round(dyanmic.speed))
-//         // console.log('DyanamicAnimation --> BouncyTension: ' + Math.round(dyanmic.bouncyTension))
-//         // console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyFriction))
-//         // console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
-//         // console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
-//         console.log('DyanamicAnimation --------> Duration: ' + (dyanmic.duration))
+        // console.log('DyanamicAnimation -----> Bounciness: ' + Math.round(dyanmic.bounciness))
+        // console.log('DyanamicAnimation ----------> Speed: ' + Math.round(dyanmic.speed))
+        // console.log('DyanamicAnimation --> BouncyTension: ' + Math.round(dyanmic.bouncyTension))
+        // console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyFriction))
+        // console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
+        // console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
+        console.log('DyanamicAnimation --------> Duration: ' + (dyanmic.duration))
 
-//         console.log('DHO Stiffness: ' + dho.stiffness)
-//         console.log('DHO DampingRatio: ' + dho.dampingRatio)
-//         console.log('DHO Duration: ' + dho.duration)
-//         // console.log('DHO Bounciness: ' + dho.bounciness)
-//         // console.log('DHO Speed: ' + dho.speed)
+        console.log('DHO Stiffness: ' + dho.stiffness)
+        console.log('DHO DampingRatio: ' + dho.dampingRatio)
+        console.log('DHO Duration: ' + dho.duration)
+        // console.log('DHO Bounciness: ' + dho.bounciness)
+        // console.log('DHO Speed: ' + dho.speed)
 
-//         // console.log('RK4 Stiffness: ' + rk4.stiffness)
-//         // console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
-//         // console.log('RK4 Duration: ' + rk4.duration)
+        // console.log('RK4 Stiffness: ' + rk4.stiffness)
+        // console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
+        // console.log('RK4 Duration: ' + rk4.duration)
 
-//         // console.log('UIViewSpring Stiffness: ' + uiviewSpring.stiffness);
-//         // console.log('UIViewSpring DampingRatio: ' + uiviewSpring.dampingRatio);
+        // console.log('UIViewSpring Stiffness: ' + uiviewSpring.stiffness);
+        // console.log('UIViewSpring DampingRatio: ' + uiviewSpring.dampingRatio);
 
-//         // console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
-//         // console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
+        // console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
+        // console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
 
-//         // console.log('transitionVal is: ' + fling.transition  + 'totalTime is: ' + fling.duration);
-//     }
+        // console.log('transitionVal is: ' + fling.transition  + 'totalTime is: ' + fling.duration);
+    }
 
-// }
+}
 
-// OutputPara(true);
+OutputPara(true);

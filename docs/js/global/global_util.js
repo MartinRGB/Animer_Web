@@ -28,36 +28,36 @@ function getCurrentConverterType(){
   return mListChoosenConverterType;
 }
 
+
 // ## TimePara Util ##
 
 function listSelectEstimatedPara(calculatorData,timeParaE){
 
-  // console.log(calculatorData)
   if(calculatorData.duration != null){
-    // console.log(calculatorData)
     if(calculatorData.transition != null){
       timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
     }
     else{
-      timeParaE.innerHTML = 'Calculating...'
 
+      //timeParaE.innerHTML = 'Calculating..'
 
-      // #### Web Worker Multiple Thread Calc ###
-      const myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
+      var myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
 
-      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping]);
-      //console.log('Message posted to worker');
-    
+      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
+
+      
       myCalculationWorker.onmessage = function(e) {
-        timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Factor - ' + e.data +'f'
         //console.log('Message received from worker');
+        timeParaE.innerHTML = e.data;   
+        myCalculationWorker.terminate();   
       }
-     
-    }
 
+    }
+    timeParaE.style.zIndex = 0;
   }
   else{
     timeParaE.innerHTML = ''
+    timeParaE.style.zIndex = -1000;
   }
 }
 

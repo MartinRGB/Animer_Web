@@ -2,6 +2,7 @@ body{
   margin:0px;
   font-family: Montserrat-Light;
   overflow-x: hidden;
+  background:#F7F9FC;
 }
 
 p{
@@ -58,26 +59,38 @@ li{
   src: url("./font/Monaco.ttf") format("truetype");
 }
 
+#web_wrapper{
+  width: 800px;
+  margin: 0 auto;
+  margin-top:40px;
+}
+
 #pannel-container{
-  /* width: 500px;
-  height: 550px;
-  max-width: 500px;
-  max-height: 550px; */
   min-width: 500px;
   display: flex;
   height: 550px;
+
+  /* if in AE,delete this */
+  margin-bottom: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 0 18px 36px -18px rgba(0,0,0,.3), 0 -12px 36px -8px rgba(0,0,0,.025);
+
+
 }
 
 #left-pannel{
   width: 180px;
-  background: #0F0C0E;
+  /* background: #0F0C0E; */
+  background: #1E2337;
   border-right: 0.5px solid #8080805c;
 }
 
 #logo-area{
   width: 100%;
   height: 54px;
-  background: #0A0A0A;
+  /* background: #0A0A0A; */
+  background: #181C2F;
   padding-top: 12px;
   border-bottom: 0.5px solid #8080805c;
 }
@@ -184,7 +197,8 @@ li{
 
 #right-pannel{
   width: 180px;
-  background: #0A0A0A;
+  /* background: #0A0A0A; */
+  background: #181C2F;
   flex:1;
 }
 
@@ -272,6 +286,7 @@ li{
   letter-spacing: 0.5px;
   transform: scale(0.916);
   display: none;
+  z-index: 1000;
 }
 
 #time-para{
@@ -403,10 +418,8 @@ input[type='range']::-webkit-slider-thumb {
   padding-bottom: 12px;
 }
 
-#console{
-  background: aliceblue;
-  width: 100%;
-  height: calc(100% - 550px);
+#console-container{
+  width: 800px;
   position: absolute;
   display: inline-block;
 }

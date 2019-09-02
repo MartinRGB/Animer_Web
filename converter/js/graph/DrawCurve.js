@@ -9,7 +9,7 @@ function DrawCurve(canvas,dataSet,halfSize){
     var realHeight = canvas.height - paddingBottom - paddingTop;
 
     // Draw the Background
-    drawBackground(canvas,context,dataSet,paddingLeft,paddingRight)
+    drawBackground(canvas,context,dataSet,paddingLeft,paddingRight,dataSet)
 
     // Draw the Gradient Coordinate
     drawCoordinate(canvas,context,paddingTop,paddingLeft,paddingBottom,paddingRight,halfSize)
@@ -73,7 +73,7 @@ function DrawCurve(canvas,dataSet,halfSize){
             if(dataSet.duration == 0){
 
                 // Draw the Background
-                drawBackground(canvas,context,dataSet,paddingLeft,paddingRight)
+                drawBackground(canvas,context,dataSet,paddingLeft,paddingRight,dataSet)
 
                 // Draw the Gradient Coordinate
                 drawCoordinate(canvas,context,paddingTop,paddingLeft,paddingBottom,paddingRight,halfSize)
@@ -81,6 +81,8 @@ function DrawCurve(canvas,dataSet,halfSize){
             }
         }
     }
+
+    updateCodeSnippet(dataSet);
 }
 
 function drawCoordinate(canvas,context,paddingTop,paddingLeft,paddingBottom,paddingRight,halfSize){
@@ -125,9 +127,10 @@ function drawCoordinate(canvas,context,paddingTop,paddingLeft,paddingBottom,padd
     context.lineTo(canvas.width - paddingRight, canvas.height);
 
     context.stroke();
+
 }
 
-function drawBackground(canvas,context,dataSet,paddingLeft,paddingRight){
+function drawBackground(canvas,context,dataSet,paddingLeft,paddingRight,dataSet){
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#FFFFFF08";
     // Error Background
@@ -136,6 +139,5 @@ function drawBackground(canvas,context,dataSet,paddingLeft,paddingRight){
             context.fillStyle = "#FF000014";
         }
     }
-
     context.fillRect(paddingLeft, canvas.height*canvas.paddingScale, canvas.width - paddingLeft - paddingRight, canvas.height*(1- canvas.paddingScale*2));
 }

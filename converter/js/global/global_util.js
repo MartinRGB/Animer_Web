@@ -28,33 +28,32 @@ function getCurrentConverterType(){
   return mListChoosenConverterType;
 }
 
+
 // ## TimePara Util ##
 
 function listSelectEstimatedPara(calculatorData,timeParaE){
 
-  // console.log(calculatorData)
   if(calculatorData.duration != null){
-    // console.log(calculatorData)
     if(calculatorData.transition != null){
       timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
     }
     else{
-      timeParaE.innerHTML = 'Calculating...'
 
-      // #### Web Worker Multiple Thread Calc ###
-      const myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
+      //timeParaE.innerHTML = 'Calculating..'
+
+      var myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
 
       myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
-      //console.log('Message posted to worker');
-    
+
+      
       myCalculationWorker.onmessage = function(e) {
-        timeParaE.innerHTML = e.data;       
         //console.log('Message received from worker');
+        timeParaE.innerHTML = e.data;   
+        myCalculationWorker.terminate();   
       }
-     
+
     }
     timeParaE.style.zIndex = 0;
-
   }
   else{
     timeParaE.innerHTML = ''

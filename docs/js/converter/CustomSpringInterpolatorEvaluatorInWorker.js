@@ -77,10 +77,12 @@ function CustomSpringInterpolatorCalculation(stiffness,damping){
 onmessage = function(e) {
     //console.log('Worker: Message received from main script');
     let stiffness = e.data[0];
-    var damping = e.data[1];
+    let damping = e.data[1];
+    let duration = e.data[2];
+    var workerResult;
     let factor = CustomSpringInterpolatorCalculation(stiffness,damping);
 
-    let workerResult = factor;
+    workerResult =  'Estimated time - ' + (duration*1000).toFixed(0) + 'ms    |    Factor - ' + factor +'f';
     //console.log('Worker: Posting message back to main script');
     postMessage(workerResult);
 }

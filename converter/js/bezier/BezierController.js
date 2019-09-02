@@ -1,6 +1,6 @@
 
 class BezierController{
-    constructor(canvas,calculator,input,c1,c2) {
+    constructor(canvas,calculator,input,c1,c2,consoleContgainer) {
         this.x1 = 0.50;
         this.y1 = 0.00;
         this.x2 = 0.50;
