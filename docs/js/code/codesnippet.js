@@ -141,7 +141,7 @@ function WebSpringCode(calculator,converter){
     var mReboundSpringAnimationString = 
     commentCode('// Facebook ReboundJS Spring Animation') + emptyCode() + emptyCode() + linkCode('[Repo]','http://www.github.com/facebook/rebound-js') + '</br>' +
     keywordCode('var') + emptyCode() + normalCode('springSystem = ') + emptyCode() + keywordCode('new') + emptyCode()  +typeCode('rebound.SpringSystem') + normalCode('();') + '</br>' +
-    keywordCode('var') + emptyCode() + normalCode('spring = ') + emptyCode() + normalCode('springSystem.') + typeCode('rebound.createSpring') + normalCode('(') + paraCode(converter.bounciness) + normalCode(',')+ paraCode(converter.speed) + normalCode(');') + '</br>';
+    keywordCode('var') + emptyCode() + normalCode('spring = ') + emptyCode() + normalCode('springSystem.') + typeCode('rebound.createSpringWithBouncinessAndSpeed') + normalCode('(') + paraCode(converter.bounciness) + normalCode(',')+ paraCode(converter.speed) + normalCode(');') + '</br>';
 
     var mFramerRK4String =
     '</br>' + commentCode('// (Legacy) Framer Classic RK4 Animation') + emptyCode() + emptyCode() + linkCode('[API]','https://classic.framer.com/docs/#layer.animate') + '</br>' + 

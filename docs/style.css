@@ -5,6 +5,12 @@ body{
   background:#F7F9FC;
 }
 
+.github-area{
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
 p{
   color:white;
   font-size:12px;
