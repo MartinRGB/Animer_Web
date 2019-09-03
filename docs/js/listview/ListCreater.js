@@ -127,7 +127,7 @@ const mAnimatorDataSet = {
           "tag":15,
           "type": "CustomSpring",
           "calculator":"CustomSpringCalculator",
-          "animation_data":["Factor:", 0.5, 0, 5]
+          "animation_data":["Factor:", 0.5, 0, 2]
           },
           {
           "id": 19,
@@ -164,7 +164,7 @@ const mAnimatorDataSet = {
           "type": "CASpring",
           "calculator":"SpringAnimationCalculator",
           "converter":"FramerDHOConverter",
-          "animation_data":["Stiffness:", 100, 0, 1000,"Damping:",10,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
+          "animation_data":["Stiffness:", 100, 0, 3000,"Damping:",10,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
           },
           {
           "id": 2,
@@ -177,30 +177,30 @@ const mAnimatorDataSet = {
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.25, 0.25, 0.75, 0.75]
           },
-          {
-          "id": 4,
-          "tag":21,
-          "type": "Default",
-          "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.10, 0.25, 1.00]
-          },
+          // {
+          // "id": 4,
+          // "tag":21,
+          // "type": "Default",
+          // "calculator":"CubicBezierCalculator",
+          // "animation_data":[0.25, 0.10, 0.25, 1.00]
+          // },
           {
           "id": 5,
-          "tag":22,
+          "tag":21,
           "type": "EaseIn",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.42, 0.00, 1.00, 1.00]
           },
           {
           "id": 6,
-          "tag":23,
+          "tag":22,
           "type": "EaseOut",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.00, 0.00, 0.58, 1.00]
           },
           {
           "id": 7,
-          "tag":24,
+          "tag":23,
           "type": "EaseInOut",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.42, 0.00, 0.58, 1.00]
@@ -214,35 +214,35 @@ const mAnimatorDataSet = {
       "subclass":[
           {
           "id": 0,
-          "tag":25,
+          "tag":24,
           "type": "Linear",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.25, 0.25, 0.75, 0.75]
           },
           {
           "id": 1,
-          "tag":26,
+          "tag":25,
           "type": "Ease",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.25, 0.10, 0.25, 1.00]
           },
           {
           "id": 2,
-          "tag":27,
+          "tag":26,
           "type": "EaseIn",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.42, 0.00, 1.00, 1.00]
           },
           {
           "id": 3,
-          "tag":28,
+          "tag":27,
           "type": "EaseOut",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.00, 0.00, 0.58, 1.00]
           },
           {
           "id": 3,
-          "tag":29,
+          "tag":28,
           "type": "EaseInOut",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.42, 0.00, 0.58, 1.00]
@@ -256,7 +256,7 @@ const mAnimatorDataSet = {
       "subclass":[
           {
           "id": 0,
-          "tag":30,
+          "tag":29,
           "type": "Cubic Bezier",
           "calculator":"CubicBezierCalculator",
           "animation_data":[0.50, 0.00, 0.50, 1.00]
@@ -270,7 +270,7 @@ const mAnimatorDataSet = {
       "subclass":[
           {
           "id": 0,
-          "tag":31,
+          "tag":30,
           "type": "Origami POP Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "OrigamiSpringConverter",
@@ -279,25 +279,25 @@ const mAnimatorDataSet = {
           },
           {
           "id": 1,
-          "tag":32,
+          "tag":31,
           "type": "Framer RK4 Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerRK4Converter",
-          "animation_data":["Tension:", 200, 0, 1000,"Friction:",25,0,100],
+          "animation_data":["Tension:", 200, 0, 3000,"Friction:",25,0,100,"Velocity:",0,0,100],
           "icon": "url(./image/icon/framer_icon.png)"
           },
           {
           "id": 2,
-          "tag":33,
+          "tag":32,
           "type": "Framer DHO Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerDHOConverter",
-          "animation_data":["Stiffness:", 50, 0, 1000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000],
+          "animation_data":["Stiffness:", 50, 0, 3000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000],
           "icon": "url(./image/icon/framer_icon.png)"
           },
           {
           "id": 3,
-          "tag":34,
+          "tag":33,
           "type": "Protopie Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerRK4Converter",
@@ -334,7 +334,8 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
     
     var platformTitle = document.createElement('a');
     platformTitle.className = 'animator-platform-title';
-    platformTitle.href = "#"        
+    // platformTitle.href = "#"        
+    platformTitle.style.cursor = 'pointer'
     platformTitle.innerHTML = mAnimatorDataSet.platform[i].type;
 
 
@@ -369,7 +370,8 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
     
         var animatorTitle = document.createElement('a');
         animatorTitle.className = 'animator-title';
-        animatorTitle.href = "#"
+        // animatorTitle.href = "#"
+        animatorTitle.style.cursor = 'pointer'
         animatorTitle.innerHTML = mAnimatorDataSet.platform[i].subclass[a].type;
         animatorTitle.animIndex = animationIndex;
         animationIndex++;
@@ -514,7 +516,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
                 eval("converter = new " + converterType + "(" + animationData[1] + "," + animationData[5] + ")");
                 break;                   
               case 3:
-                eval("converter = new " + converterType + "(" + animationData[1] + "," + animationData[5] + "," + animationData[9] + ")");
+                eval("converter = new " + converterType + "(" + animationData[1] + "," + animationData[5] + "," + animationData[9]  + ")");
                 break;
               case 4:
 
@@ -525,13 +527,19 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
             caculator = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
             setCurrentConverterType(converter);
-            resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
+            resizeCanvas(canvas,340,200,graphContainer,bezierContainer,timePara);
             DrawCurve(canvas,caculator,true);
           }
 
           break;
       case "InterpolatorCalculator":
-          caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2);
+          if(animationData[0] == null){
+            caculator = new InterpolatorCalculator(animatorTitle.innerHTML,null);
+          }
+          else{
+            caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2);
+          }
+         
           resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
           DrawCurve(canvas,caculator,false)
           break;

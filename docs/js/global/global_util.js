@@ -49,7 +49,7 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
       myCalculationWorker.onmessage = function(e) {
         //console.log('Message received from worker');
         timeParaE.innerHTML = e.data[0];
-        SpringInterpolatorAnimation(Round(e.data[1],1),Round(calculatorData.duration*1000,1));   
+        SpringInterpolatorAnimation(Round(e.data[1],2),Round(calculatorData.duration*1000,2));   
         myCalculationWorker.terminate();   
       }
 
@@ -62,9 +62,6 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
   }
 }
 
-if(calculator !=null){
-  
-}
 
 
 function SpringInterpolatorAnimation(factor,duration){
@@ -72,7 +69,6 @@ function SpringInterpolatorAnimation(factor,duration){
   document.getElementById('spring-interpolator-duration').innerHTML = duration;
 
 }
-
 
 
 // ## Resize Canvas Util ##

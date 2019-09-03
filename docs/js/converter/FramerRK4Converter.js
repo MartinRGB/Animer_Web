@@ -1,13 +1,14 @@
 class FramerRK4Converter {
-    constructor(stiffness, damping) {
-        this.stiffness = (stiffness);
-        this.damping = (damping);
+    constructor(tension, friction,velocity) {
+        this.tension = tension;
+        this.friction = friction;
+        this.velocity = velocity;
 
         // Output
-        
-        this.tension = this.stiffness;
-        this.friction = this.damping;
-        this.dampingRatio = this.computeDampingRatio(stiffness, damping);
+        this.stiffness = this.tension;
+        this.damping = this.friction;
+        this.mass = 1.0;
+        this.dampingRatio = this.computeDampingRatio(this.stiffness, this.damping);
         this.bouncyTension = this.bouncyTesnionConversion(this.tension);
         this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
         this.duration = this.computeDuration(this.tension, this.friction);
@@ -22,14 +23,14 @@ class FramerRK4Converter {
 
     //#M
     computeDamping(stiffness,dampingRatio){
-        let mass = 1.0;
+        let mass = this.mass;
         return dampingRatio * (2 * Math.sqrt(mass * stiffness));
     }
 
     computeDuration(tension, friction) {
         let epsilon = 0.001
         let velocity = 0.0
-        let mass = 1.0
+        let mass = this.mass;
         let dampingRatio = this.computeDampingRatio(tension, friction)
         let undampedFrequency = Math.sqrt(tension / mass)
         if (dampingRatio < 1) {
@@ -47,7 +48,7 @@ class FramerRK4Converter {
     }
 
     computeDampingRatio(stiffness,damping){
-        let mass = 1.0;
+        let mass = this.mass;
         return damping/ (2 * Math.sqrt(mass * stiffness));
     }
 

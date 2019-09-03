@@ -2,6 +2,8 @@ class CustomDampingCalculator {
     constructor(tension,friction) {
         this.tension = tension;
         this.friction = friction;
+        this.originalTension = tension;
+        this.originalFriction = friction;
 
         this.maxStifness = 50;
         this.maxFrictionMultipler = 1;

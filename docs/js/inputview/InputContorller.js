@@ -43,7 +43,7 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
               //console.log(calc)
             }
             else{
-              calc = new SpringAnimationCalculator(factor1,factor2,factor3);
+              calc = new SpringAnimationCalculator(factor1,factor2,factor3,1.0);
             }
             DrawCurve(canvas,calc,true);
             break;
@@ -102,12 +102,12 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             if(converterType !=null){
               var className = converterType.constructor.name
               eval("converter = new " + className + "(" + factor1 + "," + factor2 + "," + factor3 + "," + factor4 + ")");
-
+              console.log(converter.mass)
               calc = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
 
             }
             else{
-              calc = new SpringAnimationCalculator(factor1,factor2,factor3);
+              calc = new SpringAnimationCalculator(factor1,factor2,factor3,1.0);
             }
             DrawCurve(canvas,calc,true);
             break;
