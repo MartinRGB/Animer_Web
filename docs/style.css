@@ -198,10 +198,11 @@ li{
 }
 
 #right-pannel{
-  width: 180px;
+
   /* background: #0A0A0A; */
   background: #181C2F;
   flex:1;
+  min-width: 180px;
 }
 
 
