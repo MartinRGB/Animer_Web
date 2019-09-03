@@ -427,6 +427,7 @@ input[type='range']::-webkit-slider-thumb {
   display: flex;
   padding-left: 44px;
   padding-right: 44px;
+  min-width: 712px;
 }
 
 .console-block{
