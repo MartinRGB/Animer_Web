@@ -66,7 +66,7 @@ li{
 }
 
 #pannel-container{
-  min-width: 500px;
+  min-width: 800px;
   display: flex;
   height: 550px;
 
@@ -202,7 +202,7 @@ li{
   /* background: #0A0A0A; */
   background: #181C2F;
   flex:1;
-  min-width: 180px;
+  min-width: 320px;
 }
 
 
