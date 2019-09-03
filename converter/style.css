@@ -74,7 +74,7 @@ li{
 
   overflow: hidden;
   margin-bottom: 20px;
-  
+
   /* border-radius: 8px;
   box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 0 18px 36px -18px rgba(0,0,0,.3), 0 -12px 36px -8px rgba(0,0,0,.025); */
 
@@ -424,8 +424,8 @@ input[type='range']::-webkit-slider-thumb {
   width: calc(100% - 80px);
   display: inline-block;
   display: flex;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 44px;
+  padding-right: 44px;
 }
 
 .console-block{
@@ -499,6 +499,7 @@ input[type='range']::-webkit-slider-thumb {
 
 .code-comment-color{
   color: #d81b60;
+  margin-bottom: 6px;
 }
 
 .code-type-color{

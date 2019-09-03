@@ -7,6 +7,9 @@ function CustomSpringInterpolatorCalculation(stiffness,damping){
         damping: damping,
         mass: 1
     }
+
+    var maxSpringInterpolatorFactor = 2;
+
     var value = findCloseNum(computeMaxValue());
     // var factor = value;
 
@@ -32,7 +35,9 @@ function CustomSpringInterpolatorCalculation(stiffness,damping){
                 maxValue = value;
             }
         }
+
         return maxValue;
+        
     }
 
     function computeSpringMax(factor) {
@@ -52,7 +57,7 @@ function CustomSpringInterpolatorCalculation(stiffness,damping){
 
     function findCloseNum(num) {
         let arr = new Array(1/options.epsilon);
-        for (let i = 0; i < 1/options.epsilon; i++) {
+        for (let i = 0; i < 1/(options.epsilon/(maxSpringInterpolatorFactor)); i++) {
             arr[i] = computeSpringMax(i * options.epsilon)
         }
         var index = 0;

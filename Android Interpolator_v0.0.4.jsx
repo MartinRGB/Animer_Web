@@ -61,8 +61,8 @@ code:
 "        return k;\n" + 
 "}\n",
 index:0,
-slider1Range:1,
-slider1Val:0.5/1,
+slider1Range:2,
+slider1Val:0.5/2,
 slider1FixVal:null,
 slider1Text:"Factor:",
 slider2Range:null,
@@ -1282,7 +1282,7 @@ function android_interpolator_script(ui_reference) {
 			}
 		}
 
-		slider1.value = 50.;
+		slider1.value = 25.;
 		factor1 = 0.5;
 				
 		var	slGrp2 = android_interpolator.pavarte.add('group', undefined, 'Slider Group 2');

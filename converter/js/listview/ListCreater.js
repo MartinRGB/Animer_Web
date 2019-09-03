@@ -127,7 +127,7 @@ const mAnimatorDataSet = {
           "tag":15,
           "type": "CustomSpring",
           "calculator":"CustomSpringCalculator",
-          "animation_data":["Factor:", 0.5, 0, 5]
+          "animation_data":["Factor:", 0.5, 0, 2]
           },
           {
           "id": 19,
