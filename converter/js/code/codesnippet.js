@@ -80,7 +80,7 @@ function AndroidSpringCode(calculator,converter){
     typeCode('[ObjectAnimator]') + normalCode('.setDuration(') + paraCodeWithId(0,'spring-interpolator-duration','spring-interpolator-duration')+ normalCode(');') + '</br>';
 
     var mFramerRK4String =
-    '</br>' + commentCode('// Custom RK4 Framer Physics Animator in Android') + emptyCode() + emptyCode() + linkCode('[Source Code]','https://github.com/unixzii/android-SpringAnimator') + '</br>' + 
+    '</br>' + commentCode('// Custom RK4 Framer Physics Animator in Android') + emptyCode() + emptyCode() + linkCode('[Repo]','https://github.com/unixzii/android-SpringAnimator') + '</br>' + 
     typeCode('Rk4SpringAnimator') + emptyCode() +  normalCode('animator = ') + emptyCode() + keywordCode('new') + emptyCode()  + typeCode('Rk4SpringAnimator') + normalCode('();') + '</br>' + 
     normalCode('animator.setTension(') + paraCode(calculator.tension) + normalCode(');') + '</br>' +
     normalCode('animator.setFriction(') + paraCode(calculator.friction) + normalCode(');') + '</br>' +
@@ -88,7 +88,7 @@ function AndroidSpringCode(calculator,converter){
 
 
     var mFramerDHOString =
-    '</br>' + commentCode('// Custom DHO Physics Animator in Android') + emptyCode() + emptyCode() + linkCode('[Source Code]','https://github.com/unixzii/android-SpringAnimator') + '</br>' + 
+    '</br>' + commentCode('// Custom DHO Physics Animator in Android') + emptyCode() + emptyCode() + linkCode('[Repo]','https://github.com/unixzii/android-SpringAnimator') + '</br>' + 
     typeCode('DhoSpringAnimator') + emptyCode() +  normalCode('animator = ') + emptyCode() + keywordCode('new') + emptyCode()  + typeCode('DhoSpringAnimator') + normalCode('();') + '</br>' + 
     normalCode('animator.setStiffness(') + paraCode(calculator.stiffness) + normalCode(');') + '</br>' +
     normalCode('animator.setDamping(') + paraCode(calculator.damping) + normalCode(');') + '</br>' +
@@ -238,7 +238,7 @@ function AndroidBezierCode(calculator){
 function getiOSDefaultCurve(string){
     var mString =
     '</br>' +commentCode('// iOS UIView Animation with default presets') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.apple.com/documentation/uikit/uiview/animationcurve') + '</br>' +
-    keywordCode('let') + emptyCode() + normalCode('animator =') + emptyCode() + typeCode('UIViewPropertyAnimator')+normalCode('(duration: [duration], curve: .') + typeCode(string) + normalCode('){// code here}') + '</br>';
+    keywordCode('let') + emptyCode() + normalCode('animator =') + emptyCode() + typeCode('UIViewPropertyAnimator')+normalCode('(duration: [duration], curve: .') + typeCode(string) + normalCode('){') + commentCode('// code here')+normalCode('}') + '</br>';
 
     return mString;
 }
