@@ -164,7 +164,7 @@ const mAnimatorDataSet = {
           "type": "CASpring",
           "calculator":"SpringAnimationCalculator",
           "converter":"FramerDHOConverter",
-          "animation_data":["Stiffness:", 100, 0, 1000,"Damping:",10,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
+          "animation_data":["Stiffness:", 100, 0, 3000,"Damping:",10,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
           },
           {
           "id": 2,
@@ -283,7 +283,7 @@ const mAnimatorDataSet = {
           "type": "Framer RK4 Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerRK4Converter",
-          "animation_data":["Tension:", 200, 0, 1000,"Friction:",25,0,100],
+          "animation_data":["Tension:", 200, 0, 3000,"Friction:",25,0,100,"Velocity:",0,0,100],
           "icon": "url(./image/icon/framer_icon.png)"
           },
           {
@@ -292,7 +292,7 @@ const mAnimatorDataSet = {
           "type": "Framer DHO Spring",
           "calculator": "SpringAnimationCalculator",
           "converter": "FramerDHOConverter",
-          "animation_data":["Stiffness:", 50, 0, 1000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000],
+          "animation_data":["Stiffness:", 50, 0, 3000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000],
           "icon": "url(./image/icon/framer_icon.png)"
           },
           {
@@ -516,7 +516,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
                 eval("converter = new " + converterType + "(" + animationData[1] + "," + animationData[5] + ")");
                 break;                   
               case 3:
-                eval("converter = new " + converterType + "(" + animationData[1] + "," + animationData[5] + "," + animationData[9] + ")");
+                eval("converter = new " + converterType + "(" + animationData[1] + "," + animationData[5] + "," + animationData[9]  + ")");
                 break;
               case 4:
 
@@ -527,7 +527,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
             caculator = new SpringAnimationCalculator(converter.stiffness,converter.dampingRatio,(converter.velocity == null)?0:converter.velocity);
             setCurrentConverterType(converter);
-            resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
+            resizeCanvas(canvas,340,200,graphContainer,bezierContainer,timePara);
             DrawCurve(canvas,caculator,true);
           }
 

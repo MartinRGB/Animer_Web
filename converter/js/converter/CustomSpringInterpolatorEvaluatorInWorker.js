@@ -79,6 +79,7 @@ onmessage = function(e) {
     let stiffness = e.data[0];
     let damping = e.data[1];
     let duration = e.data[2];
+
     var workerResult;
     let factor = CustomSpringInterpolatorCalculation(stiffness,damping);
 

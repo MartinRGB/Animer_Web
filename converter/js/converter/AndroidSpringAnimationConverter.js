@@ -6,31 +6,30 @@ class AndroidSpringAnimationConverter {
 
 
         // Output
+        this.mass = 1.0;
         this.damping = this.computeDamping(stiffness,dampingratio);
         this.tension = this.stiffness;
         this.friction = this.damping;
         this.bouncyTension = this.bouncyTesnionConversion(this.tension);
         this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
         this.duration = this.computeDuration(this.tension, this.friction);
-
         this.s = this.getParaS(this.bouncyTension,0.5,200);
         this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
         this.b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
         this.bounciness = 20*1.7*this.b/0.8;
-
     }
 
 
     //#M
     computeDamping(stiffness,dampingRatio){
-        let mass = 1.0;
+        let mass = this.mass;
         return dampingRatio * (2 * Math.sqrt(mass * stiffness));
     }
 
     computeDuration(tension, friction) {
         let epsilon = 0.001
         let velocity = 0
-        let mass = 1.0
+        let mass = this.mass
         let dampingRatio = this.computeDampingRatio(tension, friction)
         let undampedFrequency = Math.sqrt(tension / mass)
         if (dampingRatio < 1) {
@@ -48,7 +47,7 @@ class AndroidSpringAnimationConverter {
     }
 
     computeDampingRatio(tension, friction) {
-        let mass = 1.0;
+        let mass = this.mass;
         return friction / (2 * Math.sqrt(mass * tension));
     }
     
@@ -64,7 +63,6 @@ class AndroidSpringAnimationConverter {
     }
 
     getParaB(final, start, end) {
-
         var a = 1;
 		var b = -2;
 		var c = (final - start)/(end-start);

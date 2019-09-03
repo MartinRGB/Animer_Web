@@ -9,6 +9,7 @@ class OrigamiSpringConverter {
         this.bouncyFriction = this.quadraticOutInterpolation(b, this.b3Nobounce(this.bouncyTension), 0.01);
 
         // Output
+        this.mass = 1.0;
         this.tension = this.tensionConversion(this.bouncyTension);
         this.friction = this.frictionConversion(this.bouncyFriction);
         this.stiffness = this.tension;
@@ -18,14 +19,14 @@ class OrigamiSpringConverter {
     }
 
     computeDampingRatio(tension, friction) {
-        let mass = 1.0;
+        let mass = this.mass;
         return friction / (2 * Math.sqrt(mass * tension));
     }
 
     computeDuration(tension, friction) {
         let epsilon = 0.001
         let velocity = 0.0
-        let mass = 1.0
+        let mass = this.mass
         let dampingRatio = this.computeDampingRatio(tension, friction)
         let undampedFrequency = Math.sqrt(tension / mass)
         if (dampingRatio < 1) {

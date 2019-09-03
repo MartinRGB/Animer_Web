@@ -6,11 +6,19 @@ class UIViewSpringConverter {
         this.duration = (duration);
 
         // Output
-        
-        this.friction = this.computeFriction(this.dampingRatio,this.duration);
-        this.damping = this.friction;
-        this.tension = this.computeTension(this.dampingRatio,this.friction);
+        this.mass = 1.0;
+
+        // Method -II 
+        this.tension = this.computeTension(this.dampingRatio,this.duration);
         this.stiffness = this.tension;
+        this.friction = this.computeFriction(this.dampingRatio,this.tension);
+        this.damping = this.friction;
+
+        // Method -I 
+        // this.friction = this.computeFriction(this.dampingRatio,this.duration);
+        // this.damping = this.friction;
+        // this.tension = this.computeTension(this.dampingRatio,this.friction);
+        // this.stiffness = this.tension;
        
         this.bouncyTension = this.bouncyTesnionConversion(this.tension);
         this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
@@ -22,16 +30,56 @@ class UIViewSpringConverter {
 
     }
 
-    computeFriction(dampingratio, duration) {
+    computeDuration(tension, friction,mass) {
+        let epsilon = 0.001
+        let velocity = 0.0
+        //let mass = this.mass;
+        let dampingRatio = this.computeDampingRatio(tension, friction,mass)
+        let undampedFrequency = Math.sqrt(tension / mass)
+        if (dampingRatio < 1) {
+            let a = Math.sqrt(1 - Math.pow(dampingRatio, 2))
+            let b = velocity / (a * undampedFrequency)
+            let c = dampingRatio / a
+            let d = -((b - c) / epsilon)
+            if (d <= 0) {
+                return 0.0
+            }
+            return Math.log(d) / (dampingRatio * undampedFrequency)
+        } else {
+            return 0.0
+        }
+    }
+
+
+
+    // Method -II 
+    computeTension(dampingratio, duration) {
+        let mass = this.mass
         var a = Math.sqrt(1 - Math.pow(dampingratio, 2));
         var d = (dampingratio/a)*1000.;
-
-        return 2*Math.log(d)/duration;
+        var tension = Math.pow(Math.log(d)/(dampingratio * duration),2)*mass;
+        return tension;
     }
 
-    computeTension(dampingratio, friction) {
-        return Math.pow(friction/(dampingratio*2),2);
+    computeFriction(dampingratio,tension){
+        let mass = this.mass
+        var a = (2 * Math.sqrt(mass * tension))
+        var friction = dampingratio * a
+        return friction;
     }
+
+    // Method -I 
+    // computeFriction(dampingratio, duration) {
+    //     var a = Math.sqrt(1 - Math.pow(dampingratio, 2));
+    //     var d = (dampingratio/a)*1000.;
+
+    //     return 2*Math.log(d)/duration;
+    // }
+
+    // computeTension(dampingratio, friction) {
+    //     return Math.pow(friction/(dampingratio*2),2);
+    // }
+
 
     bouncyTesnionConversion(tension){
         return (tension - 194.0)/3.62 + 30.;

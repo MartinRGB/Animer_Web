@@ -62,9 +62,6 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
   }
 }
 
-if(calculator !=null){
-  
-}
 
 
 function SpringInterpolatorAnimation(factor,duration){

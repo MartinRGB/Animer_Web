@@ -419,9 +419,17 @@ input[type='range']::-webkit-slider-thumb {
 }
 
 #console-container{
-  width: 800px;
-  position: absolute;
+  width: calc(100% - 80px);
   display: inline-block;
+  display: flex;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.console-block{
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .console-title{
@@ -468,7 +476,6 @@ input[type='range']::-webkit-slider-thumb {
 
 .code-block{
   display: block;
-  width: 768px;
   padding: 16px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -480,10 +487,9 @@ input[type='range']::-webkit-slider-thumb {
 
 .code-text{
   display: inline-block;
-  transform: scale(1);
-  font-size: 13px;
+  font-size: 12px;
   font-family: Montserrat-Light;
-  line-height: 21px;
+  line-height: 14px;
   margin-top: 1px;
   margin-bottom: 1px;
 }
