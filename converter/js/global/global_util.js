@@ -93,7 +93,7 @@ function windowResizeCanvas(canvas,graphContianer){
   var height = document.body.clientHeight;
   if(canvas.style.width == '340px' && width<563){
     //mSpringGraphTranslateX.setEndValue(-(563-width)/2);
-    graphContianer.style.transform = 'translate3d('  + -(563-width)/2 +'px,0px,0px)';
+    // graphContianer.style.transform = 'translate3d('  + -(563-width)/2 +'px,0px,0px)';
   }
   else{
     graphContianer.style.transform = 'translate3d(' + 0 +'px,0px,0px)';
