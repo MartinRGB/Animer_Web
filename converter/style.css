@@ -60,9 +60,9 @@ li{
 }
 
 #web_wrapper{
-  width: 800px;
+  /* width: 800px;
   margin: 0 auto;
-  margin-top:40px;
+  margin-top:40px; */
 }
 
 #pannel-container{
@@ -71,10 +71,12 @@ li{
   height: 550px;
 
   /* if in AE,delete this */
-  margin-bottom: 80px;
-  border-radius: 8px;
+
   overflow: hidden;
-  box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 0 18px 36px -18px rgba(0,0,0,.3), 0 -12px 36px -8px rgba(0,0,0,.025);
+  margin-bottom: 20px;
+  
+  /* border-radius: 8px;
+  box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 0 18px 36px -18px rgba(0,0,0,.3), 0 -12px 36px -8px rgba(0,0,0,.025); */
 
 
 }
@@ -433,7 +435,8 @@ input[type='range']::-webkit-slider-thumb {
 }
 
 .console-title{
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
+  margin-bottom: 10px;
 }
 
 #console-android-icon{
