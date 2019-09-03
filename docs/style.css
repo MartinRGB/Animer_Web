@@ -491,7 +491,7 @@ input[type='range']::-webkit-slider-thumb {
   overflow-y: auto;
   overflow-x: hidden;
   background: white;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   border: 0.5px solid #1e233721;
   border-radius: 6px;
 }
@@ -532,4 +532,33 @@ input[type='range']::-webkit-slider-thumb {
 .code-para-color{
   color:#50a14f;
   font-family: Montserrat-Regular;
+}
+
+.bottom-text{
+  position: relative;
+  bottom: 0px;
+  width: 100%;
+}
+
+.wip-text{
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  display: inline-block;
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #32325d;
+}
+
+.thanks-text{
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  display: inline-block;
+  font-size: 12px;
+  opacity: 1.0;
+  margin-bottom: 20px;
+  colro:#32325d
 }
