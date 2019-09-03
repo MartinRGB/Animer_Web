@@ -71,7 +71,6 @@ function SpringInterpolatorAnimation(factor,duration){
 }
 
 
-
 // ## Resize Canvas Util ##
 function resizeCanvas(canvas,width,height,graphContianer,bezierContainer,timePara){
   canvas.style.width = width + 'px';

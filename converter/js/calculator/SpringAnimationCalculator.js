@@ -26,7 +26,8 @@ class SpringAnimationCalculator{
     }
 
     computeDuration(tension, friction) {
-        let epsilon = 0.001;
+        var durationFactor = 2;
+        let epsilon = 0.001/durationFactor;
         let velocity = 0.0;
         let mass = this.mass
         let dampingRatio = this.computeDampingRatio(tension, friction)

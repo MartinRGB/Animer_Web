@@ -1052,7 +1052,8 @@ function computeDampingRatio(tension, friction,mass) {
 }
 
 function computeDuration(tension, friction,mass) {
-	var epsilon = 0.001
+	var durationFactor = 2;
+	var epsilon = 0.001/durationFactor;
 	var velocity = 0.0
 	var myMass = 1.0;
 	if(mass != null){
