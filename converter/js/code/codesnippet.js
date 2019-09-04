@@ -105,7 +105,7 @@ function iOSSpringCode(calculator,converter){
     var mUIViewSpringString = commentCode('// iOS UIViewAnimation') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.apple.com/documentation/uikit/uiview/1622594-animate') + '</br>' + 
     
     typeCode('UIView') + normalCode('.animate(') + '</br>' +
-    emptyCode() + emptyCode() + emptyCode() +emptyCode() + normalCode('withDuration:') + emptyCode() + paraCode(calculator.duration) + normalCode(',') +  '</br>' +
+    emptyCode() + emptyCode() + emptyCode() +emptyCode() + normalCode('withDuration:') + emptyCode() + paraCode(calculator.durationForUIView) + normalCode(',') +  '</br>' +
     emptyCode() + emptyCode() + emptyCode() +emptyCode() + normalCode('delay:') + emptyCode() + paraCode(0.0) + normalCode(',') + '</br>' +
     emptyCode() + emptyCode() + emptyCode() +emptyCode() + normalCode('usingSpringWithDamping:') + emptyCode() + paraCode(calculator.dampingratio) + normalCode(',') + '</br>' +
     emptyCode() + emptyCode() + emptyCode() +emptyCode() + normalCode('initialSpringVelocity:') + emptyCode() + paraCode(0.0) + normalCode(',') + '</br>' +

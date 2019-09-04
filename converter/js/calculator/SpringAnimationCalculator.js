@@ -11,8 +11,9 @@ class SpringAnimationCalculator{
         this.damping = this.computeDamping(stiffness,dampingratio);
         this.tension = this.stiffness;
         this.friction = this.damping;
-        this.duration = this.computeDuration(this.tension, this.friction);
+        this.duration = this.computeDuration(this.tension, this.friction,2);
         this.array = this.springCalculator(this.stiffness,this.dampingratio,this.velocity,this.duration);
+        this.durationForUIView = this.computeDuration(this.tension, this.friction,1);
     }
 
     computeDamping(stiffness,dampingRatio){
@@ -25,8 +26,8 @@ class SpringAnimationCalculator{
         return friction / (2 * Math.sqrt(mass * tension));
     }
 
-    computeDuration(tension, friction) {
-        var durationFactor = 2;
+    computeDuration(tension, friction,duration) {
+        var durationFactor = duration;
         let epsilon = 0.001/durationFactor;
         let velocity = 0.0;
         let mass = this.mass
@@ -40,6 +41,7 @@ class SpringAnimationCalculator{
             if (d <= 0) {
                 return 0.0
             }
+            console.log(Math.log(d) / (dampingRatio * undampedFrequency))
             return Math.log(d) / (dampingRatio * undampedFrequency)
         } else {
             return 0.0
