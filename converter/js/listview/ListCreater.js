@@ -303,6 +303,15 @@ const mAnimatorDataSet = {
           "converter": "FramerRK4Converter",
           "animation_data":["Tension:", 300, 0, 1000,"Friction:",15,0,100],
           "icon": "url(./image/icon/protopie_icon.png)"
+          },
+          {
+            "id": 4,
+            "tag":34,
+            "type": "Principle Spring",
+            "calculator": "SpringAnimationCalculator",
+            "converter": "FramerRK4Converter",
+            "animation_data":["Tension:", 380, 0, 1000,"Friction:",20,0,100],
+            "icon": "url(./image/icon/principle_icon.png)"
           }
       ]
       }

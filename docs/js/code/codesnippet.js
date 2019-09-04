@@ -13,23 +13,29 @@ function updateCodeSnippet(calculator){
 
             document.getElementById("web-block").innerHTML = WebSpringCode(calculator,converter);
 
+            document.getElementById("data-block").innerHTML = dataArrayCode(calculator);
+
             break;
         case "FlingAnimationCalculator":
 
             document.getElementById("android-block").innerHTML = AndroidFlingCode(calculator);
 
-            document.getElementById("ios-block").innerHTML = NullCode();
+            document.getElementById("ios-block").innerHTML = NullCode('ios');
 
-            document.getElementById("web-block").innerHTML = NullCode();
+            document.getElementById("web-block").innerHTML = NullCode('web');
+
+            document.getElementById("data-block").innerHTML = dataArrayCode(calculator);
 
                 break;     
         case "InterpolatorCalculator":
 
             document.getElementById("android-block").innerHTML = AndroidInterpolatorCode(calculator);
 
-            document.getElementById("ios-block").innerHTML = NullCode();
+            document.getElementById("ios-block").innerHTML = NullCode('ios');
 
-            document.getElementById("web-block").innerHTML = NullCode();
+            document.getElementById("web-block").innerHTML = NullCode('web');
+            
+            document.getElementById("data-block").innerHTML = dataArrayCode(calculator);
 
                 break;
         case "CubicBezierCalculator":
@@ -40,14 +46,18 @@ function updateCodeSnippet(calculator){
 
             document.getElementById("web-block").innerHTML = WebBezierCode(calculator);
 
+            document.getElementById("data-block").innerHTML = dataArrayCode(calculator);
+
                 break;     
         default:
 
             document.getElementById("android-block").innerHTML = AndroidCustomInterpolatorCode(calculator);
 
-            document.getElementById("ios-block").innerHTML = NullCode();
+            document.getElementById("ios-block").innerHTML = NullCode('ios');
 
-            document.getElementById("web-block").innerHTML = NullCode();
+            document.getElementById("web-block").innerHTML = NullCode('web');
+
+            document.getElementById("data-block").innerHTML = dataArrayCode(calculator);
     }
 
   }
@@ -350,7 +360,6 @@ function AndroidCustomInterpolatorCode(calculator){
             mString = getAndroidCustomInterpolator('https://github.com/MartinRGB/AndroidInterpolator_AE/blob/master/CustomInterpolator/CustomSpringInterpolator.java', mFactor, calculator,'CustomSpring')
             break;
         case "CustomBounceCalculator":
-            console.log(calculator)
             var mFactor = paraCode(calculator.originalTension) + normalCode(',') + paraCode(calculator.originalFriction);
             mString = getAndroidCustomInterpolator('https://github.com/MartinRGB/AndroidInterpolator_AE/blob/master/CustomInterpolator/CustomBounceInterpolator.java', mFactor, calculator,'CustomBounce')
             break;
@@ -364,8 +373,31 @@ function AndroidCustomInterpolatorCode(calculator){
     return mString;
 }
 
-function NullCode(){
-    return commentCode('// null')
+function dataArrayCode(calculator){
+
+    return  commentCode('// Array length is ' + calculator.array.length) + '</br>' + '</br>' + normalCode(calculator.array.toString())
+}
+
+function NullCode(string){
+
+    switch (string){
+        case 'web':
+            return  commentCode('🍶🍶🍶 No reference 🍶🍶🍶')
+            break
+        case 'android':
+            return  commentCode('🥃🥃🥃 No reference 🥃🥃🥃')
+            break
+        case 'ios':
+            return  commentCode('🍸🍸🍸 No reference 🍸🍸🍸')
+            break
+        case 'data':
+            return  commentCode('🍷🍷🍷 No reference 🍷🍷🍷')
+            break
+        default:
+            return commentCode('// ')
+    }
+
+
 }
 
 function typeCode(string){

@@ -471,6 +471,14 @@ input[type='range']::-webkit-slider-thumb {
   background-image:url(./image/console/web.png)
 }
 
+#console-data-icon{
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  display: inline-block;
+  background-image:url(./image/console/data.png)
+}
+
 .console-platform{
   display: inline-block;
   margin: 0px;
@@ -505,8 +513,16 @@ input[type='range']::-webkit-slider-thumb {
   margin-bottom: 1px;
 }
 
+#data-block {
+  max-height:450px;
+}
+
+#data-block span{
+  word-break: break-all;
+}
+
 .code-comment-color{
-  color: #d81b60;
+  color: #9D9DB2;
   margin-bottom: 6px;
 }
 
