@@ -200,7 +200,8 @@ function AndroidInterpolatorCode(calculator){
 
     var mAndroidInterpolatorString = 
     commentCode('// Android Interpolator Animation') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.android.com/reference/android/view/animation/Interpolator') + '</br>' +
-    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode(calculator.type + 'Interpolator')+normalCode('(')+ mFactor +normalCode('));')
+    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode(calculator.type + 'Interpolator')+normalCode('(')+ mFactor +normalCode('));') + '</br>' +
+    normalCode('[Animator].setDuration(') + paraCode(calculator.duration) + normalCode(');');
 
     return mAndroidInterpolatorString;
 }
@@ -216,9 +217,10 @@ function arraysEqual(a, b) {
     return true;
 }
 
-function getAndroidMaterialInterpolatorName(string){
+function getAndroidMaterialInterpolatorName(string,calculator){
     var mInterpolatorString = commentCode('// Android Interpolator Animation') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.android.com/reference/android/support/v4/view/animation/package-summary') + '</br>' +
-    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode(string + 'Interpolator')+normalCode('(')+ '' +normalCode('));') + '</br>' + '</br>';
+    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode(string + 'Interpolator')+normalCode('(')+ '' +normalCode('));') + '</br>' +
+    normalCode('[Animator].setDuration(') + paraCode(calculator.duration) + normalCode(');') + '</br>' + '</br>';
 
     return mInterpolatorString;
 }
@@ -227,18 +229,19 @@ function AndroidBezierCode(calculator){
    
 
     var mBezierString = commentCode('// Android PathInterpolator(Bezier) Animation') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.android.com/reference/android/view/animation/PathInterpolator#PathInterpolator(float,%20float,%20float,%20float)') + '</br>' +
-    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode('PathInterpolator')+normalCode('(') + paraCode(calculator.bezier[0]) + ',' + paraCode(calculator.bezier[1]) + ',' + paraCode(calculator.bezier[2]) + ',' + paraCode(calculator.bezier[3]) +normalCode('));');
+    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode('PathInterpolator')+normalCode('(') + paraCode(calculator.bezier[0]) + ',' + paraCode(calculator.bezier[1]) + ',' + paraCode(calculator.bezier[2]) + ',' + paraCode(calculator.bezier[3]) +normalCode('));') + '</br>' + 
+    normalCode('[Animator].setDuration(') + paraCode(calculator.duration) + normalCode(');') + '</br>';
 
     if(arraysEqual(calculator.bezier,[0.4, 0, 0.2, 1])){
-        var mInterpolatorString = getAndroidMaterialInterpolatorName('FastOutSlowIn')
+        var mInterpolatorString = getAndroidMaterialInterpolatorName('FastOutSlowIn',calculator)
         return mInterpolatorString + mBezierString;
     }
     else if(arraysEqual(calculator.bezier,[0,0,0.2,1.0])){
-        var mInterpolatorString = getAndroidMaterialInterpolatorName('LinearOutSlowIn')
+        var mInterpolatorString = getAndroidMaterialInterpolatorName('LinearOutSlowIn',calculator)
         return mInterpolatorString + mBezierString;
     }
     else if(arraysEqual(calculator.bezier,[0.4,0,1,1.0])){
-        var mInterpolatorString = getAndroidMaterialInterpolatorName('FastOutLinear')
+        var mInterpolatorString = getAndroidMaterialInterpolatorName('FastOutLinear',calculator)
         return mInterpolatorString + mBezierString;
     }
     else{
@@ -247,10 +250,10 @@ function AndroidBezierCode(calculator){
 
 }
 
-function getiOSDefaultCurve(string){
+function getiOSDefaultCurve(string,calculator){
     var mString =
     '</br>' +commentCode('// iOS UIView Animation with default presets') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.apple.com/documentation/uikit/uiview/animationcurve') + '</br>' +
-    keywordCode('let') + emptyCode() + normalCode('animator =') + emptyCode() + typeCode('UIViewPropertyAnimator')+normalCode('(duration: [duration], curve: .') + typeCode(string) + normalCode('){') + commentCode('// code here')+normalCode('}') + '</br>';
+    keywordCode('let') + emptyCode() + normalCode('animator =') + emptyCode() + typeCode('UIViewPropertyAnimator')+normalCode('(duration: [') + paraCode(calculator.duration) + normalCode('], curve: .') + typeCode(string) + normalCode('){') + commentCode('// code here')+normalCode('}') + '</br>';
 
     return mString;
 }
@@ -260,32 +263,33 @@ function iOSBezierCode(calculator){
     var mCubicTimingString = commentCode('// iOS UIView Animation with UICubicTimingParameters') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.apple.com/documentation/uikit/uicubictimingparameters') + '</br>' +
     keywordCode('let') + emptyCode() + normalCode('cubicTimingParameters =') + emptyCode() + typeCode('UICubicTimingParameters')+normalCode('(controlPoint1:') + emptyCode() + typeCode('CGPoint')+normalCode('(x:')+emptyCode()+paraCode(calculator.bezier[0])+normalCode(',y:')+emptyCode()+paraCode(calculator.bezier[1])+normalCode('),controlPoint2:')+emptyCode() + typeCode('CGPoint')+normalCode('(x:')+emptyCode()+paraCode(calculator.bezier[2])+normalCode(',y:')+emptyCode()+paraCode(calculator.bezier[3])+normalCode('))') + '</br>' +
 
-    keywordCode('let') + emptyCode() + normalCode('animator =') + emptyCode() + typeCode('UIViewPropertyAnimator')+normalCode('(duration: [duration],timingParameters: cubicTimingParameters)') + '</br>';
+    keywordCode('let') + emptyCode() + normalCode('animator =') + emptyCode() + typeCode('UIViewPropertyAnimator')+normalCode('(duration: [') + paraCode(calculator.duration) + normalCode('],timingParameters: cubicTimingParameters)') + '</br>';
 
     var mCAMediaTimingFunctionString = 
     '</br>' +commentCode('// iOS Core Animation with CAMediaTimingFunction') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.apple.com/documentation/quartzcore/camediatimingfunction') + '</br>' +
     keywordCode('let') + emptyCode() + normalCode('animation =') + emptyCode() + typeCode('CABasicAnimation')+normalCode('(') + typeCode('keyPath') + normalCode(': [keyPath])') + '</br>' +
 
-    normalCode('animation.timingFunction = ') + emptyCode() + typeCode('CAMediaTimingFunction') + normalCode('(') + typeCode('controlPoints') + normalCode(': ') + emptyCode() + paraCode(calculator.bezier[0]) + normalCode(',') + paraCode(calculator.bezier[1]) + normalCode(',') + paraCode(calculator.bezier[2]) + normalCode(',') + paraCode(calculator.bezier[3]) + normalCode(')') + '</br>';
+    normalCode('animation.timingFunction = ') + emptyCode() + typeCode('CAMediaTimingFunction') + normalCode('(') + typeCode('controlPoints') + normalCode(': ') + emptyCode() + paraCode(calculator.bezier[0]) + normalCode(',') + paraCode(calculator.bezier[1]) + normalCode(',') + paraCode(calculator.bezier[2]) + normalCode(',') + paraCode(calculator.bezier[3]) + normalCode(')') + '</br>' + 
+    normalCode('animation.duration = ') + emptyCode() + paraCode(calculator.duration) + '</br>';
     
     var mUIViewAnimationCurveString;
 
 
     if(arraysEqual(calculator.bezier,[0.25,0.25,0.75,0.75])){
-        mUIViewAnimationCurveString = getiOSDefaultCurve('linear')
+        mUIViewAnimationCurveString = getiOSDefaultCurve('linear',calculator)
         return mCubicTimingString + mCAMediaTimingFunctionString + mUIViewAnimationCurveString;
     }
     else if(arraysEqual(calculator.bezier,[0.42,0.00,1.00,1.00])){
-        mUIViewAnimationCurveString = getiOSDefaultCurve('easeIn')
+        mUIViewAnimationCurveString = getiOSDefaultCurve('easeIn',calculator)
         return mCubicTimingString + mCAMediaTimingFunctionString + mUIViewAnimationCurveString;
     }
     else if(arraysEqual(calculator.bezier,[0.00,0.00,0.58,1.00])){
-        mUIViewAnimationCurveString = getiOSDefaultCurve('easeOut')
+        mUIViewAnimationCurveString = getiOSDefaultCurve('easeOut',calculator)
         return mCubicTimingString + mCAMediaTimingFunctionString + mUIViewAnimationCurveString;
 
     }
     else if(arraysEqual(calculator.bezier,[0.42,0.00,0.58,1.00])){
-        mUIViewAnimationCurveString = getiOSDefaultCurve('easeInOut')
+        mUIViewAnimationCurveString = getiOSDefaultCurve('easeInOut',calculator)
         return mCubicTimingString + mCAMediaTimingFunctionString + mUIViewAnimationCurveString;
     }
     else{
@@ -294,10 +298,11 @@ function iOSBezierCode(calculator){
 
 }
 
-function getCSSDefaultTimingFunction(string){
+function getCSSDefaultTimingFunction(string,calculator){
     var mString =
     commentCode('// CSS TimingFunctions') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function') + '</br>' +
-    keywordCode('transition-timing-function') + normalCode(': ') + emptyCode() + typeCode(string);
+    keywordCode('transition-timing-function') + normalCode(': ') + emptyCode() + typeCode(string) + '</br>' +
+    keywordCode('transition-duration: ') + emptyCode() + paraCode(calculator.duration)+ normalCode(';');
 
     return mString;
 }
@@ -309,28 +314,29 @@ function WebBezierCode(calculator){
 
     var mCubicBezierCSSString = 
     commentCode('// CSS TimingFunctions') + emptyCode() + emptyCode() + linkCode('[API]','https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function') + '</br>' +
-    keywordCode('transition-timing-function') + normalCode(': cubic-bezier(') + paraCode(calculator.bezier[0]) + normalCode(',') + paraCode(calculator.bezier[1]) + normalCode(',') + paraCode(calculator.bezier[2]) + normalCode(',') + paraCode(calculator.bezier[3]) + normalCode(');');
+    keywordCode('transition-timing-function') + normalCode(': cubic-bezier(') + paraCode(calculator.bezier[0]) + normalCode(',') + paraCode(calculator.bezier[1]) + normalCode(',') + paraCode(calculator.bezier[2]) + normalCode(',') + paraCode(calculator.bezier[3]) + normalCode(');') + '</br>' +
+    keywordCode('transition-duration: ') + emptyCode() + paraCode(calculator.duration)+ normalCode(';');
 
 
     if(arraysEqual(calculator.bezier,[0.25,0.25,0.75,0.75])){
-        mDefaultCSSString = getCSSDefaultTimingFunction('linear')
+        mDefaultCSSString = getCSSDefaultTimingFunction('linear',calculator)
         return mDefaultCSSString;
     }
     else if(arraysEqual(calculator.bezier,[0.42,0.00,1.00,1.00])){
-        mDefaultCSSString = getCSSDefaultTimingFunction('ease-in')
+        mDefaultCSSString = getCSSDefaultTimingFunction('ease-in',calculator)
         return mDefaultCSSString;
     }
     else if(arraysEqual(calculator.bezier,[0.00,0.00,0.58,1.00])){
-        mDefaultCSSString = getCSSDefaultTimingFunction('ease-out')
+        mDefaultCSSString = getCSSDefaultTimingFunction('ease-out',calculator)
         return mDefaultCSSString;
 
     }
     else if(arraysEqual(calculator.bezier,[0.42,0.00,0.58,1.00])){
-        mDefaultCSSString = getCSSDefaultTimingFunction('ease-in-out')
+        mDefaultCSSString = getCSSDefaultTimingFunction('ease-in-out',calculator)
         return mDefaultCSSString;
     }
     else if(arraysEqual(calculator.bezier,[0.25,0.10,0.25,1.00])){
-        mDefaultCSSString = getCSSDefaultTimingFunction('ease')
+        mDefaultCSSString = getCSSDefaultTimingFunction('ease',calculator)
         return mDefaultCSSString;
     }
     else{
@@ -343,7 +349,7 @@ function getAndroidCustomInterpolator(link,factor,calculator,typeName){
 
     var mAndroidCustomInterpolatorString = 
     commentCode('// Android Custom Interpolator Animation') + emptyCode() + emptyCode() + linkCode('[Source Code]', link) + '</br>' +
-    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode(typeName + 'Interpolator')+normalCode('(')+ factor +normalCode('));')
+    normalCode('[Animator].setInterpolator(') + keywordCode('new') + emptyCode() + typeCode(typeName + 'Interpolator')+normalCode('(')+ factor +normalCode('));');
 
     return mAndroidCustomInterpolatorString;
 }
@@ -359,7 +365,8 @@ function AndroidCustomInterpolatorCode(calculator){
             break;
         case "CustomSpringCalculator":
             var mFactor = paraCode(calculator.factor);
-            mString = getAndroidCustomInterpolator('https://github.com/MartinRGB/AndroidInterpolator_AE/blob/master/CustomInterpolator/CustomSpringInterpolator.java', mFactor, calculator,'CustomSpring')
+            mString = getAndroidCustomInterpolator('https://github.com/MartinRGB/AndroidInterpolator_AE/blob/master/CustomInterpolator/CustomSpringInterpolator.java', mFactor, calculator,'CustomSpring') + '</br>' +
+            normalCode('[Animator].setDuration(') + paraCode(calculator.duration) + normalCode(');');
             break;
         case "CustomBounceCalculator":
             var mFactor = paraCode(calculator.originalTension) + normalCode(',') + paraCode(calculator.originalFriction);

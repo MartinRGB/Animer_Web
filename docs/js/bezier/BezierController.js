@@ -26,12 +26,12 @@ class BezierController{
         this.input.value = this.x1.toFixed(2) + ',' + this.y1.toFixed(2) + ',' + this.x2.toFixed(2) + ',' + this.y2.toFixed(2)
     }
 
-    setBezier(x1,y1,x2,y2){
+    setBezier(x1,y1,x2,y2,duration){
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
-        this.drawBezierCurve(this.x1,this.y1,this.x2,this.y2);
+        this.drawBezierCurve(this.x1,this.y1,this.x2,this.y2,duration);
 
     }
 
@@ -132,9 +132,9 @@ class BezierController{
         }
       }
 
-      drawBezierCurve(x1,y1,x2,y2){
+      drawBezierCurve(x1,y1,x2,y2,duration){
 
-        this.calculator = new CubicBezierCalculator(x1,y1,x2,y2);
+        this.calculator = new CubicBezierCalculator(x1,y1,x2,y2,duration);
         this.calculator.editable = this.editable;
         this.input.value = x1.toFixed(2) + ',' + y1.toFixed(2) + ',' + x2.toFixed(2) + ',' + y2.toFixed(2)
         // 0,1

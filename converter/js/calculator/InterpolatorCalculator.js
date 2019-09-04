@@ -1,8 +1,9 @@
 class InterpolatorCalculator {
-    constructor(type,factor) {
+    constructor(type,factor,duration) {
         this.factor = factor;
         this.type = type;
         this.array = this.interpolatorCalculator(this.type,this.factor);
+        this.duration = duration;
     }
 
     interpolatorCalculator(type,factor) {  
@@ -19,6 +20,10 @@ class InterpolatorCalculator {
                 transitionArray.push([i,this.InterpolatorTypeChooser(i,type,factor)]);
             }
         }
+    }
+
+    setDuration(duration){
+      this.duration = duration;
     }
 
     AccelerateInterpolator(t){

@@ -1,7 +1,8 @@
 class CustomSpringCalculator {
-    constructor(factor) {
+    constructor(factor,duration) {
         this.factor = factor;
         this.array = this.interpolatorCalculator();
+        this.duration = duration;
     }
 
     interpolatorCalculator() {  

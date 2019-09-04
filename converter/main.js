@@ -67,6 +67,8 @@ createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierCo
 
 function setCurve(){
 
+  apply_button.style.pointerEvents = 'none'
+  apply_button.style.backgroundColor = 'grey'
 
   var width = document.body.clientWidth;
   var flexContainerSize = (width -148)/3;
@@ -81,11 +83,11 @@ function setCurve(){
   beforeAnimator.setCallback(
     function(){
 
-      console.log(mCalculator)
       var animator = new DataDrivenPropertyAnimator(mCalculator);
       animator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[0,left,2.5],[360,right,0.8],(mCalculator.duration == null)?1000:mCalculator.duration*1000)
       animator.setProgress(0);
-      animator.delayStart(300);  
+      animator.delayStart(300); 
+      
 
       animator.setCallback(function(){
 
@@ -93,6 +95,11 @@ function setCurve(){
         afterAnimator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[360,right,0.8],[0,0,1],400)
         afterAnimator.setProgress(0);
         afterAnimator.delayStart(300);
+
+        afterAnimator.setCallback(function(){
+          apply_button.style.pointerEvents = 'all'
+          apply_button.style.backgroundColor = '#029CFF'
+        })
 
       })
     }

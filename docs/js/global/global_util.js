@@ -34,41 +34,73 @@ function getCurrentConverterType(){
 
 function listSelectEstimatedPara(calculatorData,timeParaE){
 
-  if(calculatorData.duration != null){
-    if(calculatorData.transition != null){
-      timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
-    }
-    else{
+  // if(calculatorData.duration != null){
+  //   if(calculatorData.transition != null){
+  //     timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
+  //   }
+  //   else{
+  //     //timeParaE.innerHTML = 'Calculating..'
 
-      //timeParaE.innerHTML = 'Calculating..'
+  //     var myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
 
-      var myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
-
-      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
+  //     myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
 
       
+  //     myCalculationWorker.onmessage = function(e) {
+  //       //console.log('Message received from worker');
+  //       timeParaE.innerHTML = e.data[0];
+  //       SpringInterpolatorAnimation(Round(e.data[1],2),Round(calculatorData.duration*1000,2));   
+  //       myCalculationWorker.terminate();   
+  //     }
+
+  //   }
+  //   timeParaE.style.zIndex = 0;
+  // }
+  // else{
+  //   timeParaE.innerHTML = ''
+  //   timeParaE.style.zIndex = -1000;
+  // }
+  var myCalculationWorker
+
+  switch (calculatorData.constructor.name){
+    case 'FlingAnimationCalculator':
+      timeParaE.innerHTML = 'Estimated time - ' + (Math.abs(calculatorData.duration)*1000).toFixed(0) + 'ms    |    Transition - ' + calculatorData.transition.toFixed(0) +'f'
+      timeParaE.style.zIndex = 0;
+      break;
+    case 'SpringAnimationCalculator':
+      myCalculationWorker = new Worker("./js/converter/CustomSpringInterpolatorEvaluatorInWorker.js");
+      myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
+
       myCalculationWorker.onmessage = function(e) {
-        //console.log('Message received from worker');
+        console.log('Message received from worker + 1');
         timeParaE.innerHTML = e.data[0];
-        SpringInterpolatorAnimation(Round(e.data[1],2),Round(calculatorData.duration*1000,2));   
+        console.log('Message received from worker + 2');
+        SpringInterpolatorAnimation(Round(e.data[1],2),Round(calculatorData.duration*1000,2)); 
+        console.log('Message received from worker + 3');  
+        timeParaE.style.zIndex = 0;
         myCalculationWorker.terminate();   
       }
 
-    }
-    timeParaE.style.zIndex = 0;
-  }
-  else{
-    timeParaE.innerHTML = ''
-    timeParaE.style.zIndex = -1000;
+      break;
+    default:
+      if(myCalculationWorker -=null){
+        console.log('123');
+        myCalculationWorker.terminate();
+      }
+      timeParaE.innerHTML = ''
+      timeParaE.style.zIndex = -1000;
   }
 }
 
 
 
 function SpringInterpolatorAnimation(factor,duration){
-  document.getElementById('spring-interpolator-factor').innerHTML = factor
-  document.getElementById('spring-interpolator-duration').innerHTML = duration;
-
+  if(document.getElementById('spring-interpolator-factor') !=null){
+    document.getElementById('spring-interpolator-factor').innerHTML = factor
+  }
+  if(document.getElementById('spring-interpolator-duration') !=null){
+    document.getElementById('spring-interpolator-duration').innerHTML = duration
+  }
 }
 
 

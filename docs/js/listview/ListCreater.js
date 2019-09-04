@@ -28,63 +28,63 @@ const mAnimatorDataSet = {
           "tag":2,
           "type": "AccelerateDecelerate",
           "calculator":"InterpolatorCalculator",
-          "animation_data":[null]
+          "animation_data":["Duration:",1,0.01,10]
           },
           {
           "id": 4,
           "tag":3,
           "type": "Accelerate",
           "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2,0,5]
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
           },
           {
           "id": 5,
           "tag":4,
           "type": "Decelerate",
           "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2,0,5]
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
           },
           {
           "id": 6,
           "tag":5,
           "type": "Anticipate",
           "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2,0,5]
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
           },
           {
           "id": 7,
           "tag":6,
           "type": "Overshoot",
           "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2,0,5]
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
           },
           {
           "id": 8,
           "tag":7,
           "type": "AnticipateOvershoot",
           "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2,0,5]
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
           },
           {
           "id": 9,
           "tag":8,
           "type": "Bounce",
           "calculator":"InterpolatorCalculator",
-          "animation_data":[null]
+          "animation_data":["Duration:",1,0.01,10]
           },
           {
           "id": 10,
           "tag":9,
           "type": "Cycle",
           "calculator":"InterpolatorCalculator",
-          "animation_data":["Factor:",2,0,5]
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
           },
           {
           "id": 11,
           "tag":10,
           "type": "Linear",
           "calculator":"InterpolatorCalculator",
-          "animation_data":[null]
+          "animation_data":["Duration:",1,0.01,10]
           },
           {
           "id": 12,
@@ -95,21 +95,21 @@ const mAnimatorDataSet = {
           "tag":11,
           "type": "FastOutSlowIn",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.40, 0.00, 0.20, 1.00]
+          "animation_data":[0.40, 0.00, 0.20, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 14,
           "tag":12,
           "type": "LinearOutSlowIn",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 0.20, 1.00]
+          "animation_data":[0.00, 0.00, 0.20, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 15,
           "tag":13,
           "type": "FastOutLinear",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.40, 0.00, 1.00, 1.00]
+          "animation_data":[0.40, 0.00, 1.00, 1.00,"Duration:",1,0.01,10]
           }
           ,{
           "id": 16,
@@ -127,7 +127,7 @@ const mAnimatorDataSet = {
           "tag":15,
           "type": "CustomSpring",
           "calculator":"CustomSpringCalculator",
-          "animation_data":["Factor:", 0.5, 0, 2]
+          "animation_data":["Factor:", 0.5, 0, 2,"Duration",1,0,10]
           },
           {
           "id": 19,
@@ -156,7 +156,7 @@ const mAnimatorDataSet = {
           "type": "UIViewSpring",
           "calculator":"SpringAnimationCalculator",
           "converter":"UIViewSpringConverter",
-          "animation_data":["Damping:", 0.5, 0, 1,"Duration:",0.5,0,1]
+          "animation_data":["Damping:", 0.5, 0, 1,"Duration:",0.5,0.01,1]
           },
           {
           "id": 1,
@@ -175,7 +175,7 @@ const mAnimatorDataSet = {
           "tag":20,
           "type": "Linear",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.25, 0.75, 0.75]
+          "animation_data":[0.25, 0.25, 0.75, 0.75,"Duration:",1,0.01,10]
           },
           // {
           // "id": 4,
@@ -189,21 +189,21 @@ const mAnimatorDataSet = {
           "tag":21,
           "type": "EaseIn",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 1.00, 1.00]
+          "animation_data":[0.42, 0.00, 1.00, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 6,
           "tag":22,
           "type": "EaseOut",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 0.58, 1.00]
+          "animation_data":[0.00, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 7,
           "tag":23,
           "type": "EaseInOut",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 0.58, 1.00]
+          "animation_data":[0.42, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
           }
       ]
       },
@@ -217,35 +217,35 @@ const mAnimatorDataSet = {
           "tag":24,
           "type": "Linear",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.25, 0.75, 0.75]
+          "animation_data":[0.25, 0.25, 0.75, 0.75,"Duration:",1,0.01,10]
           },
           {
           "id": 1,
           "tag":25,
           "type": "Ease",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.25, 0.10, 0.25, 1.00]
+          "animation_data":[0.25, 0.10, 0.25, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 2,
           "tag":26,
           "type": "EaseIn",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 1.00, 1.00]
+          "animation_data":[0.42, 0.00, 1.00, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 3,
           "tag":27,
           "type": "EaseOut",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.00, 0.00, 0.58, 1.00]
+          "animation_data":[0.00, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
           },
           {
           "id": 3,
           "tag":28,
           "type": "EaseInOut",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.42, 0.00, 0.58, 1.00]
+          "animation_data":[0.42, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
           },
       ]
       },
@@ -259,7 +259,7 @@ const mAnimatorDataSet = {
           "tag":29,
           "type": "Cubic Bezier",
           "calculator":"CubicBezierCalculator",
-          "animation_data":[0.50, 0.00, 0.50, 1.00]
+          "animation_data":[0.50, 0.00, 0.50, 1.00,"Duration:",1,0.01,10]
           }
       ]
       },
@@ -448,8 +448,8 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
   }
   // ######### Right Para #########
   function checkSliderContainer(calculatorType){
-    apply_button.style.marginTop = (calculatorType == "CubicBezierCalculator")?'194px':'27px';
-    sliderContainer.style.display = (calculatorType == "CubicBezierCalculator")?'none':'block';
+    apply_button.style.marginTop = (calculatorType == "CubicBezierCalculator")?'27px':'27px';
+    sliderContainer.style.display = (calculatorType == "CubicBezierCalculator")?'block':'block';
   }
 
   function checkBezierContainer(calculatorType,animatorTitle){
@@ -467,31 +467,49 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
   function updateCaculatorDataToSilder(calculatorType,animationData){
 
-      for(var i = 0;i < 4;i++){
+      // for(var i = 0;i < 4;i++){
 
-        if(i >= Math.round(animationData.length/4)){
+      //   if(i >= Math.round(animationData.length/4)){
 
-          sliderContainer.children[i].style.display = 'none'
-        }
-        else{
-          sliderContainer.children[i].style.display = 'block'
+      //     sliderContainer.children[i].style.display = 'none'
+      //   }
+      //   else{
+      //     sliderContainer.children[i].style.display = 'block'
+      //   }
+      // }
+
+      if(calculatorType == "CubicBezierCalculator"){
+        sliderContainer.children[0].style.display = 'block'
+        sliderContainer.children[1].style.display = 'none'
+        sliderContainer.children[2].style.display = 'none'
+        sliderContainer.children[3].style.display = 'none'
+      }
+      else{
+        for(var i = 0;i < 4;i++){
+
+          if(i < Math.round(animationData.length/4)){
+            sliderContainer.children[i].style.display = 'block'
+            
+          }
+          else{
+            sliderContainer.children[i].style.display = 'none'
+          }
         }
       }
-
       
 
       for(var i = 0;i<Math.round(animationData.length/4);i++){
         //console.log(animationData[4*i+1])
         
         // Bug source,must set min-max first
-        sliderContainer.children[i].children[2].min = (calculatorType == "CubicBezierCalculator")?0:animationData[4*i+2];
-        sliderContainer.children[i].children[2].max = (calculatorType == "CubicBezierCalculator")?1:animationData[4*i+3];
+        sliderContainer.children[i].children[2].min = (calculatorType == "CubicBezierCalculator")?animationData[4+2]:animationData[4*i+2];
+        sliderContainer.children[i].children[2].max = (calculatorType == "CubicBezierCalculator")?animationData[4+3]:animationData[4*i+3];
 
-        sliderContainer.children[i].children[0].innerHTML = (calculatorType == "CubicBezierCalculator")?"Value":animationData[4*i];
-        sliderContainer.children[i].children[1].value = (calculatorType == "CubicBezierCalculator")?0:Number(animationData[4*i+1]);
-        sliderContainer.children[i].children[2].value = (calculatorType == "CubicBezierCalculator")?0:Number(animationData[4*i+1]);
+        sliderContainer.children[i].children[0].innerHTML = (calculatorType == "CubicBezierCalculator")?animationData[4]:animationData[4*i];
+        sliderContainer.children[i].children[1].value = (calculatorType == "CubicBezierCalculator")?animationData[4+1]:Number(animationData[4*i+1]);
+        sliderContainer.children[i].children[2].value = (calculatorType == "CubicBezierCalculator")?animationData[4+1]:Number(animationData[4*i+1]);
 
-        var mProgress = (animationData[4*i+1] - animationData[4*i+2])/(animationData[4*i+3] - animationData[4*i+2])*100;
+        var mProgress = (calculatorType == "CubicBezierCalculator")? (animationData[4+1] - animationData[4+2])/(animationData[4+3] - animationData[4+2])*100:(animationData[4*i+1] - animationData[4*i+2])/(animationData[4*i+3] - animationData[4*i+2])*100;
 
         sliderContainer.children[i].children[3].style.left = 149 + (266-149)*mProgress/100 + 'px';
 
@@ -552,7 +570,14 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
             caculator = new InterpolatorCalculator(animatorTitle.innerHTML,null);
           }
           else{
-            caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2);
+            console.log(animationData.length)
+            if(animationData.length == 8){
+              caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2,1);
+            }
+            else{
+              caculator = new InterpolatorCalculator(animatorTitle.innerHTML,null,1);
+            }
+            
           }
          
           resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
@@ -565,6 +590,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
           var p3 = animationData[2];
           var p4 = animationData[3];
           var bezierString = p1 + "," + p2 +"," + p3 + "," + p4;
+          var duration = animationData[5];
           // console.log(bezierContainer.children[0])
           // var c1 = bezierContainer.children[0];
           // var c2 = bezierContainer.children[1];
@@ -574,11 +600,11 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
           // c1.style.top = canvas.offsetHeight * canvas.paddingScale + (canvas.offsetHeight*(1 - 2*canvas.paddingScale))*(1-p2) + 'px'
           resizeCanvas(canvas,200,200,graphContainer,bezierContainer,timePara);
           if(animatorTitle.innerHTML == "Cubic Bezier"){
-            caculator = new CubicBezierCalculator(p1,p2,p3,p4);
-            bezierController.setBezier(p1,p2,p3,p4);
+            caculator = new CubicBezierCalculator(p1,p2,p3,p4,duration);
+            bezierController.setBezier(p1,p2,p3,p4,duration);
           }
           else{
-            caculator = new CubicBezierCalculator(p1,p2,p3,p4);
+            caculator = new CubicBezierCalculator(p1,p2,p3,p4,duration);
             bezierController.setBezierWithCalculator(caculator);
           }
 

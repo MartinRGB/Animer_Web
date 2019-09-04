@@ -48,7 +48,19 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             DrawCurve(canvas,calc,true);
             break;
         case "InterpolatorCalculator":
-            calc = new InterpolatorCalculator(interpolatorType,factor1);
+           switch(interpolatorType){
+              case 'AccelerateDecelerate':
+                calc = new InterpolatorCalculator(interpolatorType,null,factor1);
+                break;
+              case 'Bounce':
+                calc = new InterpolatorCalculator(interpolatorType,null,factor1);
+                break;
+              case 'Linear':
+                calc = new InterpolatorCalculator(interpolatorType,null,factor1);
+                break;
+              default:
+                calc = new InterpolatorCalculator(interpolatorType,factor1,factor2);
+            }
             DrawCurve(canvas,calc,false)
             break;
         case "FlingAnimationCalculator":
@@ -70,6 +82,11 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
         case "CustomBounceCalculator":
             calc = new CustomBounceCalculator(factor1,factor2,factor3,factor4);
             DrawCurve(canvas,calc,true)
+            break;
+      case "CubicBezierCalculator":
+            calc = mCalculator;
+            calc.setDuration(factor1);
+            DrawCurve(canvas,calc,false)
             break;
         default:
           //console.log(calc)
@@ -109,10 +126,22 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
             else{
               calc = new SpringAnimationCalculator(factor1,factor2,factor3,1.0);
             }
-            DrawCurve(canvas,calc,true);
+            DrawCurve(canvas,calc,true);factor1
             break;
         case "InterpolatorCalculator":
-            calc = new InterpolatorCalculator(interpolatorType,factor1);
+            switch(interpolatorType){
+              case 'AccelerateDecelerate':
+                calc = new InterpolatorCalculator(interpolatorType,null,factor1);
+                break;
+              case 'Bounce':
+                calc = new InterpolatorCalculator(interpolatorType,null,factor1);
+                break;
+              case 'Linear':
+                calc = new InterpolatorCalculator(interpolatorType,null,factor1);
+                break;
+              default:
+                calc = new InterpolatorCalculator(interpolatorType,factor1,factor2);
+            }
             DrawCurve(canvas,calc,false)
             break;
         case "FlingAnimationCalculator":
@@ -135,6 +164,11 @@ function setupSliderAndInputController(canvas,slArray,iptArray,calc,calcType,int
         case "CustomBounceCalculator":
             calc = new CustomBounceCalculator(factor1,factor2,factor3,factor4);
             DrawCurve(canvas,calc,true)
+            break;
+        case "CubicBezierCalculator":
+            calc = mCalculator;
+            calc.setDuration(factor1);
+            DrawCurve(canvas,calc,false)
             break;
         default:
       }

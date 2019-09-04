@@ -1,12 +1,17 @@
 class CubicBezierCalculator {
-    constructor(p1x,p1y,p2x,p2y) {
+    constructor(p1x,p1y,p2x,p2y,duration) {
     
         this.epsilon = 1e-6;
         this.UnitBezier(p1x,p1y,p2x,p2y);
         this.array = this.bezierCalculator(p1x,p1y,p2x,p2y);
         this.bezier = [p1x,p1y,p2x,p2y];
         this.editable = true;
+        this.duration = duration;
         
+    }
+
+    setDuration(duration){
+        this.duration = duration;
     }
 
     UnitBezier(p1x, p1y, p2x, p2y) {
