@@ -73,7 +73,7 @@ function setCurve(){
   var left = -(flexContainerSize/2 -30);
   var right =  -left - 20;
 
-  var beforeAnimator = new DataDrivenPropertyAnimator(new InterpolatorCalculator('AccelerateDecelerate',0));
+  var beforeAnimator = new DataDrivenPropertyAnimator(new CubicBezierCalculator(0.40,0.00,0.20,1.00));
   beforeAnimator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[0,0,1],[0,left,2.5],400)
   beforeAnimator.setProgress(0);
   beforeAnimator.start();
@@ -89,7 +89,7 @@ function setCurve(){
 
       animator.setCallback(function(){
 
-        var afterAnimator = new DataDrivenPropertyAnimator(new InterpolatorCalculator('AccelerateDecelerate',0));
+        var afterAnimator = new DataDrivenPropertyAnimator(new CubicBezierCalculator(0.40,0.00,0.20,1.00));
         afterAnimator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[360,right,0.8],[0,0,1],400)
         afterAnimator.setProgress(0);
         afterAnimator.delayStart(300);
