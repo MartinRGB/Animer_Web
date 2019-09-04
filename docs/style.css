@@ -79,7 +79,7 @@ li{
   /* if in AE,delete this */
 
   overflow: hidden;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 
   /* border-radius: 8px;
   box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 0 18px 36px -18px rgba(0,0,0,.3), 0 -12px 36px -8px rgba(0,0,0,.025); */
@@ -412,7 +412,8 @@ input[type='range']::-webkit-slider-thumb {
 
 #apply{
   width: 162px;
-  background-color: #029CFF;
+  /* background-color: #029CFF; */
+  background-color: rgb(167, 167, 167);
   color: white;
   border: none;
   border-radius: 4px;
@@ -425,6 +426,39 @@ input[type='range']::-webkit-slider-thumb {
   padding-top: 10px;
   font-size: 12px;
   padding-bottom: 12px;
+  pointer-events: none;
+}
+
+#motion-container{
+  height: 200px;
+  margin-bottom: 20px;
+  width: calc(100% - 80px);
+  display: flex;
+  padding-left: 44px;
+  padding-right: 44px;
+  min-width: 712px;
+  border-bottom: 0.5px solid #1e233721;
+}
+
+.motion-block {
+  /* background: antiquewhite;
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 6px; */
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.motion-square{
+  width: 60px;
+  height: 60px;
+  background: #48485f;
+  border-radius: 8px;
+  margin: 0 auto;
+  position: relative;
+  top: 70px;
 }
 
 #console-container{

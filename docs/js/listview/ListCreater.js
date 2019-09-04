@@ -403,6 +403,12 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
 
         animatorTitle.addEventListener('click',function(e){
 
+
+          if(applyBtn.style.pointerEvents = 'none'){
+            applyBtn.style.pointerEvents = 'all'
+            applyBtn.style.backgroundColor = '#029CFF'
+          }
+
     
           for (var b = 0; b < animatorTitleArray.length; b++) {
           

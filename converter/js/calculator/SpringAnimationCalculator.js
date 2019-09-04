@@ -7,6 +7,9 @@ class SpringAnimationCalculator{
         this.velocity = velocity;
         this.mass = 1.0;
 
+
+        //this.yAxisDimensionData = [];
+
         // Output
         this.damping = this.computeDamping(stiffness,dampingratio);
         this.tension = this.stiffness;
@@ -14,6 +17,7 @@ class SpringAnimationCalculator{
         this.duration = this.computeDuration(this.tension, this.friction,2);
         this.array = this.springCalculator(this.stiffness,this.dampingratio,this.velocity,this.duration);
         this.durationForUIView = this.computeDuration(this.tension, this.friction,1);
+        //this.interpolator = new LookupTableCalculator(this.yAxisDimensionData).data;
     }
 
     computeDamping(stiffness,dampingRatio){
@@ -41,7 +45,6 @@ class SpringAnimationCalculator{
             if (d <= 0) {
                 return 0.0
             }
-            console.log(Math.log(d) / (dampingRatio * undampedFrequency))
             return Math.log(d) / (dampingRatio * undampedFrequency)
         } else {
             return 0.0
@@ -57,8 +60,10 @@ class SpringAnimationCalculator{
         var lastVelocity =  velocity;
         var currentVelocity = 0;
         var sampleScale = 1.5;
+        var mTheresholdValue = 0;
 
-        for (var i = 1/(60*sampleScale) ;i < duration+10/(60*sampleScale);i += 1/(60*sampleScale)){
+        //duration+10/(60*sampleScale);
+        for (var i = 1/(60*sampleScale) ;i < duration + mTheresholdValue/(60*sampleScale);i += 1/(60*sampleScale)){
             var deltaT = i;
             var lastDisplacement  = i/(5*60) -  endVal;
             var cosCoeff = lastDisplacement;
@@ -69,7 +74,8 @@ class SpringAnimationCalculator{
 
             //currentVelocity = displacement * (-mNaturalFreq) * dampingratio + Math.pow(Math.E, -dampingratio * mNaturalFreq * deltaT) * (-mDampedFreq * cosCoeff * Math.sin(mDampedFreq * deltaT)+ mDampedFreq * sinCoeff * Math.cos(mDampedFreq * deltaT));
 
-            transitionArray.push([i/(duration+10/(60*sampleScale)),Math.abs(mValue)]);
+            //duration+10/(60*sampleScale)
+            transitionArray.push([i/(duration + mTheresholdValue/(60*sampleScale)),Math.abs(mValue)]);
         }
         return transitionArray;
     }

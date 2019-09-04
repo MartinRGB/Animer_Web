@@ -3,6 +3,7 @@
 var mListChoosenCalculatorType;
 var mListChoosenInterpolatorType;
 var mListChoosenConverterType;
+var mCalculator;
 
 function setCurrentCalculatorType(calc){
   mListChoosenCalculatorType =calc;

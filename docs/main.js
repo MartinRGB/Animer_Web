@@ -66,157 +66,39 @@ createAnimatorListView(curve_canvas,mAnimatorListView,currentCalculator,bezierCo
 // ################## Apply Button ##################
 
 function setCurve(){
-  console.log('2333')
+
+
+  var width = document.body.clientWidth;
+  var flexContainerSize = (width -148)/3;
+  var left = -(flexContainerSize/2 -30);
+  var right =  -left - 20;
+
+  var beforeAnimator = new DataDrivenPropertyAnimator(new InterpolatorCalculator('AccelerateDecelerate',0));
+  beforeAnimator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[0,0,1],[0,left,2.5],400)
+  beforeAnimator.setProgress(0);
+  beforeAnimator.start();
+
+  beforeAnimator.setCallback(
+    function(){
+
+      console.log(mCalculator)
+      var animator = new DataDrivenPropertyAnimator(mCalculator);
+      animator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[0,left,2.5],[360,right,0.8],(mCalculator.duration == null)?1000:mCalculator.duration*1000)
+      animator.setProgress(0);
+      animator.delayStart(300);  
+
+      animator.setCallback(function(){
+
+        var afterAnimator = new DataDrivenPropertyAnimator(new InterpolatorCalculator('AccelerateDecelerate',0));
+        afterAnimator.setMultipleAttribute([document.getElementById("motion-rotation"),document.getElementById("motion-transition"),document.getElementById("motion-scale")],['rotate','translationX','scale'],[`rotate(`,`translate3d(`,`scale(`],[`deg)`,`px,0px,0px)`,`)`],[360,right,0.8],[0,0,1],400)
+        afterAnimator.setProgress(0);
+        afterAnimator.delayStart(300);
+
+      })
+    }
+  )
+
+
+
+
 }
-
-
-// ################## Graph Scale Test ##################
-
-// var isExpanded =false;
-// var mSpringSystem = new rebound.SpringSystem();
-// var mSpringGraphWidth = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
-// var mSpringGraphTranslateX = mSpringSystem.createSpringWithBouncinessAndSpeed(2,20);
-
-// mSpringGraphWidth.addListener({
-//   onSpringUpdate: function(mSpring) {
-//     var val = mSpring.getCurrentValue();
-//     //val = rebound.MathUtil.mapValueInRange(val, 0, 1, 200, 340);
-//     resizeCanvas(curve_canvas,val,200)
-//     DrawCurve(curve_canvas,mBe,false);
-//     bezierController = new BezierController(curve_canvas,mBe,bezier_input,bezier_controller_1,bezier_controller_2);;
-//   }
-// });
-
-// mSpringGraphTranslateX.addListener({
-//   onSpringUpdate: function(mSpring) {
-//     var val = mSpring.getCurrentValue();
-//     //val = rebound.MathUtil.mapValueInRange(val, 0, 1, 200, 340);
-//     graph_container.style.transform = 'translate3d('  + val +'px,0px,0px)';
-//   }
-// });
-
-// mSpringGraphTranslateX.setCurrentValue(0);
-// mSpringGraphWidth.setCurrentValue(200);
-
-// function expand(){
-//   mSpringGraphWidth.setEndValue(340);
-//   isExpanded =true;
-//   checkGraphTranslate()
-// }
-
-// function collapse(){
-//   mSpringGraphWidth.setEndValue(200);
-//   isExpanded = false;
-//   checkGraphTranslate()
-// }
-
-// function checkGraphTranslate(){
-//   var width = document.body.clientWidth;
-//   var height = document.body.clientHeight;
-
-//   if(isExpanded && width<563){
-//     //graph_container.style.transform = 'translate3d('  + -(563-width)/2 +'px,0px,0px)';
-//     mSpringGraphTranslateX.setEndValue(-(563-width)/2);
-//   }
-//   if(!isExpanded && width<563){
-//     //graph_container.style.transform = 'translate3d('  + 0 +'px,0px,0px)';
-//     mSpringGraphTranslateX.setEndValue(0);
-//   }
-// }
-
-
-// ################## Converter ##################
-
-// let bounciness = 3;
-// let speed = 10.;
-
-// let stiffness =  1500
-// let dampingRatio =  0.5
-
-// let framerStiffness =  50
-// let framerDamping =  10
-// let framerMass =  1
-// let framerVelocity =  0
-
-// let framerTension =  200
-// let framerFriction =  25
-
-// let uiviewspring_dampingratio = 0.5;
-// let uiviewspring_duration = 0.5;
-
-// let flingVelocity = -4000;
-// let flingDampingRatio = 0.8;
-
-
-// let spring = new OrigamiSpringConverter(bounciness, speed);
-// let factor = new CustomSpringInterpolatorEvaluator(spring.stiffness, spring.damping);
-
-// let dyanmic = new AndroidSpringAnimationConverter(stiffness,dampingRatio);
-// let dho = new FramerDHOConverter(framerStiffness,framerDamping,framerMass,framerVelocity);
-// let rk4 = new FramerRK4Converter(framerTension,framerFriction);
-// let uiviewSpring = new UIViewSpringConverter(uiviewspring_dampingratio,uiviewspring_duration);
-// let fling = new FlingAnimationDurationEvaluator(flingVelocity, flingDampingRatio);
-
-// let UIViewSpring = {
-//     dampingRatio: spring.dampingRatio,
-//     duration: spring.duration
-// }
-
-// let CASpring = {
-//     mass: 1,
-//     stiffness: spring.stiffness,
-//     damping: spring.damping,
-//     initialVelocity: 0
-// }
-
-// let DynamicSpring = {
-//     dampingRatio: spring.dampingRatio,
-//     stiffness: spring.stiffness
-// }
-
-// let SpringInterpolator = {
-//     factor: factor.value,
-//     duration: spring.duration
-// }
-
-// function OutputPara(isLog){
-    
-//     if(isLog){
-//         // console.log('\n[iOS]UIView.animate:usingSpringWithDamping: \n\tdampingRatio: ' + UIViewSpring.dampingRatio + '\n\tduration: ' + UIViewSpring.duration);
-//         // console.log('\n[iOS]CASpringAnimation: \n\tmass = ' + CASpring.mass + '\n\tstiffness = ' + CASpring.stiffness + '\n\tdamping = ' + CASpring.damping + '\n\tinitialVelocity = ' + CASpring.initialVelocity);
-//         // console.log('\n[Android]SpringAnimation: \n\tdampingRatio = ' + DynamicSpring.dampingRatio + '\n\tstiffness = ' + DynamicSpring.stiffness);
-//         // console.log('\n[Android]SpringInterpolator: \n\tfactor = ' + SpringInterpolator.factor + '\n\tduration = ' + SpringInterpolator.duration);
-//         // console.log('\n[Android]Rebound: \n\tSpringConfig.fromBouncinessAndSpeed('+ bounciness + ',' + speed +');');
-
-//         // console.log('Spring Duration: ' + spring.duration)
-
-//         // console.log('DyanamicAnimation -----> Bounciness: ' + Math.round(dyanmic.bounciness))
-//         // console.log('DyanamicAnimation ----------> Speed: ' + Math.round(dyanmic.speed))
-//         // console.log('DyanamicAnimation --> BouncyTension: ' + Math.round(dyanmic.bouncyTension))
-//         // console.log('DyanamicAnimation -> BouncyFriction: ' + Math.round(dyanmic.bouncyFriction))
-//         // console.log('DyanamicAnimation ------> Stiffness: ' + Math.round(dyanmic.stiffness))
-//         // console.log('DyanamicAnimation --------> Damping: ' + Math.round(dyanmic.damping))
-//         console.log('DyanamicAnimation --------> Duration: ' + (dyanmic.duration))
-
-//         console.log('DHO Stiffness: ' + dho.stiffness)
-//         console.log('DHO DampingRatio: ' + dho.dampingRatio)
-//         console.log('DHO Duration: ' + dho.duration)
-//         // console.log('DHO Bounciness: ' + dho.bounciness)
-//         // console.log('DHO Speed: ' + dho.speed)
-
-//         // console.log('RK4 Stiffness: ' + rk4.stiffness)
-//         // console.log('RK4 DampingRatio: ' + rk4.dampingRatio)
-//         // console.log('RK4 Duration: ' + rk4.duration)
-
-//         // console.log('UIViewSpring Stiffness: ' + uiviewSpring.stiffness);
-//         // console.log('UIViewSpring DampingRatio: ' + uiviewSpring.dampingRatio);
-
-//         // console.log('UIViewSpring Bounciness: ' + uiviewSpring.bounciness);
-//         // console.log('UIViewSpring Speed: ' + uiviewSpring.speed);
-
-//         // console.log('transitionVal is: ' + fling.transition  + 'totalTime is: ' + fling.duration);
-//     }
-
-// }
-
-// OutputPara(true);

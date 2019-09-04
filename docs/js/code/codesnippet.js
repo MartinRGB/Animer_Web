@@ -1,7 +1,9 @@
+
 function updateCodeSnippet(calculator){
 
   if(calculator !=null){
 
+    mCalculator = calculator;
     switch(calculator.constructor.name){
         case "SpringAnimationCalculator":
 

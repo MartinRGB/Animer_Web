@@ -14,6 +14,8 @@
     <script src="./js/converter/OrigamiSpringConverter.js"></script>
     <script src="./js/converter/UIViewSpringConverter.js"></script>
 
+    <script src="./js/animator/DataDrivenPropertyAnimator.js"></script>
+    <script src="./js/calculator/LookupTableCalculator.js"></script>
     <script src="./js/calculator/SpringAnimationCalculator.js"></script>
     <script src="./js/calculator/FlingAnimationCalculator.js"></script>
     <script src="./js/calculator/InterpolatorCalculator.js"></script>
@@ -23,10 +25,6 @@
     <script src="./js/calculator/CustomBounceCalculator.js"></script>
     <script src="./js/calculator/CustomDampingCalculator.js"></script>
 
-
-
-
-    <script src="./js/animator/rebound.js"></script>
 
     <script src="./js/global/global_util.js"></script>
     <script src="./js/code/codesnippet.js"></script>
@@ -111,12 +109,24 @@
                       </div>
                   </div>
 
-                  <button title="Only works in After Effect" id="apply" onclick="setCurve()">Apply</button>
+                  <button title="Only works in After Effect" id="apply" onclick="setCurve()">Animate</button>
               </div>
           </div>
 
       </div>
 
+    </div>
+
+    <div id="motion-container">
+      <div class="motion-block">
+        <div id="motion-rotation" class="motion-square" style="background: linear-gradient(135deg, #7eaeff 0%, #fca6e9 100%);"> </div>
+      </div>
+      <div class="motion-block" style="border-left: 0.5px solid #1e233721;border-right: 0.5px solid #1e233721;">
+          <div id="motion-transition" class="motion-square" style="background: linear-gradient(135deg, #ff5f6d 0%, #ffc371 100%);"> </div>
+      </div>
+      <div class="motion-block">
+          <div id="motion-scale" class="motion-square" style="background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);"> </div>
+      </div>
     </div>
 
     <div id="console-container">
