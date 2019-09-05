@@ -13,9 +13,11 @@ class DataDrivenPropertyAnimator{
         this.transformSuffixString = null;
         this.progress = 0;
         this.callback = null;
+        this.animating = false;
 
     }
 
+    // ############ Init animator with data ############
 
     parseData(calc){
         var data = [];
@@ -45,10 +47,6 @@ class DataDrivenPropertyAnimator{
         this.transformSuffixString = suffix;
     }
 
-    setCallback(callback){
-        this.callback = callback;
-    }
-
     initAnimationProperty(property){
         var _this = this;
         switch (property){
@@ -76,17 +74,19 @@ class DataDrivenPropertyAnimator{
         }
     }
 
+    // ############ Animator state ############
 
     start(){
         var count = 0
         var _this = this;
         
         _this.end();
-
+        _this.animating = true;
         function animate () {
             if (count/60 >= _this.duration) {
-                _this.cancel(_this.animationFrame)
+                _this.stop(_this.animationFrame)
                 _this.finish();
+
                 return
             }
 
@@ -119,9 +119,35 @@ class DataDrivenPropertyAnimator{
 
     }
 
-    cancel(animation){
-        cancelAnimationFrame(animation)
+    stop(){
+        cancelAnimationFrame(this.animationFrame)
+        this.animating = false;
     }
+
+    end(){
+        var _this = this;
+
+        _this.stop(_this.animationFrame)
+        _this.progress = 0;
+        _this.setProgress(_this.progress)
+
+    }
+
+    finish(){
+        if(this.callback){
+            this.callback()
+        }
+    }
+
+    setCallback(callback){
+        this.callback = callback;
+    }
+
+    isAnimating(){
+        return this.animating;
+    }
+
+    // ############ 0~1 Progress based interpolation ############
 
     setProgress(progress){
         var _this =this;
@@ -140,26 +166,7 @@ class DataDrivenPropertyAnimator{
         }
     }
 
-    end(){
-        var _this = this;
-
-        _this.cancel(_this.animationFrame)
-        _this.progress = 0;
-
-
-        if(_this.element != null){
-            if(!Array.isArray(_this.element)){
-                _this.element.style.transform = _this.transformPrefixString + (_this.from+(_this.to-_this.from) *  _this.progress) + _this.transformSuffixString
-            }
-            else{
-                for (var i = 0;i < ((_this.element).length);i++){
-                    _this.element[i].style.transform = _this.transformPrefixString[i] + (_this.from[i]+(_this.to[i]-_this.from[i]) *  _this.progress) + _this.transformSuffixString[i];
-                }
-            }
-
-        }
-    }
-
+    // ############ Lookuptable Interpolation Method ############
 
     getInterpolation(progress,data,length,step) {
         if (progress >= 1.0) {
@@ -181,9 +188,7 @@ class DataDrivenPropertyAnimator{
         return data[position] + weight * (data[position + 1] - data[position]);
     }
 
-    finish(){
-        if(this.callback){
-            this.callback()
-        }
-    }
+
+
+
 }
