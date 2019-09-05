@@ -570,7 +570,7 @@ function createAnimatorListView(canvas,listView,caculator,bezierController,bezie
             caculator = new InterpolatorCalculator(animatorTitle.innerHTML,null);
           }
           else{
-            console.log(animationData.length)
+
             if(animationData.length == 8){
               caculator = new InterpolatorCalculator(animatorTitle.innerHTML,2,1);
             }
