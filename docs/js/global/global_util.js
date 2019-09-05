@@ -72,13 +72,12 @@ function listSelectEstimatedPara(calculatorData,timeParaE){
       myCalculationWorker.postMessage([calculatorData.stiffness,calculatorData.damping,calculatorData.duration]);
 
       myCalculationWorker.onmessage = function(e) {
-        console.log('Message received from worker + 1');
+
         timeParaE.innerHTML = e.data[0];
-        console.log('Message received from worker + 2');
         SpringInterpolatorAnimation(Round(e.data[1],2),Round(calculatorData.duration*1000,2)); 
-        console.log('Message received from worker + 3');  
         timeParaE.style.zIndex = 0;
-        myCalculationWorker.terminate();   
+        myCalculationWorker.terminate(); 
+          
       }
 
       break;
