@@ -134,14 +134,14 @@ const mAnimatorDataSet = {
           "tag":16,
           "type": "CustomBounce",
           "calculator":"CustomBounceCalculator",
-          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,10]
+          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,100]
           },
           {
           "id": 20,
           "tag":17,
           "type": "CustomDamping",
           "calculator":"CustomDampingCalculator",
-          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,10]
+          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,100]
           }
       ]
       },
