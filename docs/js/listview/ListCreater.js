@@ -156,7 +156,7 @@ const mAnimatorDataSet = {
           "type": "UIViewSpring",
           "calculator":"SpringAnimationCalculator",
           "converter":"UIViewSpringConverter",
-          "animation_data":["Damping:", 0.5, 0, 1,"Duration:",0.5,0.01,1]
+          "animation_data":["Damping:", 0.5, 0, 1,"Duration:",0.5,0.01,5]
           },
           {
           "id": 1,
