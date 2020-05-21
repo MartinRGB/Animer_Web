@@ -65,6 +65,9 @@ class InterpolatorCalculator {
           case 'Cycle':
             animateVal = Math.sin(2*Math.PI * c * t);
             break;
+          case 'ViscosFluid':
+            animateVal = this.getViscosFluid(t);
+            break;
           default:
         }
         return animateVal;
@@ -92,6 +95,30 @@ class InterpolatorCalculator {
         else if (t < 0.7408) return this.bounce(t - 0.54719) + 0.7;
         else if (t < 0.9644) return this.bounce(t - 0.8526) + 0.9;
         else return this.bounce(t - 1.0435) + 0.95;
+    }
+
+    viscousFluid(x) {
+      x *= this.factor ;
+      if (x < 1.0) {
+          x -= (1.0 - Math.exp(-x));
+      } else {
+          var start = 0.36787944117;   // 1/e == exp(-1)
+          x = 1.0 - Math.exp(1.0 - x);
+          x = start + x * (1.0 - start);
+      }
+      return x;
+    }
+
+    getViscosFluid(t){
+      var VISCOUS_FLUID_NORMALIZE = 1.0 / this.viscousFluid(1.0);
+      // account for very small floating-point error
+      var VISCOUS_FLUID_OFFSET = 1.0 - VISCOUS_FLUID_NORMALIZE * this.viscousFluid(1.0);
+
+      var interpolated = VISCOUS_FLUID_NORMALIZE * this.viscousFluid(t);
+      if (interpolated > 0) {
+          return interpolated + VISCOUS_FLUID_OFFSET;
+      }
+      return interpolated;
     }
 
 }

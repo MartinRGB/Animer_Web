@@ -143,6 +143,17 @@ const mAnimatorDataSet = {
           "calculator":"CustomDampingCalculator",
           "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,100]
           }
+          ,{
+            "id": 21,
+            "type": "Divide"
+          },
+          {
+            "id": 22,
+            "tag":35,
+            "type": "ViscosFluid",
+            "calculator":"InterpolatorCalculator",
+            "animation_data":["factor:", 2, 0, 20,"Duration:",1,0.01,10]
+          }
       ]
       },
       {
